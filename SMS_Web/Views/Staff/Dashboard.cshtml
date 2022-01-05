@@ -1,0 +1,297 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<style>
+    .tile {
+        color: white;
+        margin-right: 5px;
+        border-radius: 3px;
+        height: 100px;
+        width: 15%;
+        background-color: #2A3F54;
+    }
+
+    .tile-div {
+        width: 110%;
+    }
+
+    .tileHeading {
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+<div role="main">
+    <div class="">
+
+        <div class="row top_tiles" style="margin: 0px 0 0 0;">
+            <div class="x_panel">
+
+                <div class="sc_panel_header x_title">
+
+
+                    <div class="col-md-10">
+                        <h2 class="nav navbar-left control-label" align="left">Attendance Detail Summary</h2>
+                    </div>
+
+
+
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <div class="x_content">
+                    <div class="row tile-div">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                                <h5 id="SalaryDeductions" class="tileHeading">0 PKR</h5>
+                                <p style="color:#17a2b8;margin-top:25px;font-weight:bold"> <i class="fa fa-minus-square" aria-hidden="true" style="font-size:25px;color:#17a2b8;"></i> Salary Deductions</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="Bonus" class="tileHeading">0 PKR</h5>
+                                <p style="color:#DC3545;margin-top:25px;font-weight:bold"> <i class="fa fa-plus-circle" aria-hidden="true" style="font-size:25px;color:#DC3545;"></i> Bonus</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="AdvanceAdjustment" class="tileHeading">0 PKR</h5>
+                                <p style="color:#55f4f5;margin-top:25px;"> <i class="fa fa-adjust" aria-hidden="true" style="font-size:25px;color:#55f4f5;"></i> Advance Adjustment</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="PendingSalary" class="tileHeading">0 PKR</h5>
+                                <p style="color:#f77c98;margin-top:25px;font-weight:bold"> <i class="fa fa-pencil-square" aria-hidden="true" style="font-size:25px;color:#f77c98;"></i> Pending Salary</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="Salary" class="tileHeading">0 PKR</h5>
+                                <p style="color:orange;margin-top:25px;font-weight:bold"> <i class="fa fa-key" aria-hidden="true" style="font-size:25px;color:orange;"></i> Paid Salary</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="PayableSalary" class="tileHeading">0 PKR</h5>
+                                <p style="color:#58b462;margin-top:25px;"> <i class="fa fa-cart-plus" aria-hidden="true" style="font-size:25px;color:#58b462;"></i> Total Payable Salary</p>
+                            </div>
+                    </div>
+
+                </div>
+            </div>
+                </div>
+
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-7">
+                            <h2>Staff Salary Payments Day Wise</h2>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                            Search
+                        </label>
+
+                        <div class="col-md-4">
+                            <div id="payDetailsDatePicker" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                <span style="color:black">December 30, 2018 - January 28, 2020</span> <b class="caret"></b>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="x_content">
+                        <div class="demo-container" style="height:250px">
+                            <div id="payDetails" class="demo-placeholder" style="width: 100%; height:250px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-6">
+                            <h2>Staff Lectures Details</h2>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="demo-container">
+                            <div id="subjectsAssigned" class="demo-placeholder" style="width: 100%; height:500px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<!-- /page content -->
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        showPayDetails(null, null);
+        showStaffSubjects();
+        InitializeDatePicker('payDetailsDatePicker', showPayDetails);
+    });
+
+    function showPayDetails(from, to) {
+        var options = {
+            chart: {
+                renderTo: 'payDetails',
+                type: 'line'
+            },
+            title: {
+                text: 'Salaries transferred from ' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ' to ' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY"))
+            },
+
+            xAxis: {
+                title: {
+                    text: 'Month'
+                },
+                categories: []
+            },
+            yAxis: [{ //--- Primary yAxis
+                title: {
+                    text: 'Amount (PKR)'
+                }
+            }
+            //, { //--- Secondary yAxis
+            //    title: {
+            //        text: 'Attendance'
+            //    },
+            //    opposite: true
+            //}
+            ],
+
+            series: [
+            ],
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    enableMouseTracking: true
+                }
+            },
+        };
+
+        var feeDetailChart = null;
+        $.getJSON(AppDetail() + "/StaffSalary/GetSalaryStatsByMonth?from=" + from + "&to=" + to, null, function (response) {
+            options.series = [];
+            options.xAxis.categories = [];
+            var series = {
+                name: "Staff Salaries",
+                data: []
+            }
+            var deductionSeries = {
+                name: "Salary Deductions",
+                data: []
+            }
+            var bonus = {
+                name: "Bonus",
+                data: []
+            }
+            var adjustment = {
+                name: "Advance Adjustment",
+                data: []
+            }
+            var Salary = 0;
+            var SalaryDeductions = 0;
+            var Bonus = 0;
+            var AdvanceAdjustment = 0;
+            var PayableSalary = 0;
+            for (var i = 0; i < response.length; i++) {
+                options.xAxis.categories.push(response[i].Month);
+                series.data.push(response[i].Salary);
+                deductionSeries.data.push(response[i].SalaryDeductions);
+                bonus.data.push(response[i].Bonus);
+                adjustment.data.push(response[i].AdvanceAdjustment);
+
+                Salary += response[i].Salary;
+                SalaryDeductions += response[i].SalaryDeductions;
+                Bonus += response[i].Bonus;
+                AdvanceAdjustment += response[i].AdvanceAdjustment;
+                PayableSalary += response[i].PayableSalary;
+            }
+            var pending = PayableSalary - Salary;
+            
+            $("#SalaryDeductions").html(SalaryDeductions.toLocaleString() + " PKR");
+            $("#Bonus").html(Bonus.toLocaleString() + " PKR");
+            $("#AdvanceAdjustment").html(AdvanceAdjustment.toLocaleString() + " PKR");
+            $("#PendingSalary").html(pending.toLocaleString() + " PKR");
+            $("#Salary").html(Salary.toLocaleString() + " PKR");
+            $("#PayableSalary").html(PayableSalary.toLocaleString() + " PKR");
+            options.series.push(series);
+            options.series.push(deductionSeries);
+            options.series.push(bonus);
+            options.series.push(adjustment);
+            feeDetailChart = new Highcharts.Chart(options);
+        })//end json
+    }
+
+    function showStaffSubjects() {
+        var options = {
+            chart: {
+                plotShadow: false,
+                renderTo: 'subjectsAssigned',
+                type: 'bar'
+            },
+            title: {
+                text: 'Lectures Assigned to Each Staff'
+            },
+            xAxis: {
+                categories: [],
+                title: {
+                    text: 'Staff'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Lectures'
+                }
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} subject of {series.name} <br>Total {point.total} Subjects</b>'
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal',
+                    pointWidth: 10
+                }
+
+            },
+            legend: {
+                reversed: true
+            },
+
+            series: []
+        };
+
+        $.getJSON(AppDetail() + "/Staff/GetStaffSubjectStats", null, function (response) {
+            var series = [];
+            options.xAxis.categories = response.Staff;
+            var style = "width: 100%; height:" + response.Staff.length*25 + "px";
+            $("#subjectsAssigned").attr('style', style);
+            for (var i = 0; i < response.StaffClassSubjectCount.length; i++) {
+                var tempObj = {};
+                tempObj.name = response.StaffClassSubjectCount[i].ClassName;
+                tempObj.data = response.StaffClassSubjectCount[i].SubjectCount;
+                series.push(tempObj);
+            }
+            options.series = series;
+            chart = new Highcharts.Chart(options);
+
+        })//end json
+    }
+</script>

@@ -1,0 +1,221 @@
+﻿@model List<SMS_DAL.ViewModel.ChallanDetailViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+          if ((int)@ViewData["Error"] == 4)
+           { 
+               <text> showNotification('Please define admission charges plan first, before pdf.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+    window.onload = function (e) {
+        populateErrors();
+        //ChangeChalan();
+        
+    }
+    var subTotal = 0;
+    var lastIndex = 0;
+    function setPrint() {
+        $.ajax({
+            url: AppDetail() + '/Student/setPrint',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            statusCode: {
+                200: function (data) {
+
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+    
+    function CheckEnterykey()
+    {
+        if (window.event.keyCode == '13') {
+            event.preventDefault();
+        }
+    }
+
+    function UpdateTotal(index)
+    {
+
+        var rowCount = $('#classTable tr').length;
+
+        var total = 0;
+
+        for (var i = 0; i < rowCount - 2; i++)
+        {
+            var subTotal = document.getElementById("textbox" + i).value;
+            total += Number(subTotal);
+        }
+        //if (index != lastIndex)
+        //{
+        //    subTotal = 0;
+        //}
+        //var total = document.getElementById("totalbox").value;
+        //var updatedSubTotal = document.getElementById("textbox" + index).value;
+        
+        //total = parseInt(total,10) + parseInt(updatedSubTotal,10) - parseInt(subTotal,10);
+        document.getElementById("totalbox").value = total;
+        //subTotal = updatedSubTotal;
+        //lastIndex = index;
+        
+    }
+
+    function EnableAmountTextBox(index)
+    {
+        var tableBody = document.getElementById("classBody");
+        var rows = tableBody.getElementsByTagName("tr");
+        var tdObj = rows[index].getElementsByTagName("td")[0];
+        if(document.getElementById("checkbox" + index).checked)
+        {
+            document.getElementById("cbSelect" + index).checked = true;
+            document.getElementById("textbox" + index).readOnly = false;
+            subTotal = document.getElementById("textbox" + index).value;
+            //document.getElementById("feebox" + index).readOnly = false;
+        }
+        else
+        {
+            document.getElementById("cbSelect" + index).checked = false;
+            document.getElementById("textbox" + index).readOnly = true;
+            //document.getElementById("feebox" + index).readOnly = true;
+        }
+        //alert(document.getElementById("checkbox" + index).checked);
+
+    }
+
+
+</script>
+
+
+<div class="x_panel">
+    <div class="x_title sc_panel_header">
+        <label class="nav navbar-left control-label sc_panel_label" align="left">Student Admission Charges </label>
+
+
+        <div class="nav navbar-right">
+            <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 4}) + "'");"
+                   class="btn sc_help_btn btn-xs" />
+
+        </div>
+
+        @*<ul class="nav navbar-right panel_toolbox">
+
+            <li>
+                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li>
+                @*<a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>*@
+        @*<label class="nav navbar control-label" align="right" for="first-name"
+               style=@((Convert.ToInt32(ViewData["Error"]) == 5) ? "display:block;color:red;font-size:12px;" : "display:none")>
+            Please define admission charges plan first, before pdf.
+        </label>*@
+        <div class="clearfix"></div>
+        
+    </div>
+
+    <div class="x_content">
+        @using (Html.BeginForm(Html.BeginForm("SaveAdmissionCharges", "Student", FormMethod.Post, new { enctype = "multipart/form-data" })))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action table" id="classTable">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        <label>Fee Head</label>
+                                    </th>
+                                    <th>
+                                        <label>Standard Amount</label>
+                                    </th>
+                                    <th>
+                                        <label>Revised Amount</label>
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+
+                            </thead>
+                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                @if (Model != null)
+                                {
+                                    var total = 0;
+                                    for (int i = 0; i < ((List<SMS_DAL.ViewModel.ChallanDetailViewModel>)Model).Count(); i++)
+                                    {
+                                        total += Model[i].Amount;
+                                        <tr height="80%" style="margin-top:-5px;margin-bottom:-5px;height:30px;">
+                                            <td height="80%" style="height:30px;"></td>
+                                            <td height="80%" style="height:30px;">
+                                                <div style="height:30px;">
+                                                    <input type="checkbox" name="ChargesIds" onchange="EnableAmountTextBox(@i)" id="@("checkbox" + i)" value="@Model[i].Id" style="width:15px;height:15px;">
+                                                    <input type="checkbox" name="Indexes" value="@i" id="@("cbSelect" + i)" style="width:15px;height:15px;" hidden="hidden">
+                                                </div>
+                                            </td>
+
+                                            <td height="80%">
+                                                @Html.TextBoxFor(m => m[i].Name, new { @class = "form-control", @style = "height:30px;border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                @*@Html.DisplayFor(modelItem => item.Name)*@
+                                            </td>
+                                            <td height="80%">
+                                                @Html.TextBoxFor(m => m[i].StandardAmount, new { @class = "form-control", @style = "height:30px;border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                @*@Html.DisplayFor(modelItem => item.StandardAmount)*@
+                                            </td>
+                                            <td height="80%">
+                                                @Html.TextBoxFor(m => m[i].Amount, new { Name = "PaidAmount", @class = "form-control input-sm", @style = "height:30px;background-color: transparent;", @onkeypress = "CheckEnterykey()", @onChange = "UpdateTotal(" + i + ")", @readonly = "readonly", @id = ("textbox" + i) })
+                                                @*@Html.DisplayFor(modelItem => item.Amount)*@
+                                            </td>
+                                            <td height="80%">
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr style="height:25px;background-color:yellow;color:red;font-size:14px;">
+                                        <td style="height:25px;"></td>
+                                        <td style="height:25px;"></td>
+                                        <td style="height:25px;">
+                                            Total
+                                        </td>
+                                        <td style="height:25px;"></td>
+                                        <td style="height:25px;">
+                                            <input type="text" value="@total" style="height:30px;border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;" id="totalbox"></td>
+                                        <td style="height:25px;"></td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="form-group row" style="margin-top:20px;">
+                        <div class="nav navbar-right">
+                            <input type="submit" value="Create Pdf" onclick="setPrint()" class="btn btn-squar" />
+                            <input type="submit" value="Save" onclick="return ConfirmAction('Are you sure, you want to save admission charges?', 'saveAdmissionChrg');" id="saveAdmissionChrg" class="btn btn-squar" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        }
+    </div>
+</div>
+
+

@@ -1,0 +1,206 @@
+﻿@model List<SMS_DAL.ViewModel.IssuedChallanViewModel>
+
+@{
+    ViewBag.Title = "Chalan Status";
+}
+
+<style>
+    .btn-squar {
+        border-radius: 0 !important;
+    }
+</style>
+
+<div class="row" id="searchPanelData">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel">
+                    <div class="x_title">
+                        @if (ViewData["ClassName"] != null)
+                        {
+                            <label class="nav navbar-left control-label col-md-12 col-sm-12 col-xs-12" style="font-size: 11px;" align="left" for="last-name">
+                                Class @ViewData["ClassName"] @ViewData["SectionName"] @ViewData["FeeStatus"] Fee Details from @ViewData["FromDate"] to @ViewData["ToDate"]
+                            </label>
+                        }
+                        <div class="clearfix"></div>
+                        <div class="ln_solid" style="margin-top:10px;"></div>
+                        <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                            
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-striped jambo_table bulk_action" id="classTable" name="model">
+                                        <thead>
+                                            <tr class="headings">
+                                                <th style="min-width:100px;">
+                                                    Roll No
+                                                </th>
+                                                <th style="min-width:200px;">
+                                                    Name
+                                                </th>
+                                                <th style="min-width:200px;">
+                                                    Father Name
+                                                </th>
+                                                <th style="min-width:200px;">
+                                                    Contact
+                                                </th>
+                                                @*<th style="min-width:200px;">
+                                                    Chalan
+                                                </th>*@
+                                                @*<th style="min-width:150px;">
+                                                    Due Date
+                                                </th>*@
+                                                <th style="min-width:80px;">
+                                                    Amount
+                                                </th>
+
+                                                <th style="min-width:80px;">
+                                                    Fine
+                                                </th>
+                                                <th style="min-width:80px;">
+                                                    Balance
+                                                </th>
+                                                <th style="min-width:80px;">
+                                                    Advance
+                                                </th>
+
+                                                @*<th style="min-width:120px;" hidden="hidden">
+                                                    Annual Charges
+                                                </th>*@
+                                            </tr>
+
+                                        </thead>
+                                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 0; i < Model.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].RollNumber, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Name, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Fathername, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Model[i].Contact_1
+                                                        </td>
+
+                                                        @*<td style="width:200px;">
+                                                            @Html.TextBoxFor(m => m[i].Chalan, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td style="width:150px;">
+                                                            @Html.TextBoxFor(m => m[i].DueDate, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>*@
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Amount, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @name = "Amount", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Fine, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Balance, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Advance, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+
+                                                        @*<td hidden="hidden">
+                                                            @Html.TextBoxFor(m => m[i].AnnualCharges, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>*@
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+</div>
+
+
+<script>
+
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 4)
+            {
+                <text> showNotification('Issue Challan is saved succesfully.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 20)
+            {
+                <text> showNotification('Annual Charges of selected student(s) is reset successfully.', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to Save Issued Challan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 5)
+            {
+                <text> showNotification('Issue Chalan for all selected student(s) to Create Pdf.', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 6)
+            {
+                <text> showNotification('Select Student(s) to Issue Chalan.', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 7)
+            {
+                <text> showNotification('Select Student(s) to Create Pdf of Issued Chalan(s).', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 8)
+            {
+                <text> showNotification('Due Date must be greater than Issued date.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 109)
+            {
+                <text> showNotification('Some of the challans are not issued, Please issue first.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 10)
+            {
+                <text> showNotification('Search Student(s) to Create Pdf of Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 515)
+            {
+                <text> showNotification('No Fine Settings is defined, please defince settings to Issue Challan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 11)
+            {
+                <text> showNotification('Search Student(s) to save Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 60)
+            {
+                <text> showNotification('Select Student(s) to Reset Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 4420)
+            {
+                <text> showNotification('Unable to reset the selected Challan(s).', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 120)
+            {
+                <text> showNotification('Some of the Challan(s) are paid, Unpay them to reset the Challan(s)', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 40)
+            {
+                <text> showNotification('Selected Student(s) Challan(s) are reset succefully.', 'Success', 'Success') </text>
+            }
+
+        }
+    }
+
+    
+</script>

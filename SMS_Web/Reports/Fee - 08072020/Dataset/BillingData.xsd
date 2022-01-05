@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="BillingData" targetNamespace="http://tempuri.org/BillingData.xsd" xmlns:mstns="http://tempuri.org/BillingData.xsd" xmlns="http://tempuri.org/BillingData.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="BillingData" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="BillingData" msprop:Generator_UserDSName="BillingData">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_RowClassName="DataTable1Row" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="FIVE" msprop:Generator_ColumnVarNameInTable="columnFIVE" msprop:Generator_ColumnPropNameInRow="FIVE" msprop:Generator_ColumnPropNameInTable="FIVEColumn" msprop:Generator_UserColumnName="FIVE" type="xs:string" minOccurs="0" />
+              <xs:element name="EIGHT" msprop:Generator_ColumnVarNameInTable="columnEIGHT" msprop:Generator_ColumnPropNameInRow="EIGHT" msprop:Generator_ColumnPropNameInTable="EIGHTColumn" msprop:Generator_UserColumnName="EIGHT" type="xs:string" minOccurs="0" />
+              <xs:element name="FOUR" msprop:Generator_ColumnVarNameInTable="columnFOUR" msprop:Generator_ColumnPropNameInRow="FOUR" msprop:Generator_ColumnPropNameInTable="FOURColumn" msprop:Generator_UserColumnName="FOUR" type="xs:string" minOccurs="0" />
+              <xs:element name="HIFZ_x0020_CLASS" msprop:Generator_ColumnVarNameInTable="columnHIFZ_CLASS" msprop:Generator_ColumnPropNameInRow="HIFZ_CLASS" msprop:Generator_ColumnPropNameInTable="HIFZ_CLASSColumn" msprop:Generator_UserColumnName="HIFZ CLASS" type="xs:string" minOccurs="0" />
+              <xs:element name="NINE" msprop:Generator_ColumnVarNameInTable="columnNINE" msprop:Generator_ColumnPropNameInRow="NINE" msprop:Generator_ColumnPropNameInTable="NINEColumn" msprop:Generator_UserColumnName="NINE" type="xs:string" minOccurs="0" />
+              <xs:element name="SEVEN" msprop:Generator_ColumnVarNameInTable="columnSEVEN" msprop:Generator_ColumnPropNameInRow="SEVEN" msprop:Generator_ColumnPropNameInTable="SEVENColumn" msprop:Generator_UserColumnName="SEVEN" type="xs:string" minOccurs="0" />
+              <xs:element name="SIX" msprop:Generator_ColumnVarNameInTable="columnSIX" msprop:Generator_ColumnPropNameInRow="SIX" msprop:Generator_ColumnPropNameInTable="SIXColumn" msprop:Generator_UserColumnName="SIX" type="xs:string" minOccurs="0" />
+              <xs:element name="TEN" msprop:Generator_ColumnVarNameInTable="columnTEN" msprop:Generator_ColumnPropNameInRow="TEN" msprop:Generator_ColumnPropNameInTable="TENColumn" msprop:Generator_UserColumnName="TEN" type="xs:string" minOccurs="0" />
+              <xs:element name="THREE" msprop:Generator_ColumnVarNameInTable="columnTHREE" msprop:Generator_ColumnPropNameInRow="THREE" msprop:Generator_ColumnPropNameInTable="THREEColumn" msprop:Generator_UserColumnName="THREE" type="xs:string" minOccurs="0" />
+              <xs:element name="TWO" msprop:Generator_ColumnVarNameInTable="columnTWO" msprop:Generator_ColumnPropNameInRow="TWO" msprop:Generator_ColumnPropNameInTable="TWOColumn" msprop:Generator_UserColumnName="TWO" type="xs:string" minOccurs="0" />
+              <xs:element name="ONE" msprop:Generator_ColumnVarNameInTable="columnONE" msprop:Generator_ColumnPropNameInRow="ONE" msprop:Generator_ColumnPropNameInTable="ONEColumn" msprop:Generator_UserColumnName="ONE" type="xs:string" minOccurs="0" />
+              <xs:element name="PRE_x0020_YEAR-I" msprop:Generator_ColumnVarNameInTable="_columnPRE_YEAR_I" msprop:Generator_ColumnPropNameInRow="_PRE_YEAR_I" msprop:Generator_ColumnPropNameInTable="_PRE_YEAR_IColumn" msprop:Generator_UserColumnName="PRE YEAR-I" type="xs:string" minOccurs="0" />
+              <xs:element name="PRE_x0020_YEAR-II" msprop:Generator_ColumnVarNameInTable="_columnPRE_YEAR_II" msprop:Generator_ColumnPropNameInRow="_PRE_YEAR_II" msprop:Generator_ColumnPropNameInTable="_PRE_YEAR_IIColumn" msprop:Generator_UserColumnName="PRE YEAR-II" type="xs:string" minOccurs="0" />
+              <xs:element name="PRE_x0020_YEAR-III" msprop:Generator_ColumnVarNameInTable="_columnPRE_YEAR_III" msprop:Generator_ColumnPropNameInRow="_PRE_YEAR_III" msprop:Generator_ColumnPropNameInTable="_PRE_YEAR_IIIColumn" msprop:Generator_UserColumnName="PRE YEAR-III" type="xs:string" minOccurs="0" />
+              <xs:element name="Section" msprop:Generator_ColumnVarNameInTable="columnSection" msprop:Generator_ColumnPropNameInRow="Section" msprop:Generator_ColumnPropNameInTable="SectionColumn" msprop:Generator_UserColumnName="Section" type="xs:string" minOccurs="0" />
+              <xs:element name="IMAGE" msprop:Generator_ColumnVarNameInTable="columnIMAGE" msprop:Generator_ColumnPropNameInRow="IMAGE" msprop:Generator_ColumnPropNameInTable="IMAGEColumn" msprop:Generator_UserColumnName="IMAGE" type="xs:base64Binary" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "Behaviour Details";
+}
+
+<div role="main">
+    <div class="">
+        <div class="row top_tiles" style="margin: 0px 0 0 0;">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Student Behaviour Details</label>
+
+                <div class="nav navbar-right">
+                    <input type="button" value="Details" name="Help" onclick="@("window.location.href='" + @Url.Action("StudentProfile", "StudentBehaviour", new { studentId = @ViewData["StudentId"] }) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6 tile">
+                
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6 tile">
+
+            </div>
+
+            
+        </div>
+        <br />
+
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header2">
+                        <h2 class="sc_panel_label_left">Categories<small style="color:white">Weightage</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" id="Categories">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header2">
+                        <h2 class="sc_panel_label_left">Category Parmaters<small style="color:white">Weightage</small></h2>
+                        
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" id="Parameters">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+                        
+                        <div class="col-md-6">
+                            <h3>Performance</h3>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="demo-container" style="height:250px">
+                            <div id="Behaviour" class="demo-placeholder" style="width: 100%; height:250px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+       
+
+    </div>
+</div>
+<!-- /page content -->
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        ShowCategories();
+        ShowPerformance(0, '', 0, '');
+        //on setting change
+        //$('#lineChartRevenue').click(function () {
+        //    RevenueByDateChart.update({
+        //        chart: {
+        //            type: 'line'
+        //        },
+        //        subtitle: {
+        //            text: 'line'
+        //        }
+        //    });
+        //});
+        
+    });
+
+
+    function ShowCategories() {
+        var options = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                renderTo: 'Categories',
+                type: 'pie'
+            },
+            title: {
+                text: 'Behaviour Categories'
+            },
+            tooltip: {
+                pointFormat: '<b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+
+            series: []
+        };
+
+        $.getJSON("/BehaviourCategory/GetCategoriesByBranch", null, function (response) {
+            var series1 = {
+                name: 'Categories',
+                colorByPoint: true,
+                data: [],
+                point: {
+                    events: {
+                        click: function (event) {
+                            ShowCategoryParameters(this.id, this.name);
+                            ShowPerformance(this.id, this.name, 0, '');
+                        }
+                    }
+                }
+            };
+            for (var i = 0; i < response.length; i++) {
+                var tempObj = {};
+                tempObj.name = response[i].CategoryName;
+                tempObj.y = response[i].CategoryRating;
+                tempObj.id = response[i].CategoryID;
+                series1.data.push(tempObj);
+
+                if (i == 0) {
+                    ShowCategoryParameters(response[i].CategoryID, response[i].CategoryName);
+                }
+            }
+            options.series = [];
+            options.series.push(series1);
+            chart = new Highcharts.Chart(options);
+
+        })//end json
+    }
+
+    function ShowCategoryParameters(id, name) {
+        var options = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                renderTo: 'Parameters',
+                type: 'pie'
+            },
+            title: {
+                text: name + ' Parmaters'
+            },
+            tooltip: {
+                pointFormat: '<b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+
+            series: []
+        };
+
+        $.getJSON("/BehaviourParameters/GetByCategory?categoryId="+id, null, function (response) {
+            var series1 = {
+                name: 'Parameters',
+                colorByPoint: true,
+                data: [],
+                point: {
+                    events: {
+                        click: function (event) {
+                            ShowPerformance(0, '', this.id, this.name);
+                        }
+                    }
+                }
+            };
+            for (var i = 0; i < response.length; i++) {
+                var tempObj = {};
+                tempObj.name = response[i].ParameterName;
+                tempObj.y = response[i].ParameterRating;
+                tempObj.id = response[i].ParameterID;
+                series1.data.push(tempObj);
+            }
+            options.series = [];
+            options.series.push(series1);
+            chart = new Highcharts.Chart(options);
+
+        })//end json
+    }
+
+    function ShowPerformance(categoryId, categoryName, parameterId, parameterName) {
+        var options = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                renderTo: 'Behaviour',
+                type: 'bar'
+            },
+            title: {
+                text: (parameterName ? parameterName : categoryName ? categoryName : 'Overall') + ' Performance'
+            },
+            xAxis: {
+                categories: [],
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rating',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                pointFormat: ''
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                shadow: true
+            },
+
+            series: []
+        };
+
+        $.getJSON("/StudentBehaviour/GetPerformanceChartData?studentId=" + @ViewData["StudentId"] + "&categoryId=" + categoryId + "&parameterId=" + parameterId, null, function (response) {
+            var series = [];
+            options.xAxis.categories = response.Parameters;
+            for (var i = 0; i < response.RatingsByStaff.length; i++) {
+                var tempObj = {};
+                tempObj.name = response.RatingsByStaff[i].StaffName;
+                tempObj.data = response.RatingsByStaff[i].Ratings;
+                series.push(tempObj);
+            }
+            options.series = [];
+            options.series = series;
+            chart = new Highcharts.Chart(options);
+
+        })//end json
+    }
+</script>
+<!-- /bootstrap-daterangepicker -->

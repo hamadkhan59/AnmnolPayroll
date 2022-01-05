@@ -1,0 +1,301 @@
+﻿@model IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Class Section Create</label>
+                    <div class="nav navbar-right">
+                        <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 12}) + "'");"
+                               class="btn sc_help_btn btn-xs" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+    
+
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                            <div class="form-group row">
+
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name" style="font-size: 11px;">
+                                    Class 
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div>
+                                        @if (ViewData["Operation"] == null || (int)ViewData["Operation"] == 0)
+                                        { 
+                                            @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm" })
+                                        }
+                                        else
+                                        { 
+                                            @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", @disabled = "true" })
+                                        }
+                                        @*@Html.ValidationMessageFor(model => model.ClassId)*@
+                                        @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                        @Html.ValidationMessageFor(model => model.Name)*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="last-name" style="font-size: 11px;">
+                                    Section
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div>
+                                        @*<input id="last-name" name="last-name" required="required" class="form-control input-sm col-md-7 col-xs-12" type="text">*@
+                                        @if (ViewData["Operation"] == null || (int)ViewData["Operation"] == 0)
+                                        {
+                                            @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control input-sm" })
+                                        }
+                                        else
+                                        { 
+                                            @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control input-sm", @disabled = "true" })
+                                        }
+                                        @*@Html.ValidationMessageFor(model => model.SectionId)*@
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group row">
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+
+                                <div>
+                                    @Html.CheckBox("IsFinanceAccountOpen", new { @class = "form-control input-sm", @style = "width:15px;height:15px;", id = "cbFinanceAccount", @checked = "checked", @disabled = "true" })
+                                    @*@Html.CheckBox(ViewData["isfinanceaccountopen"])*@
+                                    @*<input type="checkbox" id="chbFinanceAccount" style="width:15px;height:15px;" onclick="SetFincanceAccountValue(this)" name="IsFinanceAccountOpen" value="@ViewData["isfinanceaccountopen"]">
+                                    <input type="text" value="@ViewData["isfinanceaccountopen"]" id="txtFinanceAccount"  hidden />*@
+                                    <label style="font-size: 11px;">Finance Account Open</label>
+                                </div>
+
+                                @*<label class="control-label" align="left" for="last-name" style="font-size: 11px;">
+                                    Finance Account Open
+                                </label>*@
+                            </div>
+                            
+                        </div>
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <div class="nav navbar-right">
+                                        <input type="submit" value="Save" name="Create" class="btn btn-squar"
+                                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none;" : "display:block;") />
+                                        <input type="submit" value="Save" name="Update" class="btn btn-squar"
+                                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;" : "display:none;") />
+                                    </div>
+                                   
+                                </div>
+                            </div>
+</fieldset>
+                    @*</form>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function SetFincanceAccountValue(checkBoxFinance)
+        {
+            $("#txtFinanceAccount").val(checkBoxFinance.checked ? 1 : 0)
+            $("#chbFinanceAccount").val(checkBoxFinance.checked ? 1 : 0)
+        }
+
+        function populateErrors()
+        {
+            @if(ViewData["Error"] != null)
+            {
+                if ((int)@ViewData["Error"] == 2)
+                {
+                    <text> showNotification('Class Section is saved succesfully.', 'Success', 'Success') </text>
+                }
+            else if ((int)@ViewData["Error"] == 11)
+                {
+                    <text> showNotification('Class Section is already added.', 'Error', 'Error') </text>
+                }
+            else if ((int)@ViewData["Error"] == 420)
+                {
+                    <text> showNotification('Unable to Save Class Section.', 'Error', 'Error') </text>
+                }
+            else if ((int)@ViewData["Error"] == 3)
+                {
+                    <text> showNotification('Unable to delete  Class Section.', 'Error', 'Error') </text>
+                }
+                 else if ((int)@ViewData["Error"] == 40)
+                {
+                    <text> showNotification('Unable to delete  Class Section, as Student(s) are added to this class section', 'Error', 'Error') </text>
+                }
+            else if ((int)@ViewData["Error"] == 4)
+                {
+                    <text> showNotification('Class Section is deleted succesfully.', 'Success', 'Success') </text>
+                }
+            }
+        }
+
+        window.onload = function (e) {
+            $("#classTable").DataTable();
+            populateErrors();
+            ChangeClass();
+            @if ((bool)@ViewData["IsFinanceAccountOpen"] == true)
+        {
+            <text>
+            document.getElementById("IsFinanceAccountOpen").disabled = true;
+            </text>
+        }
+        }
+        function ChangeClass() {
+            var classId = $('#classChangeId').val();
+            $('#classTable > tbody').html("");
+            @foreach (var item in Model)
+        {
+             <text>
+
+            if(classId == '')
+            {
+                var tableRow = '<tr>' +
+                    '<td>' +
+                        '@(item.ClassName)' +
+                    '</td>' +
+                    '<td>' +
+                        '@(item.SectionName)' +
+                            '</td>' +
+                            '<td>'+
+                                '@((item.IsFinanceAccountOpen == false) ? @Html.Raw("<p style=" + "color:red;" + "> No </p>") : @Html.Raw("<p style=" + "color:green;" + "> Yes </p>"))'
+                                + '</td>'+
+                            '<td style="color:blue;">' +
+                                @*'@Html.ActionLink("  ", "Index", new { id = item.ClassSectionId }, new { style = "color: green;font-size: 15px;", title = "Edit", @class = "glyphicon glyphicon-edit" }) |' +*@
+                                '@Html.ActionLink("  ", "Delete", new { id = item.ClassSectionId }, new { onclick = "return ConfirmDelete('Are you sure you wish to delete this Class Section?', " + item.ClassSectionId + ", 'ClassSection');", style = "color: darkred;font-size: 15px;", title = "Delete", @class = "glyphicon glyphicon-trash" })' +
+                            '</td>' +
+                        '</tr>';
+                $("#classTable").find('tbody').append(tableRow);
+            }
+            else if(classId == @(item.ClassId))
+                {
+                var tableRow = '<tr>' +
+                    '<td>' +
+                        '@(item.ClassName)' +
+                    '</td>' +
+                    '<td>' +
+                        '@(item.SectionName)' +
+                            '</td>' +
+                                '<td>'+
+                                    '@((item.IsFinanceAccountOpen == false) ? @Html.Raw("<p style=" + "color:red;" + "> No </p>") : @Html.Raw("<p style=" + "color:green;" + "> Yes </p>"))'
+                                   + '</td>'+
+                            '<td style="color:blue;">' +
+                @*'@Html.ActionLink("  ", "Index", new { id = item.ClassSectionId }, new { style = "color: green;font-size: 15px;", title = "Edit", @class = "glyphicon glyphicon-edit" }) |' +*@
+                                '@Html.ActionLink("  ", "Delete", new { id = item.ClassSectionId }, new { onclick = "return ConfirmDelete('Are you sure you wish to delete this Class Section?', " + item.ClassSectionId + ", 'ClassSection');", style = "color: darkred;font-size: 15px;", title = "Delete", @class = "glyphicon glyphicon-trash" })' +
+                            '</td>' +
+                        '</tr>';
+            $("#classTable").find('tbody').append(tableRow);
+        }
+        </text>
+        }
+        }
+
+
+</script>
+
+<div class="x_panel">
+        <div class="x_title sc_panel_header">
+            <label class="nav navbar-left control-label sc_panel_label" align="left">Class Section List </label>
+            
+            
+
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="nav navbar-right col-md-4 col-sm-4 col-xs-4" align="right" style="margin-top:2px;">
+                    <div>
+                        @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control input-sm", @onchange = "ChangeClass()", id = "classChangeId" })
+                        @*@Html.ValidationMessageFor(model => model.ClassId)*@
+                        @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                    @Html.ValidationMessageFor(model => model.Name)*@
+                    </div>
+                </div>
+            <label class="nav navbar-right control-label col-md-2 col-sm-2 col-xs-12" style="margin-top:5px;font-size: 11px;" align="right" for="last-name">
+                Select Class
+            </label>
+                <div class="clearfix"></div>
+            </div>
+
+    <div class="x_content">
+
+        <div class="form-group">
+            <div class="table-responsive">
+                <table  class="table table-striped table-bordered" id="classTable">
+                    <thead>
+                        <tr class="headings">
+                            
+                            <th>
+                                Class Name
+</th>
+                            <th>
+                                Section Name
+</th>
+                            <th>
+                                FInance Account Open
+</th>
+                            <th>
+                                Actions
+</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ClassName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SectionName)
+                                </td>
+                                <td>
+                                    @if (item.IsFinanceAccountOpen == false)
+                                    {
+                                        <p style="color:red;"> No </p>
+                                    }
+                                    else
+                                    {
+                                        <p style="color:green;"> Yes </p>
+                                    }
+                                </td>
+                                <td style="color:blue;">
+                                    @*@Html.ActionLink("  ", "Index", new { id = item.ClassSectionId }, new { style = "color: green;font-size: 15px;", title = "Edit", @class = "glyphicon glyphicon-edit" }) |*@
+                                    @*@Html.ActionLink("Details", "Details", new { id = item.ClassSectionId }) |*@
+                                    @*<a onclick="deleteRecord(12)" href="JavaScript:void(0)">Delete</a>*@
+                                    @Html.ActionLink("  ", "Delete", new { id = item.ClassSectionId }, new { onclick = "return ConfirmDelete('Are you sure you wish to delete this Class Section?', " + item.ClassSectionId + ", 'ClassSection');", style = "color: darkred;font-size: 15px;", title = "Delete", @class = "glyphicon glyphicon-trash" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+}

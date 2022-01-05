@@ -1,0 +1,278 @@
+﻿@{
+    Layout = null;
+}
+
+@model SMS_DAL.User
+
+<!DOCTYPE html>
+<html lang="en" style="background-color:#111111">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inaequo Payroll Login </title>
+    <!-- Bootstrap -->
+    <!-- Bootstrap -->
+    <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="../../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="../../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../../css/custom.min.css" rel="stylesheet">
+    <link href="~/css/toastr.min.css" rel="stylesheet">
+    <link href="~/vendors/Custom/particles/css/style.css" rel="stylesheet">
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/vendors/Custom/AppDetail.js"></script>
+   
+
+    <style>
+        .boxed {
+            border: 1px solid white;
+            padding-left: 15px;
+            padding-right: 15px;
+            height: 525px;
+            width: 400px;
+            margin-left: -400px;
+            background-color:transparent;
+            color:transparent;
+        }
+    </style>
+
+    </head>
+    
+@*<body class="login" style="background-image: url('/sc_background6.jpg');">*@
+    <body class="login" style="background-color:#000000;">
+
+        <div id="particles-js">
+            <a class="hiddenanchor" id="signup"></a>
+            <a class="hiddenanchor" id="signin"></a>
+            <div>
+
+                <div style="margin-left:20%;">
+
+                    <p style="font-family:Calibri;font-size:70px;font-weight:bolder;color:white;margin-left:-150px;margin-top:60px;background-color:#06844a;padding-left:30px;width:420px;height:80px;" id="Partener">Your Partner</p>
+                    <p style="font-family:Calibri;font-size:70px;font-weight:bolder;color:white;margin-left:-50px;background-color:#0173bc;margin-top:25px;padding-left:30px;width:420px;height:80px;" id="InSchooling">In Payrolls</p>
+                    <p style="text-decoration: underline;font-family:Calibri;font-size:70px;font-weight:bolder;color:white;margin-top:100px;border-radius:50%;padding-left:30px;width:200px;height:200px;" id="scImg">Inaequo Payrolls</p>
+
+                    @*<img src="/" alt="Inaequo Payrolls" style="width:250px;height:250px;border-radius:50%;margin-top:50px;" id="scImg">*@
+
+
+                </div>
+
+                <div class="form login_form" style="margin-top:1px;">
+
+                    <section class="login_content boxed" style="margin-left:60%;margin-top:100px;">
+                        <form action="Login/AuthenticateUser" method="post">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+
+                            <h1 style="color:white">User Login</h1>
+                            <fieldset>
+                                <label class="control-label" align="left" for="first-name" id="errorLabel" style="color:red;background-color:white;font-size:15px;font-family:Calibri;font-stretch:narrower;text-align:left;margin-bottom:5px;width:100%">
+
+                                </label>
+                                <label class="control-label" align="left" for="first-name" id="420"
+                                            style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:15px;background-color:white;font-family:Calibri;margin-bottom:5px;font-stretch:narrower" : "display:none")>
+                                        Error : Username or password is incorrect.
+                                    </label>
+                                    <label class="control-label" align="left" for="first-name" id="421"
+                                           style=@((Convert.ToInt32(ViewData["Error"]) == 421) ? "display:block;color:red;font-size:15px;background-color:white;font-family:Calibri;margin-bottom:5px;font-stretch:narrower" : "display:none")>
+                                        Error : Username is already logged in.
+                                    </label>
+
+
+                                    <div>
+                                        @Html.TextBoxFor(model => model.LoginId, new { @class = "form-control", @placeholder = "Username", @style = "border:none;height:45px;background:transparent;background-color:Transparent;color:white;border: 1px solid white;", id = "LoginId" })
+                                    </div>
+                                    <div>
+                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", @style = "height:45px;background-color:Transparent;color:white;border: 1px solid white;", id = "Password" })
+                                    </div>
+
+                                    <div style="margin-top:40px;">
+                                        <input type="submit" value="Login" class="btn" onclick="return VerifyInput();" style="height:45px;width:100%;margin-left:0px;background-color:Transparent;color:white;border: 1px solid white;" />
+                                    </div>
+</fieldset>
+                            @*<div class="clearfix"></div>*@
+                            <div>
+
+                                <br />
+                                <br />
+                                <br />
+                                
+
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <div>
+
+                                    <p style="color:black;font-size:10px;color:white;font-family:Calibri;font-stretch:narrower">Copyright © Inaequo Solutions, All Rights Reserved.</p>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+
+
+            </div>
+        </div>
+
+        <script src="~/vendors/Custom/particles/js/particles.min.js"></script>
+        <script src="~/vendors/Custom/particles/js/app.js"></script>
+    </body>
+
+</html>
+
+<script>
+
+    function populateErrors()
+    {
+      @if(ViewData["Error"] != null)
+      {
+          if ((int)@ViewData["Error"] == 420)
+          { 
+              <text> showNotification('Username or password is incorrect.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 421)
+          { 
+              <text> showNotification('Username is already logged in.', 'Error', 'Error') </text>
+          }
+      }
+    }
+
+    function VerifyInput()
+    {
+        var login = $("#LoginId").val();
+        var password = $("#Password").val();
+        $("#errorLabel").text("");
+        $("#420").text("");
+        $("#421").text("");
+
+        var errorText = '';
+        if((login == '' || login.length == 0) && (password == '' || password.length == 0))
+        {
+            errorText = "Please enter Username and Password.";
+        }
+        else if((login == '' || login.length == 0))
+        {
+            errorText = "Please enter Username.";
+        }
+        else if((password == '' || password.length == 0))
+        {
+            errorText = "Please enter Password.";
+        }
+            
+        if(errorText == '' || errorText.length == 0)
+        {
+            return true;
+        }
+        $("#errorLabel").text("Error : " + errorText); 
+        return false;
+    }
+
+    window.onload = function (e) {
+        //populateErrors();
+        myMove();
+        //myMove1();
+        //myMove2();
+        //$('#Partener').fadeOut('20000000');
+        //$('#InSchooling').fadeOut('20000000');
+    }
+
+    function myMove() {
+        var elem = document.getElementById("Partener");   
+        var elem1 = document.getElementById("InSchooling");   
+        var elem2 = document.getElementById("scImg");   
+        elem.style.display = 'none';
+        elem1.style.display = 'none';
+        elem2.style.display = 'none';
+
+        elem.style.display = 'block';
+        elem.style.position = "absolute";
+        var pos = 300;
+        var id = setInterval(frame, 5);
+        function frame() {
+            if (pos == 40) {
+                clearInterval(id);
+                //pos = 350;
+                myMove1();
+            } else {
+                pos--; 
+                //alert(pos)
+                elem.style.top = pos + "px"; 
+                //elem.style.left = pos + "px"; 
+            }
+        }
+    }
+
+    function myMove1() {
+        var elem = document.getElementById("InSchooling");   
+        elem.style.position = "absolute";
+        var pos = 300;
+        var id1 = setInterval(frame1, 5);
+        function frame1() {
+            if (pos == 180) {
+                clearInterval(id1);
+                myMove2();
+                //pos = 350;
+            } else {
+                pos--; 
+                //alert(pos)
+                elem.style.display = 'block';
+                elem.style.top = pos + "px"; 
+                //elem.style.left = pos + "px"; 
+            }
+        }
+    }
+
+    function myMove2() {
+        var elem = document.getElementById("scImg");   
+        elem.style.position = "absolute";
+        var pos = 280;
+        var leftpos = 130;
+        var plusFlag = true;
+        var id2 = setInterval(frame2, 10);
+        function frame2() {
+
+            //else {
+            elem.style.display = 'block';
+            if(plusFlag)
+                leftpos++; 
+            else 
+                leftpos--; 
+            //alert(pos)
+            elem.style.top = pos + "px"; 
+            elem.style.left = leftpos + "px"; 
+            //}
+
+            if (leftpos == 400) {
+                //clearInterval(id2);
+                //myMove();
+                plusFlag = false;
+            }
+            else if (leftpos == 130) {
+                clearInterval(id2);
+                myMove();
+                plusFlag = true;
+            } 
+            
+        }
+    }
+</script>

@@ -1,0 +1,873 @@
+﻿@model SMS_DAL.Staff
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    /*body {
+        padding: 10px;
+    }*/
+
+    #exTab1 .tab-content {
+        color: #73879c;
+        background-color: white;
+        padding: 5px 15px;
+    }
+
+    #exTab2 h3 {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+    /* remove border radius for the tab */
+
+    #exTab1 .nav-pills > li > a {
+        border-radius: 0;
+    }
+
+    /* change border radius for the tab , apply corners on top*/
+
+    #exTab3 .nav-pills > li > a {
+        border-radius: 4px 4px 0 0;
+    }
+
+    #exTab3 .tab-content {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+
+    .boxed {
+        border: 1px solid #DDDDDD;
+        margin-left: -15px;
+        margin-right: -15px;
+        height: 320px;
+    }
+
+    .nav-boxed {
+        border: 1px solid #DDDDDD;
+        /*border-radius:10px;*/
+    }
+
+    .padded-ends {
+        padding-left: 20px;
+        padding-right: 20px;
+        /*margin-right:20px;*/
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Staff @((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "Edit" : "Create")</label>
+               
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div hidden="hidden">@Html.ValidationSummary(false)</div>
+
+    <fieldset>
+        <div class="row">
+            <div class="col-md-9">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        @Html.ActionLink("Catagory", "Index", "DesignationCatagory", new { id = 0 }, new { title = "Click to add new Catagory" })
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.DropDownList("Designation.CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId" })
+                        </div>
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        @Html.ActionLink("Designation", "Index", "Designation", new { id = 0 }, new { title = "Click to add new Designation" })
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            <select class="form-control input-sm" name="Designation.Id" id="designationId"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        CNIC <span class="required" style="color:red;">*</span>
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.CNIC, new { @class = "form-control input-sm", @placeholder = "xxxxx-xxxxxxx-x" })
+                        </div>
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Name <span class="required" style="color:red;">*</span>
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Date Of Birth 
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.DateOfBirth, new { @type = "date", @class = "form-control input-sm", id = "dob" })
+                        </div>
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Joining Date
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.JoinDate, new { @type = "date", @class = "form-control input-sm", id = "joiningDate" })
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Merital Status
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.DropDownList("MeritalStatusId", (IEnumerable<SelectListItem>)ViewBag.MeritalStatus, new { @class = "form-control input-sm" })
+                            
+                        </div>
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Relegion
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.DropDownList("ReligionId", (IEnumerable<SelectListItem>)ViewBag.Relegions, new { @class = "form-control input-sm" })
+                            
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="form-group row">
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Gender
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.DropDownList("GenederId", (IEnumerable<SelectListItem>)ViewBag.Genders, new { @class = "form-control input-sm" })
+                            
+                        </div>
+                    </div>
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Nationality
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.Nationality, new { @class = "form-control input-sm" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Mobile No <span class="required" style="color:red;">*</span>
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                        </div>
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Phone No 
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.PhoneNumber1, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Email
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-sm" })
+                        </div>
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                        Type
+                    </label>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div>
+                            @Html.DropDownList("TypeId", (IEnumerable<SelectListItem>)ViewBag.TypeId, new { @class = "form-control input-sm" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 col-sm-3 col-xs-12" hidden="hidden">
+                    <div>
+                        @Html.TextBoxFor(model => model.StaffId, new { @class = "form-control input-sm" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group row">
+
+                    
+                    <div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+                            @{
+                                var imgSrc = "";
+                                if (Model != null && Model.StaffImage != null)
+                                {
+                                    var base64 = Convert.ToBase64String(Model.StaffImage);
+                                    imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                                }
+
+                                <img id="stdImage" src="@imgSrc" style="width:200px;height:200px;margin-top:20px;" />
+
+                            }
+                            <input class="img-show" type='file' style="margin-top:20px;" id="imgInp" onchange="readURL(this);" />
+
+                        </div>
+                        <!-- col ends here -->
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body" style="height:400px;">
+                        <div id="exTab1" class="container">
+                            <ul class="nav nav-pills nav-tabs-justified">
+                                <li class="active nav-boxed">
+                                    <a href="#1a" data-toggle="tab">Parents Info</a>
+                                </li>
+                                <li class="nav-boxed">
+                                    <a href="#2a" data-toggle="tab">Address Info</a>
+                                </li>
+                                @if(SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Fee Edit|") == true)
+                                { 
+                                    <li class="nav-boxed">
+                                        <a href="#3a" data-toggle="tab">Salary Info</a>
+                                    </li>
+                                }
+                                <li class="nav-boxed">
+                                    <a href="#4a" data-toggle="tab">Education Info</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content clearfix">
+                                <div class="tab-pane active boxed" id="1a">
+                                    <div class="form-group row padded-ends" style="margin-top:30px">
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Father Name <span class="required" style="color:red;">*</span>
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Occupation
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.FatherOccupation, new { @class = "form-control input-sm" })
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            CNIC <span class="required" style="color:red;">*</span>
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control input-sm", @placeholder = "xxxxx-xxxxxxx-x" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row padded-ends">
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Contact#1 <span class="required" style="color:red;">*</span>
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.FatherPhoneNo, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Contact#2
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.FatherPhoneNo1, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Email
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.FatherEmail, new { @class = "form-control input-sm", @placeholder = "some@example.com" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane boxed" id="2a">
+                                    <div class="form-group row">
+                                        <div class="form-group row padded-ends" style="margin-top:30px">
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                Current Address <span class="required" style="color:red;">*</span>
+                                            </label>
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                            </div>
+                                            <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                Permanent Address
+                                            </label>
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row padded-ends">
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <div>
+                                                    @Html.TextAreaFor(model => model.CurrentAddress, 3, 25, new { @class = "form-control input-sm" })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <div>
+                                                    @Html.TextAreaFor(model => model.PermanentAddress, 3, 25, new { @class = "form-control input-sm" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Salary View OR Edit|") == true)
+                                {
+                                    <div class="tab-pane boxed" id="3a">
+                                    <div class="form-group row padded-ends" style="margin-top:20px">
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Basic Salary
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.Salary, new { @class = "form-control input-sm", @type = "number", @placeholder = "xxxx" })
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            Duty Hours
+                                        </label>
+                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                            <div>
+                                                @Html.TextBoxFor(model => model.DutyHours, new { @class = "form-control input-sm", @type = "number", @placeholder = "xxxx" })
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            
+                                            @Html.ActionLink("Allownces", "Index", "StaffAllownce", new { id = 0 }, new { title = "Click to add new Allownce" })
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                            <div>
+                                                @*@Html.TextBoxFor(model => model.Allownces, new { @class = "form-control input-sm", @type = "number", @placeholder = "xxxx-xxxxxxx" })*@
+                                                @Html.DropDownList("AllowncesList", (IEnumerable<SelectListItem>)ViewBag.StaffAllownces, new { @class = "form-control input-sm", id = "allowenceDD" })
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                            <input type="button" onclick="AddRowInAllownces()" value="Add" class="btn btn-squar" style="width:50px;" />
+                                        </label>
+
+                                    </div>
+                                    <label class="control-label" align="left" for="first-name" style="margin-left:20px;margin-top:-7px;font-size: 11px;color:red" id="allownceLable">
+                                    </label>
+                                    <div class="row form-group padded-ends" style="margin-top:-10px;">
+                                        <div class="table-responsive" style="height:220px;">
+                                            <table class="table table-striped jambo_table bulk_action" id="allownceTable">
+                                                <thead>
+                                                    <tr class="headings">
+                                                        <th class="column-title">
+
+                                                        </th>
+
+                                                        <th class="column-title">
+                                                            Allownces
+                                                        </th>
+                                                        <th class="column-title">
+
+                                                        </th>
+                                                        <th class="column-title" style="width:100px;">
+                                                            Amount
+                                                        </th>
+
+
+                                                        <th class="column-title">
+                                                        </th>
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody style="background-color:white;color:#2A3F54" id="allownceBody"></tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                }
+                                <div class="tab-pane boxed" id="4a">
+
+                                    <div class="row form-group padded-ends" style="margin-top:20px;">
+                                        <div class="table-responsive" style="height:280px;">
+                                            <table class="table table-striped jambo_table bulk_action" id="classTable">
+                                                <thead>
+                                                    <tr class="headings">
+                                                        <th class="column-title">
+
+                                                        </th>
+
+                                                        <th class="column-title">
+                                                            Degree
+                                                        </th>
+                                                        <th class="column-title" style="width:100px;">
+                                                            Year
+                                                        </th>
+                                                        <th class="column-title" style="width:100px;">
+                                                            Obt Marks
+                                                        </th>
+                                                        <th class="column-title" style="width:100px;">
+                                                            Total Marks
+                                                        </th>
+                                                        <th class="column-title">
+                                                            Roll Number
+                                                        </th>
+                                                        <th class="column-title">
+                                                            Institute
+                                                        </th>
+                                                        <th class="column-title">
+                                                            <div class="nav navbar-right">
+                                                                <input type="button" onclick="AddRowInEdu()" value="+" class="btn btn-sm btn-xs btn-dark btn-squar" style="width:25px;" />
+                                                            </div>
+                                                        </th>
+
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody style="background-color:white;color:#2A3F54;" id="classBody"></tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                    <div class="nav navbar-right">
+                        <div class="nav navbar-right">
+                            <input type="submit" id="createBtn"  value="Save" name="Create" class="btn btn-squar navbar-right" onclick="return UploadStaffData(this)"
+                                   style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none; " : "display:block;margin-right:10px") />
+                            <input type="submit" id="updateBtn"  value="Save" name="Update" class="btn btn-squar navbar-right" onclick="return UploadStaffData(this)"
+                                   style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+                        </div>
+                        <input type="submit" value="Print" name="Print" class="btn btn-squar navbar-right"
+                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+                    </div>
+
+                    @*<div class="row col-md-12 col-sm-12 col-xs-12">
+                        <input type="submit" value="Regulr Fee Plan" name="Print" class="btn btn-squar col-md-offset-5" onclick="UploadImage()" @*style="margin-top:-60px;"*@ @*/>*@
+                        @*<input type="submit" value="Admission Charges Plan" name="Print" class="btn btn-squar col-md-offset-7" onclick="UploadImage()" style="margin-top:-60px;" />
+                                <input type="submit" value="Save" name="Create" class="btn btn-squar col-md-offset-10" onclick="UploadImage()"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none" : "display:block") />
+                                <input type="submit" value="Edit" name="Update" class="btn btn-squar col-md-offset-10" onclick="UploadImage()"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none") />
+                                <input type="submit" value="Print" name="Print" class="btn btn-squar col-md-offset-11" onclick="UploadImage()" style="margin-top:-60px;" />
+                            </div>*@
+                    </div>
+        </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function populateErrors()
+    {
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            <text> populateValidationErrors()  </text>
+        }
+         
+
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           { 
+               <text> showNotification('Staff is saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 11)
+           { 
+               <text> showNotification('Staff is already added.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           { 
+               <text> showNotification(' Unable to Save Staff.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 1420)
+           { 
+               <text> showNotification('Unable to Search Staff.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 3)
+           { 
+               <text> showNotification('Unable to delete Staff.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           { 
+               <text> showNotification(' Staff is deleted succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+
+    window.onload = function (e) {
+        
+        populateErrors();
+
+        @if(Model != null )
+        {
+            <text>
+                $('#dob').val('@(Model.DateOfBirth.Value.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+                $('#joiningDate').val('@(Model.JoinDate.Value.ToString("yyyy-MM-dd"))');
+                getStaffAllownces();
+                getStaffDegrees();
+            </text>
+        }
+        else
+        {
+            <text>
+        $('#dob').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+        $('#joiningDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        </text>
+        }
+
+        var Id = '@(Model == null ? 0 : Model.StaffId)';
+        
+            getDesignationList();
+    }
+    var degreeCount = 0, allownceCount = 0;
+
+    function getStaffDegrees()
+    {
+        var staffId = 0;
+        @if(Model != null )
+        {
+            <text>
+                staffId = @Model.StaffId;
+            </text>
+        }
+        degreeCount = 0;
+        $.post( AppDetail() +"/Staff/GetStaffDegrees",
+                    { staffId: staffId },
+                    function (response) {
+                        //alert(response[0][0]);
+                        for (var i = 0; i < response.length; i++) {
+                            var tableRow = '<tr class="even pointer" id="eduRow' + degreeCount + '"><td></td>' +
+                            '<td><input type="text" value="' + response[i][0] + '" id="degree' + degreeCount + '"></td>' +
+                            '<td><input type="text" value="' + response[i][1] + '" id="year' + degreeCount + '"  style="width:100px;"></td>' +
+                            '<td><input type="text" value="' + response[i][2] + '" id="obtMarks' + degreeCount + '"  style="width:100px;"></td>' +
+                            '<td><input type="text" value="' + response[i][3] + '" id="totalMarks' + degreeCount + '"  style="width:100px;"></td>' +
+                            '<td><input type="text" value="' + response[i][4] + '" id="rollNo' + degreeCount + '" ></td>' +
+                            '<td><input type="text" value="' + response[i][5] + '" id="institute' + degreeCount + '" ></td>' +
+                            '<td><input type="button" onclick=" onclick=RemoveItem(' + degreeCount + ')" value="x" class="btn btn-sm btn-dark btn-squar btn-xs" /></td>' +
+                            '</tr>';
+                            $("#classTable").find('tbody').append(tableRow);
+                            degreeCount++;
+                        }
+                    }
+                 );
+    }
+
+    function getStaffAllownces()
+    {
+        var staffId = 0;
+        @if(Model != null )
+        {
+            <text>
+        staffId = @Model.StaffId;
+        </text>
+        }
+        allownceCount = 0;
+        $.post( AppDetail() +"/Staff/GetStaffAllownces",
+                    { staffId: staffId },
+                    function (response) {
+                        //alert(response[0][0]);
+                        for (var i = 0; i < response.length; i++) {
+                            var tableRow = '<tr class="even pointer" id="allRow' + allownceCount + '"><td></td>' +
+                                '<td>' + response[i][0] + '</td>' +
+                                '<td><input type="text" style="width:100px;" value="' + response[i][1] + '" id="valAllownce' + allownceCount + '" hidden="hidden"></td>' +
+                                '<td><input type="text" style="width:100px;" value="' + response[i][2] + '" id="txtAllownce' + allownceCount + '"></td>' +
+
+                                '<td><input type="button" onclick=" onclick=RemoveItemAllownces(' + allownceCount + ')" value="x" class="btn btn-sm btn-dark btn-squar btn-xs" /></td>' +
+                                '</tr>';
+                            $("#allownceTable").find('tbody').append(tableRow);
+                            allownceCount++;
+                        }
+                    }
+                 );
+    }
+
+    function AddRowInEdu()
+    {
+        var tableRow = '<tr class="even pointer" id="eduRow' + degreeCount + '"><td></td>' +
+                        '<td><input type="text" id="degree' + degreeCount + '"></td>' +
+                        '<td><input type="text" id="year' + degreeCount + '"  style="width:100px;"></td>' +
+                        '<td><input type="text" id="obtMarks' + degreeCount + '"  style="width:100px;"></td>' +
+                        '<td><input type="text" id="totalMarks' + degreeCount + '"  style="width:100px;"></td>' +
+                        '<td><input type="text" id="rollNo' + degreeCount + '" ></td>' +
+                        '<td><input type="text" id="institute' + degreeCount + '" ></td>' +
+                        '<td><input type="button" onclick=" onclick=RemoveItem(' + degreeCount + ')" value="x" class="btn btn-sm btn-dark btn-squar btn-xs" /></td>' +
+                        '</tr>';
+        $("#classTable").find('tbody').append(tableRow);
+        degreeCount++;
+    }
+
+    function AddRowInAllownces() {
+        var e = document.getElementById("allowenceDD");
+        var strAllownce = e.options[e.selectedIndex].text;
+        var allownceValue = e.options[e.selectedIndex].value;
+        //alert(strUser1);
+        var alreadyFlag = false;
+        var table = document.getElementById("allownceTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var allownceText = row.cells[1].firstChild.nodeValue;
+            if (allownceText == strAllownce)
+            {
+                alreadyFlag = true;
+            }
+        }
+
+        if (alreadyFlag == false) {
+            var tableRow = '<tr class="even pointer" id="allRow' + allownceCount + '"><td></td>' +
+                            '<td>' + strAllownce + '</td>' +
+                            '<td><input type="text" style="width:100px;" value="' + allownceValue + '" id="valAllownce' + allownceCount + '" hidden="hidden"></td>' +
+                            '<td><input type="text" style="width:100px;" id="txtAllownce' + allownceCount + '"></td>' +
+
+                            '<td><input type="button" onclick=" onclick=RemoveItemAllownces(' + allownceCount + ')" value="x" class="btn btn-sm btn-dark btn-squar btn-xs" /></td>' +
+                            '</tr>';
+            $("#allownceTable").find('tbody').append(tableRow);
+            allownceCount++;
+            document.getElementById('allownceLable').innerHTML = '';
+        }
+        else {
+            //document.getElementById('allownceLable').innerHTML = 'Allownce is already added in table';
+            showNotification('Allownce is already added in table.', 'Error', 'Error')
+        }
+    }
+
+    function RemoveItem(removeIndex) {
+        //alert(removeIndex);
+        var currentrow = document.getElementById('eduRow' + removeIndex);
+        document.getElementById('classTable').deleteRow(currentrow.rowIndex);
+    }
+
+    function RemoveItemAllownces(removeIndex) {
+        //alert(removeIndex);
+        var currentrow = document.getElementById('allRow' + removeIndex);
+        document.getElementById('allownceTable').deleteRow(currentrow.rowIndex);
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function UploadImage() {
+        debugger;
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: AppDetail() + "/Student/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                //alert('Image Uploaded successfully')
+            });
+        }
+
+    }
+
+    function UploadStaffData(event)
+    {
+        var staffAllownces = [];
+        var table = document.getElementById("allownceTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var allownceText = row.cells[1].firstChild.nodeValue;
+            var allownceAmount = document.getElementById("txtAllownce" + (i - 1)).value;
+            var allownceId = document.getElementById("valAllownce" + (i - 1)).value;
+            var staffAllownce = {
+                "AllownceId": allownceId,
+                "Amount": allownceAmount
+            }
+            staffAllownces[i - 1] = staffAllownce;
+        }
+        //alert(staffAllownces);
+        var staffAllowncesListJson = JSON.stringify(staffAllownces);
+        $.ajax({
+            url: AppDetail() + '/Staff/SaveStaffAllownces',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: staffAllowncesListJson,// JSON.stringify(tagsList) },//JSON.stringify({ 'tagsList': tagsList }),
+            statusCode: {
+                200: function () { },
+                500: function () {
+                }
+            },
+
+            jsonp: 'jsonp'
+        });
+
+        var staffDegrees = [];
+        var table = document.getElementById("classTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var allownceText = row.cells[1].firstChild.nodeValue;
+            var degree = document.getElementById("degree" + (i - 1)).value;
+            var year = document.getElementById("year" + (i - 1)).value;
+            var obtMarks = document.getElementById("obtMarks" + (i - 1)).value;
+            var totalMarks = document.getElementById("totalMarks" + (i - 1)).value;
+            var rollNo = document.getElementById("rollNo" + (i - 1)).value;
+            var institute = document.getElementById("institute" + (i - 1)).value;
+            var staffDegree = {
+                "DegreeName": degree,
+                "Year": year,
+                "ObtMarks": obtMarks,
+                "TotalMarks": totalMarks,
+                "RollNo": rollNo,
+                "Institute": institute
+            }
+            staffDegrees[i - 1] = staffDegree;
+        }
+        //alert(staffAllownces);
+        var staffDegreeListJson = JSON.stringify(staffDegrees);
+        $.ajax({
+            url: AppDetail() + '/Staff/SaveStaffDegree',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: staffDegreeListJson,// JSON.stringify(tagsList) },//JSON.stringify({ 'tagsList': tagsList }),
+            statusCode: {
+                200: function () { },
+                500: function () {
+                }
+            },
+
+            jsonp: 'jsonp'
+
+        });
+
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: AppDetail() + "/Staff/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                //alert('Image Uploaded successfully')
+            });
+        }
+
+        $(document).ajaxStop(function() {
+            //alert(0)
+            if(event.name =="Create")
+            {
+                document.getElementById("createBtn").onclick = true;
+                $("#createBtn").click()
+            }
+            else
+            {
+                document.getElementById("updateBtn").onclick = true;
+                $("#updateBtn").click()
+            }
+        });
+
+        return false;
+    }
+
+    function getDesignationList() {
+        var catagoryId = $("#catagoryId").val();
+        GetDesignation(catagoryId, 0, 'designationId');
+    }
+
+    </script>

@@ -1,0 +1,605 @@
+﻿@model SMS_DAL.ViewModel.ScheduleViewModel
+@{
+    ViewBag.Title = "Time Table";
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Actions</label>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="form-group">
+                    <button class="btn btn-squar" id="StartBtn" onclick="startSchedule('@(ViewData["ScheduleStatus"] == "New" ? "Start" : "Reschedule")')" disabled="@(ViewData["AlgorithmStatus"] == "Running")">
+                        @(ViewData["ScheduleStatus"] == "New" ? "Start" : "Reschedule")
+                    </button>
+                    <button class="btn btn-squar" id="StopBtn" onclick="stopAlgorithm(null);" disabled="@(ViewData["AlgorithmStatus"] != "Running")">Stop</button>
+                    <button class="btn btn-squar" id="PauseBtn" onclick="pauseAlgorithm();" disabled="@(ViewData["AlgorithmStatus"] != "Running")">Pause</button>
+                    <button class="btn btn-squar" id="ResumeBtn" onclick="resumeAlgorithm();" disabled="@(ViewData["AlgorithmStatus"] != "Paused")">Resume</button>
+
+                    <div id="schedulerProgress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" id="searchPanelData">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Time Table</label>
+                <ul class="nav navbar-right panel_toolbox" style="margin-top:2px;">
+
+                    <li>
+                        <button class="btn btn-default btn-squar btn-sm" id="SaveBtn" onclick="onSaveScheduleChanges()" title="Save Changes">Save Changes</button>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+
+                        <button class="btn btn-danger btn-squar btn-sm" id="RefreshBtn" onclick="reloadData()" title="Cancel Changes">Cancel</button>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" id="classTable">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        Class Section
+                                    </th>
+                                    @foreach (var item in (List<SMS_DAL.ViewModel.LectureSlot>)Model.LectureSlots)
+                                    {
+                                        <th>
+                                            @item.SlotId
+                                        </th>
+                                    }
+                                </tr>
+
+                            </thead>
+                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                @foreach (var item in (List<SMS_DAL.ViewModel.ClassSectionLectures>)Model.ClassSectionLectures)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@Html.DisplayFor(modelItem => item.ClassSectionName)</strong>
+                                        </td>
+                                        @foreach (var slot in (List<SMS_DAL.ViewModel.LectureSlot>)Model.LectureSlots)
+                                        {
+                                            var lecture = item.Lectures.Where(n => n.SlotId == slot.SlotId).FirstOrDefault();
+                                            if (lecture != null)
+                                            {
+                                                <td id="@(item.ClassSectionId)_@(slot.SlotId)" ondrop="drop(event, @item.ClassSectionId, @slot.SlotId)"
+                                                    ondragover="allowDrop(event, @item.ClassSectionId)"
+                                                    style="margin: 10px; padding: 10px; border: 1px solid black;">
+
+                                                    <div id="@lecture.TimeTableId" draggable="true"
+                                                         ondragstart="drag(event, @item.ClassSectionId, @lecture.TimeTableId, @lecture.TeacherId, @lecture.RoomId)">
+                                                        <span style="font-size:10px;"><strong>Subject: </strong>@lecture.SubjectName</span><br />
+                                                        <span style="font-size:10px;"><strong>Teacher: </strong>@lecture.TeacherName</span><br />
+                                                        @*<span><strong>Room: </strong>@lecture.RoomId</span>*@
+                                                        <input id="lecture_@lecture.TimeTableId" hidden="hidden" value="@lecture.SlotId">
+                                                    </div>
+
+                                                    <input id="destTimeTableId_@(item.ClassSectionId)_@slot.SlotId" hidden="hidden" value="@lecture.TimeTableId">
+                                                    <input id="destTeacherId_@(item.ClassSectionId)_@slot.SlotId" hidden="hidden" value="@lecture.TeacherId">
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td id="@(item.ClassSectionId)_@slot.SlotId" ondrop="drop(event, @item.ClassSectionId, @slot.SlotId)"
+                                                    ondragover="allowDrop(event, @item.ClassSectionId)" style="margin: 10px; padding: 10px; border: 1px solid black;">
+
+                                                    <input id="destTimeTableId_@(item.ClassSectionId)_@slot.SlotId" hidden="hidden" value="0">
+                                                    <input id="destTeacherId_@(item.ClassSectionId)_@slot.SlotId" hidden="hidden" value="0">
+                                                </td>
+                                            }
+                                        }
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.getJSON(AppDetail() + "/TimeTable/GetSchedule", null, function (response) {
+            window.value = response.LectureSlots;
+        })//end json
+    });
+
+    var chartSpeed = null;
+    var schedularStatus = null;
+    function showSchedulerProgress(){
+        var options = {
+            chart: {
+                type: 'solidgauge'
+            },
+            title: {
+                text: 'Scheduler Progress'
+            },
+            pane: {
+                center: ['50%', '85%'],
+                size: '140%',
+                startAngle: -90,
+                endAngle: 90,
+                background: {
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                    innerRadius: '60%',
+                    outerRadius: '100%',
+                    shape: 'arc'
+                }
+            },
+
+            exporting: {
+                enabled: false
+            },
+
+            tooltip: {
+                enabled: false
+            },
+
+            yAxis: {
+                stops: [
+                    [0.1, '#DF5353'], // red
+                    [0.5, '#DDDF0D'], // yellow
+                    [0.8, '#55BF3B'] //green
+                ],
+                lineWidth: 0,
+                tickWidth: 0,
+                minorTickInterval: null,
+                tickAmount: 2,
+                title: {
+                    y: -70
+                },
+                labels: {
+                    y: 16
+                }
+            },
+
+            plotOptions: {
+                solidgauge: {
+                    dataLabels: {
+                        y: 5,
+                        borderWidth: 0,
+                        useHTML: true
+                    }
+                }
+            }
+        };
+
+        // The speed gauge
+        chartSpeed = Highcharts.chart('schedulerProgress', Highcharts.merge(options, {
+            yAxis: {
+                min: 0,
+                max: 100,
+                title: {
+                    text: 'Progress'
+                }
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            series: [{
+                name: 'Speed',
+                data: [80],
+                dataLabels: {
+                    format:
+                        '<div style="text-align:center">' +
+                        '<span style="font-size:25px">{y}</span><br/>' +
+                        '<span style="font-size:12px;opacity:0.4">%</span>' +
+                        '</div>'
+                },
+                tooltip: {
+                    valueSuffix: ' %'
+                }
+            }]
+
+        }));
+    }
+
+    function startSchedule(action) {
+        if (action == "Reschedule") {
+            let message = 'By resheduling, your previous time table will be cleared. Are you sure to setup new time table?';
+            let r = confirm(message);
+            if(r == true){
+                onStartAlgorithmConfirmed();
+            }
+            //showConfirmation("onStartAlgorithmConfirmed", message, null, null, null);
+            //ConfirmDelete(message, 1, "controllerName");
+            //ConfirmDelete('Are you sure you wish to delete this Teacher Subjec?', "0", 'test');
+        } else {
+            onStartAlgorithmConfirmed();
+        }
+    }
+
+    function onStartAlgorithmConfirmed() {
+        $('#StartBtn').attr('disabled', true);
+        $.getJSON(AppDetail() + "/TimeTable/StartAlgorithm", function (response) {
+            showNotification(response.Message, response.Success ? 'Success' : 'Error', response.Success ? 'Success' : 'Error');
+            if (response.Success) {
+                schedularStatus = "Running";
+                $('#StopBtn').attr('disabled', false);
+                $('#PauseBtn').attr('disabled', false);
+                showSchedulerProgress();
+                setTimeout(startgettingFitness(0, 0), 1000);
+            } else {
+                $('#StartBtn').attr('disabled', false);
+            }
+        })//end json
+    }
+
+    function startgettingFitness(oldValue, times){
+        var globalResponse = null;
+        $.ajax({
+            contentType:'application/json; charset=utf-8',
+            dataType:'json',
+            type:'Get',
+            url:AppDetail() + '/TimeTable/GetFitness',
+            //error: function(){
+            //    showNotification("An Error accured while saving changes, please try again.", 'Error', 'Error');
+            //},
+            success: function(response){
+                globalResponse = response;
+            },
+            complete: function(response){
+
+                if(globalResponse && globalResponse.Source && globalResponse.Source.length > 0 ){
+                    // if same result for ten seconds then abort
+                    if(globalResponse && globalResponse.Source && globalResponse.Source.length > 0 && oldValue == globalResponse.Source[1].Value && globalResponse.Source[0].Value != "Completed"){
+                        times++;
+
+                    }else{
+                        times = 0;
+                    }
+
+                    if(schedularStatus == "Running"){
+                        oldValue = globalResponse.Source[1].Value;
+                        if(chartSpeed){
+                            var point = chartSpeed.series[0].points[0];
+                            point.update(Number((oldValue*100).toFixed(2)))
+                        }
+
+                        if(times < 1000 && globalResponse.Source[0].Value == "Running"){
+                            setTimeout(startgettingFitness(oldValue, times), 3000);
+                        }else if(globalResponse.Source[0].Value == "Completed"){
+                            showNotification(globalResponse.Message, globalResponse.Success ? 'Success' : 'Error', globalResponse.Success ? 'Success' : 'Error');
+                            $('#StopBtn').attr('disabled', true);
+                            $('#PauseBtn').attr('disabled', true);
+                            setTimeout(reloadData(), 5000);
+                        }else if(times >= 1000){
+                            let message = 'Schedular is not able to optimize more than ' + (oldValue*100).toFixed(2) + '%. Considering the scenerio, most appropriate solution has been formed. Click yes to save and see the results.';
+                            let r = confirm(message);
+                            if(r == true){
+                                stopAlgorithm(true);
+                            }else{
+                                stopAlgorithm(false);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    function reloadData() {
+        window.location.href = AppDetail() + "/TimeTable/Index";
+    }
+
+    function stopAlgorithm(save) {
+        if(save == null){
+            let message = 'Considering the scenerio, most appropriate solution has been formed. Click yes to save and see the results.';
+            save = confirm(message);
+        }
+        $.getJSON(AppDetail() + "/TimeTable/StopAlgorithm?save="+save, function (response) {
+            showNotification(response.Message, response.Success ? 'Success' : 'Error', response.Success ? 'Success' : 'Error');
+            if (response.Success) {
+                schedularStatus = "Stopped";
+                $('#StartBtn').attr('disabled', false);
+                $('#PauseBtn').attr('disabled', true);
+                $('#StopBtn').attr('disabled', true);
+                $('#ResumeBtn').attr('disabled', true);
+                if(save == true){
+                    reloadData();
+                }
+            }
+        })//end json
+    }
+
+    function pauseAlgorithm() {
+        $('#PauseBtn').attr('disabled', true);
+        $('#StopBtn').attr('disabled', true);
+
+        $.getJSON(AppDetail() + "/TimeTable/PauseAlgorithm", function (response) {
+            schedularStatus = "Paused";
+            showNotification(response.Message, response.Success ? 'Success' : 'Error', response.Success ? 'Success' : 'Error');
+            if (response.Success) {
+                $('#ResumeBtn').attr('disabled', false);
+            }
+        })//end json
+    }
+
+
+    function resumeAlgorithm() {
+        $('#ResumeBtn').attr('disabled', true);
+        $.getJSON(AppDetail() + "/TimeTable/ResumeAlgorithm", function (response) {
+            showNotification(response.Message, response.Success ? 'Success' : 'Error', response.Success ? 'Success' : 'Error');
+            if (response.Success) {
+                schedularStatus = "Running";
+                $('#PauseBtn').attr('disabled', false);
+                $('#StopBtn').attr('disabled', false);
+                setTimeout(startgettingFitness(0, 0), 1000);
+            }
+        })//end json
+    }
+
+    // manual changes
+    function hasDuplicates(array) {
+        return (new Set(array)).size !== array.length;
+    }
+
+    function onSaveScheduleChanges() {
+        for(var i = 0; i < window.value.length; i++){
+            if(hasDuplicates(window.value[i].TeacherIds)){
+                showNotification("Your changes have conflicts. Please make sure that a teacher is not teaching multiple classes in same slot.", 'Error', 'Error');
+                return;
+            }
+        }
+        $.ajax({
+            contentType:'application/json; charset=utf-8',
+            dataType:'json',
+            type:'POST',
+            url:AppDetail() + '/TimeTable/SaveScheduleChanges',
+            data:JSON.stringify(window.value),
+            error: function(){
+                showNotification("An Error accured while saving changes, please try again.", 'Error', 'Error');
+            },
+            success: function(response){
+                showNotification(response.Message, response.Success ? 'Success' : 'Error', response.Success ? 'Success' : 'Error');
+                reloadData();
+            }
+        });
+    }
+    // Drag and drop functionality
+    function allowDrop(ev, destClassSectionId) {
+        ev.preventDefault();
+    }
+
+    function drag(ev, classSectionId, timeTableId, teacherId, roomId) {
+        ev.dataTransfer.setData("schedule-item", ev.target.id);
+        ev.dataTransfer.setData("class-section-id", classSectionId);
+        ev.dataTransfer.setData("time-table-id", timeTableId);
+        ev.dataTransfer.setData("teacher-id", teacherId);
+        ev.dataTransfer.setData("room-id", roomId);
+    }
+
+    function drop(ev, destClassSectionId, destSlotId) {
+        let sourceClassSectionId = ev.dataTransfer.getData("class-section-id");
+        let sourceTimeTableId = ev.dataTransfer.getData("time-table-id");
+        let sourceTeacherId = ev.dataTransfer.getData("teacher-id");
+        let sourceRoomId = ev.dataTransfer.getData("room-id");
+
+        var sourceSlotId = $("#lecture_"+sourceTimeTableId).val();
+
+        if (sourceClassSectionId != destClassSectionId) {
+            showNotification("You cannot swap lectures with other class sections", 'Error', 'Error');
+        } else {
+            ev.preventDefault();
+            var destTimeTableId = $("#destTimeTableId_"+destClassSectionId+"_"+destSlotId).val();
+            if(sourceTimeTableId != destTimeTableId){
+                var destTeacherId = $("#destTeacherId_"+destClassSectionId+"_"+destSlotId).val();
+                if(window.value && window.value.length > 0){
+                    var destSlotIndex = window.value.findIndex(n => n.SlotId == destSlotId);
+                    var sourceSlotIndex = window.value.findIndex(n => n.SlotId == sourceSlotId);
+                    if(destSlotIndex > -1){
+                        if(destTimeTableId && destTimeTableId > 0){//need to swap
+                            // is diplacement possible
+                            var response = updateGlobalTeachers(sourceSlotIndex, destSlotIndex, sourceTeacherId, destTeacherId, sourceTimeTableId, destTimeTableId, sourceClassSectionId, destClassSectionId);
+
+                            swapLectures(ev, sourceClassSectionId, destClassSectionId, sourceSlotId, destSlotId,
+                                sourceTimeTableId, destTimeTableId, response[0], response[1]);
+                            //updating source and dest
+                            updateValues(sourceClassSectionId, destClassSectionId, sourceSlotId,
+                                destSlotId, sourceTimeTableId, destTimeTableId, sourceTeacherId, destTeacherId);
+
+                            if(response[0] == true || response[1] == true){
+                                showNotification("Your changes have caused conflicts. Please make sure that a teacher is not teaching multiple classes in same slot.", 'Warning', 'Warning');
+                            }
+
+                        }else{
+                            // updating global instance
+                            var response = updateGlobalTeachers(sourceSlotIndex, destSlotIndex, sourceTeacherId, null, sourceTimeTableId, null, sourceClassSectionId, null);
+
+                            swapLectures(ev, sourceClassSectionId, destClassSectionId, sourceSlotId, destSlotId, null, null, response[0], response[1]);
+                            //updating source and dest
+                            updateValues(sourceClassSectionId, destClassSectionId, sourceSlotId,
+                                            destSlotId, sourceTimeTableId, 0, sourceTeacherId, 0);
+
+                            if(response[0] == true || response[1] == true){
+                                showNotification("Your changes have caused conflicts. Please make sure that a teacher is not teaching multiple classes in same slot.", 'Warning', 'Warning');
+                            }
+                        }
+                        //}
+                    }
+                }
+            }
+        }
+    }
+
+    function updateGlobalTeachers(sourceSlotIndex, destSlotIndex, sourceTeacherId, destTeacherId, sourceId, destId, sourceClassId, destClassId){
+        sourceTeacherId = Number(sourceTeacherId);
+        sourceId = Number(sourceId);
+        sourceSlotIndex = Number(sourceSlotIndex);
+        destTeacherId = Number(destTeacherId);
+        destId = Number(destId);
+        destSlotIndex = Number(destSlotIndex);
+        sourceClassId = Number(sourceClassId);
+        destClassId = Number(destClassId);
+
+        var teachersOnDestSlot = window.value[destSlotIndex].TeacherIds;
+        var idsOnDestSlot = window.value[destSlotIndex].TimeTableIds;
+        if(teachersOnDestSlot && teachersOnDestSlot.length < 1){
+            teachersOnDestSlot = [];
+            window.value[destSlotIndex].TeacherIds = [];
+            idsOnDestSlot = [];
+            window.value[destSlotIndex].TimeTableIds = [];
+            window.value[destSlotIndex].ClassSectionIds = [];
+        }
+
+        var teachersOnSourceSlot = window.value[sourceSlotIndex].TeacherIds;
+        var IdsOnSourceSlot = window.value[sourceSlotIndex].TimeTableIds;
+        if(teachersOnSourceSlot && teachersOnSourceSlot.length < 1){
+            teachersOnSourceSlot = [];
+            window.value[sourceSlotIndex].TeacherIds = [];
+            IdsOnSourceSlot = [];
+            window.value[sourceSlotIndex].TimeTableIds = [];
+            window.value[sourceSlotIndex].ClassSectionIds = [];
+        }
+
+        // remove sourceTeacherId from source as going to dispalced
+        var sourceTeacherIndex = teachersOnSourceSlot.findIndex(n => n == sourceTeacherId);
+        window.value[sourceSlotIndex].TeacherIds.splice(sourceTeacherIndex, 1);
+        var isDestConflict = false;
+        var isSourceConflict = false;
+
+        if(destTeacherId){//dest is not empty slot
+            var sourceBusyTeacherIndex = teachersOnSourceSlot.findIndex(n => n == destTeacherId);
+            isSourceConflict = sourceBusyTeacherIndex >= 0;
+            // changing all lectures bg by this teacher in slot
+            if(isSourceConflict){
+                hightLightExistingConflicts(destTeacherId, window.value[sourceSlotIndex].SlotId, window.value[sourceSlotIndex].ClassSectionIds);
+            }
+
+            window.value[sourceSlotIndex].TeacherIds.push(destTeacherId);
+            window.value[sourceSlotIndex].TimeTableIds.push(destId);
+            window.value[sourceSlotIndex].ClassSectionIds.push(destClassId);
+
+            //remove destTeacherId from dest as going to dispalced
+            var destTeacherIndex = teachersOnDestSlot.findIndex(n => n == destTeacherId);
+            window.value[destSlotIndex].TeacherIds.splice(destTeacherIndex, 1);
+
+            var destIdIndex = idsOnDestSlot.findIndex(n => n == destId);
+            window.value[destSlotIndex].TimeTableIds.splice(destIdIndex, 1);
+
+            var destClassIdIndex = window.value[destSlotIndex].ClassSectionIds.findIndex(n => n == destClassId);
+            window.value[destSlotIndex].ClassSectionIds.splice(destClassIdIndex, 1);
+
+            //placing source to dest
+            isDestConflict = teachersOnDestSlot.findIndex(n => n == sourceTeacherId) >= 0;
+            // changing all lectures bg by this teacher in slot
+            if(isDestConflict){
+                hightLightExistingConflicts(sourceTeacherId, window.value[destSlotIndex].SlotId, window.value[destSlotIndex].ClassSectionIds);
+            }
+            window.value[destSlotIndex].TeacherIds.push(sourceTeacherId);
+            window.value[destSlotIndex].TimeTableIds.push(sourceId);
+            window.value[destSlotIndex].ClassSectionIds.push(sourceClassId);
+            //to change BG color
+            resetBGColor(window.value[destSlotIndex].SlotId, destTeacherId, window.value[destSlotIndex].TeacherIds, window.value[destSlotIndex].ClassSectionIds);
+        }else{
+            //placing source to dest
+            isDestConflict = teachersOnDestSlot.findIndex(n => n == sourceTeacherId) >= 0;
+
+            // changing all lectures bg by this teacher in slot
+            if(isDestConflict){
+                hightLightExistingConflicts(sourceTeacherId, window.value[destSlotIndex].SlotId, window.value[destSlotIndex].ClassSectionIds);
+            }
+
+            window.value[destSlotIndex].TeacherIds.push(sourceTeacherId);
+            window.value[destSlotIndex].TimeTableIds.push(sourceId);
+            window.value[destSlotIndex].ClassSectionIds.push(sourceClassId);
+        }
+
+        var sourceIndex = IdsOnSourceSlot.findIndex(n => n == sourceId);
+        window.value[sourceSlotIndex].TimeTableIds.splice(sourceIndex, 1);
+
+        var sourceClassIdIndex = window.value[sourceSlotIndex].ClassSectionIds.findIndex(n => n == sourceClassId);
+        window.value[sourceSlotIndex].ClassSectionIds.splice(sourceClassIdIndex, 1);
+        //to change BG color
+        resetBGColor(window.value[sourceSlotIndex].SlotId, sourceTeacherId, window.value[sourceSlotIndex].TeacherIds, window.value[sourceSlotIndex].ClassSectionIds);
+
+        return [isSourceConflict, isDestConflict];
+    }
+
+    function resetBGColor(SlotId, sourceTeacherId, TeacherIds, ClassSectionIds){
+        //to change BG color,  is still conflict
+        let count = TeacherIds.reduce((n, x) => n + (x === sourceTeacherId), 0);
+        if(count == 1){// not a conflict and exist
+            for(var i = 0 ; i < ClassSectionIds.length; i++){
+                if($("#destTeacherId_"+ClassSectionIds[i]+"_"+SlotId).val() == sourceTeacherId){
+                    $("#"+ClassSectionIds[i]+"_"+SlotId).attr('style', 'margin: 10px; padding: 10px; border: 1px solid black;');
+                }
+            }
+        }
+    }
+
+    function hightLightExistingConflicts(teacherId, slotId, classSectionIds){
+        for(var i = 0; i < classSectionIds.length; i++){
+            var lectureByTeacher = $("#destTeacherId_"+classSectionIds[i] + "_"+slotId).val();
+            // chnage bg if that teacher already teaching this section
+            if(lectureByTeacher == teacherId){
+                $("#"+classSectionIds[i]+'_'+slotId).attr('style', 'background:orange; margin: 10px; padding: 10px; border: 1px solid black;');
+            }
+        }
+    }
+
+    function updateValues(sourceClassSectionId, destClassSectionId, sourceSlotId, destSlotId, sourceTimeTableId, destTimeTableId, sourceTeacherId, destTeacherId){
+        $("#lecture_"+sourceTimeTableId).attr('value',destSlotId);
+        $("#lecture_"+destTimeTableId).attr('value',sourceSlotId);
+
+        //updating time table ids
+        $("#destTimeTableId_"+destClassSectionId+"_"+destSlotId).attr('value',sourceTimeTableId);
+        $("#destTimeTableId_"+sourceClassSectionId+"_"+sourceSlotId).attr('value',destTimeTableId);
+
+        $("#destTeacherId_"+destClassSectionId+"_"+destSlotId).attr('value',sourceTeacherId);
+        $("#destTeacherId_"+sourceClassSectionId+"_"+sourceSlotId).attr('value',destTeacherId);
+    }
+
+    function swapLectures(ev, sourceClassSectionId, destClassSectionId, sourceSlotId, destSlotId, sourceTimeTableId, destTimeTableId, isSourceConflict, isDestConflict){
+        $("#"+destClassSectionId+'_'+destSlotId).attr('style', 'margin: 10px; padding: 10px; border: 1px solid black;');
+        $("#"+sourceClassSectionId+'_'+sourceSlotId).attr('style', 'margin: 10px; padding: 10px; border: 1px solid black;');
+
+        var data = ev.dataTransfer.getData("schedule-item");
+        var destSlot = document.getElementById(destClassSectionId+'_'+destSlotId);
+        destSlot.appendChild(document.getElementById(data));
+        if(isDestConflict){
+            $("#"+destClassSectionId+'_'+destSlotId).attr('style', 'background:orange; margin: 10px; padding: 10px; border: 1px solid black;');
+        }
+        //swap
+        if(destTimeTableId){
+            var sourceSlot = document.getElementById(sourceClassSectionId+'_'+sourceSlotId);
+            var destLecture = document.getElementById(destTimeTableId);
+            sourceSlot.appendChild(destLecture);
+            if(isSourceConflict){
+                $("#"+sourceClassSectionId+'_'+sourceSlotId).attr('style', 'background:orange; margin: 10px; padding: 10px; border: 1px solid black;');
+            }
+        }
+    }
+</script>
+

@@ -1,0 +1,311 @@
+﻿@{
+    ViewBag.Title = "Term Chapters";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Term Chapters</label>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("CreateTermChapters", "TermChapters", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*@Html.ValidationSummary(true)*@
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Year
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", @onchange = "GetTermByYear()", id = "yearIdSearch" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Term<span class="required annotation">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("TermId", (IEnumerable<SelectListItem>)ViewBag.TermId, new { @class = "form-control input-sm", id = "termIdSearch" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Class
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Section
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control input-sm", onchange = "getSubjectList()", id = "sectionId" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Class Subject
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassSubjectId", (IEnumerable<SelectListItem>)ViewBag.SubjectId, new { @class = "form-control input-sm", onchange = "getChapterList()", id = "classSubjectList" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Subject Chapters<span class="required annotation">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("chapterId", (IEnumerable<SelectListItem>)ViewBag.ChapterId, new { @class = "form-control input-sm", id = "chapterId" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Add Term Chapters" name="Create" class="btn btn-sm btn-info btn-squar" />
+                                </div>
+                            </div>
+                            </div>
+</fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="x_panel">
+    <div class="x_title sc_panel_header">
+        <label class="nav navbar-left control-label sc_panel_label" align="left">Term Chapters</label>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+            </li>
+
+            <li>
+                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+
+        <div class="form-group">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="classTable">
+                    <thead>
+                        <tr class="headings">
+                            <th>
+                                <label>Term</label>
+                            </th>
+                            <th>
+                                <label>Chapter</label>
+                            </th>
+                            @*<th>
+                                <label>Rating</label>
+                            </th>
+                            <th>
+                                <label>Description</label>
+                            </th>*@
+                            <th>
+                                <label>Actions</label>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.TermChapterModel>)ViewData["TermChapters"])
+                        {
+                            <tr>
+
+                                <td>
+                                    <span>@(item.TermName)</span>
+                                </td>
+                                <td>
+                                    <span>@(item.SubjectChapterName)</span>
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.Rating)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>*@
+
+                            <td>
+                                @Html.ActionLink("  ", "Delete", new { id = item.Id }, new
+                                                            {
+                                                                onclick = "return GenericConfirmDelete('Are you sure to delete the term chapter?',  '/TermChapters/Delete?id=" + item.Id + "&registerCourseId=" + item.RegisterCourseId
+                                                           + "&classId=" + item.ClassId + "&yearId=" + item.ExamTermYear + "&termId=" + item.TermId
+                                                           + "&sectionId=" + item.SectionId + "');",
+                                                                style = "color: darkred;font-size: 15px;",
+                                                                title = "Delete",
+                                                                @class = "glyphicon glyphicon-trash"
+                                                            })
+                            </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    window.onload = function (e) {
+        GetTermByYear();
+        getSectionList();
+        populateErrors();
+    }
+
+    $(document).ready(function() {
+        $('#classTable').DataTable( {
+            "lengthMenu": [[-1], ["All"]],
+            paging: false, searching : false
+        } );
+    } );
+
+    function populateErrors()
+    {
+        @if (ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 1)
+            {
+                <text> showNotification('Record save successfully.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 1)
+            {
+                <text> showNotification('Unable to Save.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 200)
+            {
+                <text> showNotification('Record deleted successfully.', 'Success', 'Success') </text>
+            }
+             else if ((int)@ViewData["Error"] == 403)
+            {
+                <text> showNotification('Following chapter is already added to the term.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 404)
+            {
+                <text> showNotification('Unable to delete.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 202)
+            {
+                <text> showNotification('Please select term and chapter to be added.', 'Error', 'Error') </text>
+            }
+        }
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        $("#sectionId").html("");
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+        if(classId == '')
+        {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+            $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+        }
+        else if(classId == @(item.ClassId))
+            {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+        $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+    getSubjectList();
+    }
+
+    function GetTermByYear() {
+        var yearId = $('#yearIdSearch').val();
+        $("#termIdSearch").html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamTerm>)ViewData["examTerm"])
+        {
+             <text>
+
+        if(yearId == @(item.Year))
+        {
+            var id = @(item.Id);
+            var name = '@(item.TermName)';
+        $("#termIdSearch").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+    }
+
+    function getSubjectList() {
+        var classId = $("#classId").val();
+        var sectionId = $("#sectionId").val();
+        $("#subjectId").html("");
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.RegisterCourseModel>)ViewData["classSubject"])
+        {
+
+            <text>
+        if(classId == '' || classId == '0' || classId == @(item.ClassId))
+        {
+            if(sectionId == '' || sectionId == '0' || sectionId == @(item.SectionId))
+        {
+            var id = @(item.SubjectId);
+            var name = '@(item.SubjectName)';
+            $("#subjectId").append('<option value='+id+'>'+name+'</option>');
+        }
+    }
+    </text>
+        }
+
+    getChapterList();
+    }
+
+    function getChapterList() {
+        var courseId = $("#classSubjectList").val();
+        $('#chapterId').html("");
+        @foreach (var item in (IEnumerable<SMS_DAL.SubjectChapter>)ViewData["allChapters"])
+        {
+            <text>
+        if(courseId == @(item.RegisterCourseId))
+        {
+            $("#chapterId").append('<option value=@(item.Id)>@(item.Name)</option>');
+    }
+    </text>
+        }
+    }
+
+</script>
+

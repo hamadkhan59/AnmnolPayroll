@@ -1,0 +1,231 @@
+﻿
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Exam Configuration</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div hidden="hidden">@Html.ValidationSummary(false)</div>
+                    @*@Html.ValidationSummary(true)*@
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Grade to be displayed in Exam Result? 
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_GRADE_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD, 
+                                        new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_GRADE_FLAG })
+                                </div>
+                            </div>
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Position to be displayed in Exam Result? 
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_POSITION_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD, 
+                                   new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_POSITION_FLAG })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Remarks to be displayed in Exam Result?
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_REMARKS_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD,
+                                        new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_REMARKS_FLAG })
+                                </div>
+                            </div>
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Percentage to be displayed in Exam Result?
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_PERCENTAGE_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD,
+                                   new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_PERCENTAGE_FLAG })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Priciple Signature to be displayed in Exam Result?
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_PRICIPLE_SIGN_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD,
+                                        new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_PRICIPLE_SIGN_FLAG })
+                                </div>
+                            </div>
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Teacher Signature to be displayed in Exam Result?
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_TEACHER_SIGN_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD,
+                                   new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_TEACHER_SIGN_FLAG })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Parents Signature to be displayed in Exam Result?
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_PARENT_SIGN_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD,
+                                        new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_PARENT_SIGN_FLAG })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Is Passing Percetange Note to be displayed in Exam Result?
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList(SMS_Web.Helpers.SysConfig.EC_PASSING_PER_NOTE_FLAG, (IEnumerable<SelectListItem>)ViewBag.YesNoDD,
+                                        new { @class = "form-control", id = SMS_Web.Helpers.SysConfig.EC_PASSING_PER_NOTE_FLAG })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Passing Percentage Note
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div>
+                                    <input type="text" class="form-control" id="@SMS_Web.Helpers.SysConfig.EC_PASSING_PER_NOTE"
+                                     value="@SMS_Web.Helpers.SysConfig.GetSystemParam(SMS_Web.Helpers.SysConfig.EC_PASSING_PER_NOTE).ParamValue" />
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Save" name="Create" class="btn btn-squar" onclick="return UpdateConfigValues()" />
+                                    </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function() {
+        $('#classTable').DataTable( {
+            "lengthMenu": [[-1], ["All"]],
+            paging: false, searching : false
+        } );
+    } );
+
+    window.onload = function (e) {
+        SetConfigValues();
+    }
+
+    function SetConfigValues() {
+        @foreach (var item in (IEnumerable<SMS_DAL.SystemConfig>)SMS_Web.Helpers.SessionHelper.SystemConfigList())
+        {
+             <text>
+                var elem = document.getElementById('@item.ParamName');
+                if(elem != null)
+                {
+                    @*var option = "#" + "@item.ParamName" + " option[value='" + "@item.ParamValue" + "']";*@
+                    var option = "#"+ "@item.ParamName" + " option:contains('"+ "@item.ParamValue" +"')";
+
+                    $(option).prop('selected', true);
+                }
+            </text>
+        }
+    }
+
+    function UpdateConfigValues() {
+
+        var SystemConfigList = [];
+        var i = 0;
+        @foreach (var item in (IEnumerable<SMS_DAL.SystemConfig>)SMS_Web.Helpers.SessionHelper.SystemConfigList())
+        {
+             <text>
+                var elem = document.getElementById('@item.ParamName');
+                if(elem != null)
+                {
+                    if ('@item.ParamName' == '@SMS_Web.Helpers.SysConfig.EC_PASSING_PER_NOTE')
+                    {
+                        var option = "#" + "@item.ParamName";
+                        var config = {
+                            Id: '@item.Id',
+                            ParamName: '@item.ParamName',
+                            ParamValue: $(option).val(),
+                        };
+                        SystemConfigList[i] = config;
+                        i++;
+                    }
+                    else
+                    {
+                        var option = "#" + "@item.ParamName" + " option:selected";
+                        var config = {
+                            Id: '@item.Id',
+                            ParamName: '@item.ParamName',
+                            ParamValue: $(option).text(),
+                        };
+                        SystemConfigList[i] = config;
+                        i++;
+                    }
+                }
+            </text>
+        }
+
+        $.ajax({
+            url: AppDetail() + '/SystemConfiguration/SaveExamConfig',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(SystemConfigList),
+            statusCode: {
+                200: function () {
+                    showNotification('Exam Configuration is saved succesfully.', 'Success', 'Success')
+                },
+                500: function () {
+                    showNotification(' Unable to Save Exam Configuration.', 'Error', 'Error')
+                }
+            },
+            jsonp: 'jsonp'
+        });
+
+        debugger
+        return false;
+    }
+
+</script>

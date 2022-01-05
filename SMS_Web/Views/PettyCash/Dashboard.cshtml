@@ -1,0 +1,712 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<div role="main">
+    <div class="">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-5">
+                            <h2>Expenses VS Revenue</h2>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="left" for="first-name">
+                            Date Range <span class="required">*</span>
+                        </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div id="revExStatsDatePicker" style="background: #fff; cursor: pointer; padding: 4px 10px; border: 1px solid #ccc;">
+                                <i class="caret pull-right"></i>
+                                <span style="color:black">December 30, 2018 - January 28, 2020</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select onchange="onRevenueViewChanged()" id="view1" style="color:black;background: #fff; cursor: pointer; padding: 5px 20px; border: 1px solid #ccc" class="pull-right">
+                                <option value="month">Month View</option>
+                                <option value="day">Day View</option>
+                            </select>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="x_content">
+                        <div class="demo-container" style="height:350px">
+                            <div id="revenueDetails" class="demo-placeholder" style="width: 100%; height:350px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-5">
+                            <h2>Expenses VS Revenue (Line)</h2>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                            Date Range <span class="required">*</span>
+                        </label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div id="revExStatsDatePickerLine" style="background: #fff; cursor: pointer; padding: 4px 10px; border: 1px solid #ccc">
+                                <i class="caret pull-right"></i>
+                                <span style="color:black">December 30, 2018 - January 28, 2020</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select onchange="onRevenueViewChangedLine()" id="view1Line" style="color:black;background: #fff; cursor: pointer; padding: 5px 20px; border: 1px solid #ccc" class="pull-right">
+                                <option value="month">Month View</option>
+                                <option value="day">Day View</option>
+                            </select>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="x_content">
+                        <div class="demo-container" style="height:350px">
+                            <div id="revenueDetailsLine" class="demo-placeholder" style="width: 100%; height:350px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-6">
+                            <h2>Account Details</h2>
+                        </div>
+                        <div class="col-md-6">
+
+                           
+                            <select onchange="onViewChanged()" id="view" style="color:black;background: #fff; cursor: pointer; padding: 5px 20px; border: 1px solid #ccc" class="pull-right">
+                                <option value="month">Month View</option>
+                                <option value="day">Day View</option>
+                            </select>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="x_content">
+        
+                        <fieldset>
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                                        Finance Level <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("FinanceLevelId", (IEnumerable<SelectListItem>)ViewBag.FinanceLevelId, new { name = "FinanceLevel", @class = "form-control input-sm", id = "idFinanceLevel", @onchange = "ShowLevel()" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter1" style="font-size:11px;" align="right" for="first-name">
+                                        Category <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 filter1">
+                                        <div>
+                                            @Html.DropDownList("FinanceFirstLvlAccount", (IEnumerable<SelectListItem>)ViewBag.FirstLvlAccountId, new { name = "FinanceFirstLvlAccount", @class = "form-control input-sm", id = "firstLvlAccountIdList" })
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter2" style="font-size:11px;" align="right" for="first-name">
+                                        Main Account <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 filter2">
+                                        <div>
+                                            @Html.DropDownList("FinanceSeccondLvlAccount", (IEnumerable<SelectListItem>)ViewBag.SeccondLvlAccountId, new { name = "FinanceSeccondLvlAccount", @class = "form-control input-sm", id = "seccondLvlAccountIdList" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter3" style="font-size:11px;" align="right" for="first-name">
+                                        Sub Account <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 filter3">
+                                        <div>
+                                            @Html.DropDownList("FinanceThirdLvlAccount", (IEnumerable<SelectListItem>)ViewBag.ThirdLvlAccountId, new { name = "FinanceThirdLvlAccount", @class = "form-control input-sm", id = "thirdLvlAccountIdList" })
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter4" style="font-size:11px;" align="right" for="first-name">
+                                        Sub Sub Account <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 filter4">
+                                        <div>
+                                            @Html.DropDownList("FinanceFourthLvlAccount", (IEnumerable<SelectListItem>)ViewBag.FourthLvlAccountId, new { name = "FinanceFourthLvlAccount", @class = "form-control input-sm", id = "fourthLvlAccountIdList" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter5" style="font-size:11px;" align="right" for="first-name">
+                                        Detail Account <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 filter5">
+                                        <div>
+                                            @Html.DropDownList("FinanceFifthLvlAccount", (IEnumerable<SelectListItem>)ViewBag.FifthLvlAccountId, new { name = "FinanceFifthLvlAccount", @class = "form-control input-sm", id = "fifthLvlAccountIdList" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                                        Date Range <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <div id="attendanceStatsDatePicker" style="background: #fff; cursor: pointer; padding: 4px 10px; border: 1px solid #ccc">
+                                            <i class="caret pull-right"></i>
+                                            <span>December 30, 2018 - January 28, 2020</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                               
+                                <div class="form-group row">
+                                    <div class="col-md-11 col-sm-11 col-xs-12">
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-12">
+                                        <button onclick="showAccountDetails()" name="SearchEntry" class="btn btn-squar">Search</button>
+                                    </div>
+                                </div>
+
+                                <div class="ln_solid"></div>
+                            </fieldset>
+                    </div>
+
+
+                    <div class="x_content">
+                        <div class="demo-container" style="height:350px">
+                            <div id="attendanceDetails" class="demo-placeholder" style="width: 100%; height:350px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-6">
+                            <h2>Account Details (Line)</h2>
+                        </div>
+                        <div class="col-md-6">
+
+
+                            <select onchange="onViewChangedLine()" id="viewLine" style="color:black;background: #fff; cursor: pointer; padding: 5px 20px; border: 1px solid #ccc" class="pull-right">
+                                <option value="month">Month View</option>
+                                <option value="day">Day View</option>
+                            </select>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="x_content">
+        
+                        <fieldset>
+                            <div class="form-group row">
+
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                                    Finance Level <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <div>
+                                        @Html.DropDownList("FinanceLevelId", (IEnumerable<SelectListItem>)ViewBag.FinanceLevelId, new { name = "FinanceLevel", @class = "form-control input-sm", id = "idFinanceLevelLine", @onchange = "ShowLevelLine()" })
+                                    </div>
+                                </div>
+
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter1Line" style="font-size:11px;" align="right" for="first-name">
+                                    Category <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12 filter1Line">
+                                    <div>
+                                        @Html.DropDownList("FinanceFirstLvlAccount", (IEnumerable<SelectListItem>)ViewBag.FirstLvlAccountId, new { name = "FinanceFirstLvlAccount", @class = "form-control input-sm", id = "firstLvlAccountIdListLine" })
+                                    </div>
+                                </div>
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter2Line" style="font-size:11px;" align="right" for="first-name">
+                                    Main Account <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12 filter2Line">
+                                    <div>
+                                        @Html.DropDownList("FinanceSeccondLvlAccount", (IEnumerable<SelectListItem>)ViewBag.SeccondLvlAccountId, new { name = "FinanceSeccondLvlAccount", @class = "form-control input-sm", id = "seccondLvlAccountIdListLine" })
+                                    </div>
+                                </div>
+
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter3Line" style="font-size:11px;" align="right" for="first-name">
+                                    Sub Account <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12 filter3Line">
+                                    <div>
+                                        @Html.DropDownList("FinanceThirdLvlAccount", (IEnumerable<SelectListItem>)ViewBag.ThirdLvlAccountId, new { name = "FinanceThirdLvlAccount", @class = "form-control input-sm", id = "thirdLvlAccountIdListLine" })
+                                    </div>
+                                </div>
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter4Line" style="font-size:11px;" align="right" for="first-name">
+                                    Sub Sub Account <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12 filter4Line">
+                                    <div>
+                                        @Html.DropDownList("FinanceFourthLvlAccount", (IEnumerable<SelectListItem>)ViewBag.FourthLvlAccountId, new { name = "FinanceFourthLvlAccount", @class = "form-control input-sm", id = "fourthLvlAccountIdListLine" })
+                                    </div>
+                                </div>
+
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12 lblfilter5Line" style="font-size:11px;" align="right" for="first-name">
+                                    Detail Account <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12 filter5Line">
+                                    <div>
+                                        @Html.DropDownList("FinanceFifthLvlAccount", (IEnumerable<SelectListItem>)ViewBag.FifthLvlAccountId, new { name = "FinanceFifthLvlAccount", @class = "form-control input-sm", id = "fifthLvlAccountIdListLine" })
+                                    </div>
+                                </div>
+
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                                    Date Range <span class="required">*</span>
+                                </label>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <div id="attendanceStatsDatePickerLine" style="background: #fff; cursor: pointer; padding: 4px 10px; border: 1px solid #ccc">
+                                        <i class="caret pull-right"></i>
+                                        <span>December 30, 2018 - January 28, 2020</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-11 col-sm-11 col-xs-12">
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-12">
+                                    <button onclick="showAccountDetailsLine()" name="SearchEntry" class="btn btn-squar">Search</button>
+                                </div>
+                            </div>
+
+                            <div class="ln_solid"></div>
+                        </fieldset>
+                    </div>
+
+
+                    <div class="x_content">
+                        <div class="demo-container" style="height:350px">
+                            <div id="attendanceDetailsLine" class="demo-placeholder" style="width: 100%; height:350px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- /page content -->
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        showAccountDetails();
+        showRevenueExpenseDetails();
+        showRevenueExpenseDetailsLine();
+        showAccountDetailsLine();
+        InitializeDatePicker('attendanceStatsDatePicker', dateRangeSelected);
+        InitializeDatePicker('attendanceStatsDatePickerLine', dateRangeSelectedLine);
+        InitializeDatePicker('revExStatsDatePicker', showRevenueExpenseDetails);
+        InitializeDatePicker('revExStatsDatePickerLine', showRevenueExpenseDetailsLine);
+        ShowLevel();
+        ShowLevelLine();
+    });
+
+    var from = null; var to = null; var view = "month";
+    var fromLine = null; var toLine = null; var viewLine = "month";
+    var fromRE = null; var toRE = null; var revenueView = "month";
+    var fromRELine = null; var toRELine = null; var revenueViewLine = "month";
+
+    function onViewChanged(){
+        view = $("#view").val();
+        showAccountDetails();
+    }
+
+    function onViewChangedLine() {
+        viewLine = $("#viewLine").val();
+        showAccountDetailsLine();
+    }
+
+    function onRevenueViewChanged() {
+        revenueView = $("#view1").val();
+        showRevenueExpenseDetails(fromRE, toRE);
+    }
+
+    function onRevenueViewChangedLine() {
+        revenueViewLine = $("#view1Line").val();
+        showRevenueExpenseDetailsLine(fromRE, toRE);
+    }
+
+    function dateRangeSelected(_from, _to){
+        from=_from;
+        to = _to;
+        showAccountDetails();
+    }
+
+    function dateRangeSelectedLine(_from, _to) {
+        fromLine = _from;
+        toLine = _to;
+        showAccountDetailsLine();
+    }
+
+    function showAccountDetails() {
+
+        if (SetDayViewOneMonth(from, to, view) == false) {
+            return;
+        }
+
+        var options = {
+            chart: {
+                renderTo: 'attendanceDetails',
+                type: 'column'
+            },
+            title: {
+                text: 'Finance Details from ' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ' to ' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY"))
+            },
+
+            xAxis: {
+                title: {
+                    text: view == "day" ? 'Date' : 'Month'
+                },
+                categories: []
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: 'Amount (PKR)'
+                }
+            },
+
+            series: [
+            ],
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '<br/>' +
+                        'Total: ' + this.point.stackTotal;
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                }
+            },
+        };
+        var lvlId = $('#idFinanceLevel').val();
+        var firstLvl = 0;
+        var secondLvl = 0;
+        var thirdLvl = 0;
+        var fourthLvl = 0;
+        var fifthLvl = 0;
+        if (lvlId == 1)
+        {
+            firstLvl = $('#firstLvlAccountIdList').val();
+        }
+        else if (lvlId == 2) {
+            secondLvl = $('#seccondLvlAccountIdList').val();
+        }
+        else if (lvlId == 3) {
+            thirdLvl = $('#thirdLvlAccountIdList').val();
+        }
+        else if (lvlId == 4) {
+            fourthLvl = $('#fourthLvlAccountIdList').val();
+        }
+        else if (lvlId == 5) {
+            fifthLvl = $('#fifthLvlAccountIdList').val();
+        }
+
+        var feeDetailChart = null;
+        $.getJSON(AppDetail() + "/JournalEntry/GetFinanceStats?from=" + from + "&to=" + to +"&view="+view 
+            + "&firstLvlId=" + firstLvl
+            + "&secondLvlId=" + secondLvl
+            + "&thirdLvlId=" + thirdLvl
+            + "&fourthLvlId=" + fourthLvl
+            + "&fifthLvlId=" + fifthLvl, null, function (response) {
+            options.series = [];
+            if(view == "day"){
+                options.xAxis.categories = response.Days.map(n => moment(n).format("DD/MM/YYYY"));
+            }else{
+                options.xAxis.categories = response.Months;
+            }
+
+            options.series.push({ name: "Credit Cash", data: response.CreditCash, stack:"Credit" });
+            options.series.push({ name: "Credit Cheque", data: response.CreditCheque, stack:"Credit" });
+            options.series.push({ name: "Debit Cash", data: response.DebitCash, stack:"Debit" });
+            options.series.push({ name: "Debit Cheque", data: response.DebitCheque, stack:"Debit" });
+
+            feeDetailChart = new Highcharts.Chart(options);
+        })//end json
+    }
+
+    function showAccountDetailsLine() {
+
+        if (SetDayViewOneMonth(fromLine, toLine, viewLine) == false) {
+            return;
+        }
+
+        var options = {
+            chart: {
+                renderTo: 'attendanceDetailsLine',
+                type: 'line'
+            },
+            title: {
+                text: 'Finance Details from ' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ' to ' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY"))
+            },
+
+            xAxis: {
+                title: {
+                    text: view == "day" ? 'Date' : 'Month'
+                },
+                categories: []
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: 'Amount (PKR)'
+                }
+            },
+
+            series: [
+            ],
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    enableMouseTracking: true
+                }
+            },
+        };
+        var lvlId = $('#idFinanceLevelLine').val();
+        var firstLvl = 0;
+        var secondLvl = 0;
+        var thirdLvl = 0;
+        var fourthLvl = 0;
+        var fifthLvl = 0;
+        if (lvlId == 1) {
+            firstLvl = $('#firstLvlAccountIdListLine').val();
+        }
+        else if (lvlId == 2) {
+            secondLvl = $('#seccondLvlAccountIdListLine').val();
+        }
+        else if (lvlId == 3) {
+            thirdLvl = $('#thirdLvlAccountIdListLine').val();
+        }
+        else if (lvlId == 4) {
+            fourthLvl = $('#fourthLvlAccountIdListLine').val();
+        }
+        else if (lvlId == 5) {
+            fifthLvl = $('#fifthLvlAccountIdListLine').val();
+        }
+
+        var feeDetailChart = null;
+        $.getJSON(AppDetail() + "/JournalEntry/GetFinanceStats?from=" + fromLine + "&to=" + toLine + "&view=" + viewLine
+            + "&firstLvlId=" + firstLvl
+            + "&secondLvlId=" + secondLvl
+            + "&thirdLvlId=" + thirdLvl
+            + "&fourthLvlId=" + fourthLvl
+            + "&fifthLvlId=" + fifthLvl, null, function (response) {
+                options.series = [];
+                if (viewLine == "day") {
+                    options.xAxis.categories = response.Days.map(n => moment(n).format("DD/MM/YYYY"));
+                } else {
+                    options.xAxis.categories = response.Months;
+                }
+
+                options.series.push({ name: "Credit Cash", data: response.CreditCash });
+                options.series.push({ name: "Credit Cheque", data: response.CreditCheque });
+                options.series.push({ name: "Debit Cash", data: response.DebitCash });
+                options.series.push({ name: "Debit Cheque", data: response.DebitCheque });
+
+                feeDetailChart = new Highcharts.Chart(options);
+            })//end json
+    }
+
+    function showRevenueExpenseDetails(_from, _to) {
+        fromRE = _from;
+        toRE = _to;
+
+        if (SetDayViewOneMonth(fromRE, toRE, revenueView) == false) {
+            return;
+        }
+
+        var options = {
+            chart: {
+                renderTo: 'revenueDetails',
+                type: 'column'
+            },
+            title: {
+                text: 'Exepnse VS Revenue from ' + (fromRE != null ? moment(fromRE).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ' to ' + (toRE != null ? moment(toRE).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY"))
+            },
+
+            xAxis: {
+                title: {
+                    text: view == "day" ? 'Date' : 'Month'
+                },
+                categories: []
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: 'Amount (PKR)'
+                }
+            },
+
+            series: [
+            ],
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '<br/>' +
+                        'Total: ' + this.point.stackTotal;
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                }
+            },
+        };
+        
+        var feeDetailChart = null;
+        $.getJSON(AppDetail() + "/JournalEntry/GetRevenueExpenseStats?from=" + fromRE + "&to=" + toRE + "&view=" + revenueView
+            , null, function (response) {
+                options.series = [];
+                if (revenueView == "day") {
+                    options.xAxis.categories = response.Days.map(n => moment(n).format("DD/MM/YYYY"));
+                } else {
+                    options.xAxis.categories = response.Months;
+                }
+
+                options.series.push({ name: "Expense", data: response.Expenses, stack: "Expense" });
+                options.series.push({ name: "Revenue", data: response.Revenue, stack: "Revenue" });
+
+                feeDetailChart = new Highcharts.Chart(options);
+            })//end json
+    }
+
+    function showRevenueExpenseDetailsLine(_from, _to) {
+        fromRELine = _from;
+        toRELine = _to;
+
+        if (SetDayViewOneMonth(fromRELine, toRELine, revenueViewLine) == false) {
+            return;
+        }
+
+        var options = {
+            chart: {
+                renderTo: 'revenueDetailsLine',
+                type: 'line'
+            },
+            title: {
+                text: 'Exepnse VS Revenue from ' + (fromRELine != null ? moment(fromRELine).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ' to ' + (toRELine != null ? moment(toRELine).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY"))
+            },
+
+            xAxis: {
+                title: {
+                    text: view == "day" ? 'Date' : 'Month'
+                },
+                categories: []
+            },
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: 'Amount (PKR)'
+                }
+            },
+
+            series: [
+            ],
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    enableMouseTracking: true
+                }
+            },
+        };
+
+        var feeDetailChart = null;
+        $.getJSON(AppDetail() + "/JournalEntry/GetRevenueExpenseStats?from=" + fromRELine + "&to=" + toRELine + "&view=" + revenueViewLine
+            , null, function (response) {
+                options.series = [];
+                if (revenueViewLine == "day") {
+                    options.xAxis.categories = response.Days.map(n => moment(n).format("DD/MM/YYYY"));
+                } else {
+                    options.xAxis.categories = response.Months;
+                }
+
+                options.series.push({ name: "Expense", data: response.Expenses });
+                options.series.push({ name: "Revenue", data: response.Revenue });
+
+                feeDetailChart = new Highcharts.Chart(options);
+            })//end json
+    }
+
+    function hideAll() {
+        $('.lblfilter1, .lblfilter2, .lblfilter3, .lblfilter4, .lblfilter5').hide();
+        $('.filter1, .filter2, .filter3, .filter4, .filter5').hide();
+    }
+
+    function ShowLevel()
+    {
+        hideAll();
+        var lvlId = $('#idFinanceLevel').val();
+        if (lvlId > 0) {
+            var classname = "filter" + $('#idFinanceLevel').val();
+            document.getElementsByClassName(classname)[0].style.display = 'block';
+            
+            classname = "lblfilter" + $('#idFinanceLevel').val();
+            document.getElementsByClassName(classname)[0].style.display = 'block';
+        }
+    }
+
+    function hideAllLine() {
+        $('.lblfilter1Line, .lblfilter2Line, .lblfilter3Line, .lblfilter4Line, .lblfilter5Line').hide();
+        $('.filter1Line, .filter2Line, .filter3Line, .filter4Line, .filter5Line').hide();
+    }
+
+    function ShowLevelLine() {
+        hideAllLine();
+        var lvlId = $('#idFinanceLevelLine').val();
+        if (lvlId > 0) {
+            var classname = "filter" + $('#idFinanceLevelLine').val() + "Line";
+            document.getElementsByClassName(classname)[0].style.display = 'block';
+
+            classname = "lblfilter" + $('#idFinanceLevelLine').val() + "Line";
+            document.getElementsByClassName(classname)[0].style.display = 'block';
+        }
+    }
+
+</script>

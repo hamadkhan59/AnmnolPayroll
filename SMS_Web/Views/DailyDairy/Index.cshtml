@@ -1,0 +1,163 @@
+﻿@model SMS_DAL.ViewModel.FileModel
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Upload Daily Dairy</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("UploadDailyDairy", "DailyDairy", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*@Html.ValidationSummary(true)*@
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Class
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Section
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, "All", new { @class = "form-control input-sm", onchange = "getSubjectList()", id = "sectionId" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Date
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    <input type="date" name="FileDate" class="form-control input-sm" id="FileDate" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Select File
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.File, "", new { @type = "file", @multiple = "multiple" })
+                                </div>
+                            </div>
+                        </div>
+
+
+            <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Upload Dairy" name="Create" class="btn btn-squar" />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                        @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           {
+               <text> showNotification('Dairy is uploaded succesfully.', 'Success', 'Success') </text>
+           }
+           else if ((int)@ViewData["Error"] == 200)
+           {
+               <text> showNotification('Unsuppoted file extension is selected.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 201)
+           {
+               <text> showNotification('No file is selected, please select the file.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to upload dairy, please try again later.', 'Error', 'Error') </text>
+           }
+       }
+    }
+
+
+
+    window.onload = function (e) {
+        ShowSearchPanel(@((ViewData["examSheet"] == null) ? 0 : 1));
+
+        $('#classTable').DataTable( {
+            paging: false, searching : false
+        } );
+
+        populateErrors();
+       
+        getSectionList();
+
+        $('#FileDate').val('@DateTime.Now.ToString("yyyy-MM-dd")');
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        //alert(classId);
+        $("#sectionId").html("");
+        $("#sectionId").append('<option value='+0+'>All</option>');
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+            if(classId == '')
+            {
+                var id = @(item.SectionId);
+                var name = '@(item.SectionName)';
+                $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+            }
+            else if(classId == @(item.ClassId))
+            {
+                var id = @(item.SectionId);
+                var name = '@(item.SectionName)';
+                $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+            }
+            </text>
+        }
+    }
+
+</script>
+

@@ -1,0 +1,425 @@
+﻿@{
+    ViewBag.Title = "Staff Course Coverage";
+}
+<style>
+    .tile {
+        color: white;
+        margin-right: 5px;
+        border-radius: 3px;
+        height: 100px;
+        width: 16%;
+        background-color: #2A3F54;
+    }
+
+    .tile-div {
+        width: 110%;
+    }
+
+    .tileHeading {
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+    <div class="">
+        <div class="row top_tiles" style="margin: 0px 0 0 0;">
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <div class="col-md-10">
+                        <h2 class="nav navbar-left control-label" align="left">Course Details</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                        <h5 id="TotalCourses" class="tileHeading">0</h5>
+                        <p style="color:#17a2b8;margin-top:25px;font-weight:bold"> <i class="fa fa-leaf" aria-hidden="true" style="font-size:25px;color:#17a2b8;"></i> Total Courses</p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                        <h5 id="TotalChapters" class="tileHeading">0</h5>
+                        <p style="color:#DC3545;margin-top:25px;font-weight:bold"> <i class="fa fa-lightbulb-o" aria-hidden="true" style="font-size:25px;color:#DC3545;"></i> Total Chapters</p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                        <h5 id="CourseChapters" class="tileHeading">0</h5>
+                        <p style="color:#55f4f5;margin-top:25px;font-weight:bold"> <i class="fa fa-asterisk" aria-hidden="true" style="font-size:25px;color:#55f4f5;"></i> Course Chapters</p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                        <h5 id="ChapterCoverage" class="tileHeading">0</h5>
+                        <p style="color:#f77c98;margin-top:25px;font-weight:bold"> <i class="fa fa-circle-o-notch" aria-hidden="true" style="font-size:25px;color:#f77c98;"></i> Chapter Coverage</p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                        <h5 id="ChapterTopics" class="tileHeading">0</h5>
+                        <p style="color:orange;margin-top:25px;font-weight:bold"> <i class="fa fa-chain-broken" aria-hidden="true" style="font-size:25px;color:orange;"></i> Chapter Topics</p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                        <h5 id="TopicCoverage" class="tileHeading">0</h5>
+                        <p style="color:#58b462;margin-top:25px;font-weight:bold"> <i class="fa fa-bitbucket" aria-hidden="true" style="font-size:25px;color:#58b462;"></i> Topic Coverage</p>
+                    </div>
+
+
+                </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-4">
+                                        <label class="nav navbar-left control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                            Year
+                                        </label>
+                                        <div class="nav navbar-left col-md-8 col-sm-8 col-xs-12">
+                                            <div>
+                                                @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", @onchange = "GetTermByYear()", id = "yearIdSearch" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="nav navbar-left control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                            Term
+                                        </label>
+                                        <div class="nav navbar-left col-md-8 col-sm-8 col-xs-12">
+                                            <div>
+                                                @Html.DropDownList("TermId", (IEnumerable<SelectListItem>)ViewBag.TermId, new { @class = "form-control input-sm", id = "termIdSearch" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="nav navbar-left control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                            Teacher
+                                        </label>
+                                        <div class="nav navbar-left col-md-8 col-sm-8 col-xs-12">
+                                            <div>
+                                                @Html.DropDownList("TeacherId", (IEnumerable<SelectListItem>)ViewBag.TeacherId, new { @class = "form-control input-sm", id = "teacherIdSearch" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" id="search" value="Search" onclick="loadChart(0,0)" style="margin-right:10px;" class="btn btn-sm btn-default btn-squar navbar-left" />
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="x_content">
+                        <div class="demo-container" style="height:500px">
+                            <div id="courseDetails" class="demo-placeholder" style="width: 100%; height:500px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+<!-- /page content -->
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sankey.js"></script>
+<script src="https://code.highcharts.com/modules/organization.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+    var chapterCourseId = 0;
+    $(document).ready(function () {
+        GetTermByYear();
+        loadChart(0, 0);
+    });
+
+    function loadChart(registerCourseId, chapterId) {
+        let data = [];
+        let nodes = [];
+        addNodes(data, nodes, registerCourseId, chapterId);
+
+        var options = {
+            chart: {
+                inverted: true,
+                renderTo: 'courseDetails'
+            },
+            title: {
+                text: 'Course Coverage'
+            },
+
+            series: [{
+                type: 'organization',
+                name: 'Course Coverage',
+                keys: ['from', 'to'],
+                data: data,
+                levels: [{
+                    level: 0,
+                    color: '#2A3F54',
+                    dataLabels: {
+                        color: 'white'
+                    },
+                    height: 15
+                }, {
+                    level: 1,
+                    height: 15
+                }, {
+                    level: 2,
+                    color: '#17A2B8',
+                    height: 15
+                }, {
+                    level: 3,
+                    color: "#fcc657",
+                    height: 15
+                    }],
+                nodes: nodes,
+                point: {
+                    events: {
+                        click: function (event) {
+                            if (event.point.level == 1 || event.point.level == 2) {
+                                onBeforeLoadChart(event.point.id, event.point.level);
+                            }
+                        }
+                    }
+                },
+                colorByPoint: false,
+                color: '#007ad0',
+                dataLabels: {
+                    color: 'white'
+                },
+                borderColor: 'white',
+                nodeWidth: 55,
+                nodeHeight: 120
+            }],
+
+            tooltip: {
+                outside: true,
+                formatter: function() {
+                    return this.point.info;
+                }
+            },
+            exporting: {
+                allowHTML: true,
+                sourceWidth: 800,
+                sourceHeight: 600
+            }
+        };
+
+        chart = new Highcharts.Chart(options);
+    }
+
+    function getRegisterCourseId(classSectionId, subjectId) {
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.RegisterCourseModel>)ViewData["allCourses"])
+        {
+                <text>
+                if (classSectionId == @(item.ClassSectionId) && subjectId == @(item.SubjectId)) {
+                    return @item.RegisterCourseId;
+                }
+                </text>
+        }
+    }
+
+    function onBeforeLoadChart(nodeId, level) {
+        let registeredCourseId = 0;
+        let chapterId = 0;
+        if (level == 1) {
+            @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.SessionSubjectModel>)ViewData["teacherSubjects"])
+            {
+                <text>
+                var subjectName = '@(item.SubjectName)'+ '(@item.ClassName '+ '@item.SectionName)';
+
+                if (nodeId == subjectName) {
+                    registeredCourseId = getRegisterCourseId(@item.ClassSectionId, @item.SubjectId);
+                }
+                </text>
+            }
+        }
+        else if (level == 2) {
+            @foreach (var item in (IEnumerable<SMS_DAL.SubjectChapter>)ViewData["allChapters"])
+            {
+                <text>                
+                if (nodeId == '@(item.Name)' && chapterCourseId == @(item.RegisterCourseId)) {
+                    registeredCourseId = @item.RegisterCourseId;
+                    chapterId = @item.Id
+                }
+                </text>
+            }
+        }
+
+        loadChart(registeredCourseId, chapterId);
+    }
+
+    function addCourseNodes(data, nodes, registerCourseId, chapterId) {
+        var staffId = $("#teacherIdSearch").val();
+        var staffName = $("#teacherIdSearch option:selected").text();
+        nodes.push({
+            id: staffName,
+            name: staffName.length < 16 ? staffName : staffName.substring(0, 12) + "...",
+            info: staffName
+        });
+        var totalCourses = 0;
+
+        $("#TotalChapters").html("0");
+        $("#CourseChapters").html("0 (0%)");
+        $("#ChapterCoverage").html("0 (0%)");
+        $("#ChapterTopics").html("0 (0%)");
+        $("#TopicCoverage").html("0 (0%)");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.SessionSubjectModel>)ViewData["teacherSubjects"])
+        {
+            <text>
+            if(staffId == @(item.TeacherId))
+            {
+                var subjectName = '@(item.SubjectName)'+ '(@item.ClassName '+ '@item.SectionName)';
+                data.push([staffName, subjectName]);
+                nodes.push({
+                    id: subjectName,
+                    title: null,
+                    name: subjectName.length < 16 ? subjectName : subjectName.substring(0, 12) + "...",
+                    color: "#2A3F54",
+                    dataLabels: {
+                        color: 'orange'
+                    },
+                    info: "Click to view chapters of '" + subjectName + "' course of class " + '@item.ClassName' + " section " + '@item.SectionName'
+                });
+
+                var subjectRegisterCourseId = getRegisterCourseId(@item.ClassSectionId, @item.SubjectId);
+                // if no course selected just show chapters of first course
+                if (registerCourseId == 0) {
+                    registerCourseId = subjectRegisterCourseId;
+                }
+
+                if (registerCourseId == subjectRegisterCourseId) {
+                    addChapterNodes(data, nodes, registerCourseId, subjectName, chapterId);
+                }
+                totalCourses++;
+            }
+            </text>
+        }
+
+        $("#TotalCourses").html(totalCourses.toLocaleString());
+    }
+
+    function addChapterNodes(data, nodes, registerCourseId, parentNodeName, chapterId) {
+        chapterCourseId = registerCourseId;
+        var termId = $("#termIdSearch").val();
+        var totalChapters = 0;
+        var courseChapters = 0;
+        var coveredChapters = 0;
+        @foreach (var item in (IEnumerable<SMS_DAL.SubjectChapter>)ViewData["allChapters"])
+        {
+            <text>
+            var chapterTermIds = [];
+            @foreach(var tc in item.TermChapters)
+            {
+                <text>
+                chapterTermIds.push(@tc.TermId);
+                </text>
+            }
+            if (chapterTermIds.some(n => n == termId)) {
+                
+                totalChapters++;
+                if (registerCourseId == @item.RegisterCourseId) {
+                    courseChapters++;
+                    if (@(item.IsCovered ? 1 : 0)) {
+                        coveredChapters++;
+                    }
+                    var chapterName = '@(item.Name)';
+                    data.push([parentNodeName, chapterName]);
+                    nodes.push({
+                        id: chapterName,
+                        title: null,
+                        name: chapterName.length < 16 ? chapterName : chapterName.substring(0, 12) + "...",
+                        color: "#2A3F54",
+                        dataLabels: {
+                            color: '#55f4f5'
+                        },
+                        image: "/vendors/images/@(item.IsCovered ? "tick.jpg" : "cross.jpg")",
+                        info: "'" + chapterName + "' is @(item.IsCovered ? "" : "not") covered. Click to view topics."
+                    });
+
+                    // if no chapter selected just show chapters of first course
+                    if (chapterId == 0) {
+                        chapterId = @(item.Id);
+                    }
+
+                    if (chapterId == @(item.Id)) {
+                        addTopicNodes(data, nodes, @(item.Id), chapterName);
+                    }
+                }
+            }
+            </text>
+        }
+
+        $("#TotalChapters").html(totalChapters.toLocaleString());
+        $("#CourseChapters").html(courseChapters.toLocaleString() + " (" + (courseChapters / (totalChapters > 0 ? totalChapters : 1) * 100).toLocaleString() + "%)");
+        $("#ChapterCoverage").html(coveredChapters.toLocaleString() + " (" + (coveredChapters/(courseChapters > 0 ? courseChapters : 1)*100).toLocaleString() + "%)");
+    }
+
+    function addTopicNodes(data, nodes, chapterId, parentNodeName) {
+        var totalTopics = 0;
+        var courseTopics = 0;
+        var coveredTopics = 0;
+        @foreach (var item in (IEnumerable<SMS_DAL.ChapterTopic>)ViewData["allTopics"])
+        {
+            <text>
+            totalTopics++;
+            if (chapterId == @item.ChapterId) {
+                courseTopics++;
+                if (@(item.IsCovered ? 1 : 0)) {
+                    coveredTopics++;
+                }
+                var topicName = '@(item.Name)';
+                data.push([parentNodeName, topicName]);
+                nodes.push({
+                    id: topicName,
+                    name: topicName.length < 16 ? topicName : topicName.substring(0, 12) + "...",
+                    image: "/vendors/images/@(item.IsCovered ? "tick.jpg" : "cross.jpg")",
+                    color: "#2A3F54",
+                    dataLabels: {
+                        color: '#f77c98'
+                    },
+                    info: "'" + topicName + "' is @(item.IsCovered ? "" : "not") covered."
+                });
+            }
+            </text>
+        }
+
+        $("#ChapterTopics").html(courseTopics.toLocaleString() + " (" + (courseTopics / (totalTopics > 0 ? totalTopics : 1) * 100).toLocaleString() + "%)");
+        $("#TopicCoverage").html(coveredTopics.toLocaleString() + " (" + (coveredTopics/(courseTopics > 0 ? courseTopics : 1)*100).toLocaleString() + "%)");
+    }
+
+    function addNodes(data, nodes, registerCourseId, chapterId) {
+        addCourseNodes(data, nodes, registerCourseId, chapterId);
+    }
+
+    function GetTermByYear() {
+        var yearId = $('#yearIdSearch').val();
+        $("#termIdSearch").html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamTerm>)ViewData["examTerm"])
+        {
+        <text>
+
+            if(yearId == @(item.Year))
+            {
+                var id = @(item.Id);
+                var name = '@(item.TermName)';
+                $("#termIdSearch").append('<option value='+id+'>'+name+'</option>');
+            }
+        </text>
+        }
+    }
+</script>

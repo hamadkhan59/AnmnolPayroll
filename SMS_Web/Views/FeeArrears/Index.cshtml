@@ -1,0 +1,317 @@
+﻿@model List<SMS_DAL.ViewModel.IssuedChallanViewModel>
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<head>
+    <link rel="stylesheet" href="../../assets/css/Table-with-search-1.css">
+    <script src="../../assets/js/Table-with-search.js"></script>
+    <script src="~/vendors/Custom/QuickSearch.js"></script>
+</head>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Fee Arrears Search</label>
+                
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 26}) + "'");"
+                            class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-12 nav navbar-right" style="margin-top:2px;">
+                    @using (Html.BeginForm(Html.BeginForm("SearchByAdmissionNo", "FeeArrears", FormMethod.Post, new { id = "fastPayForm", enctype = "multipart/form-data" })))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <fieldset>
+
+                            <div class="form-group row">
+
+                                <div class="col-6 col-md-12">
+                                    <div class="pull-left" style="width:100%">
+                                        <input id="medicine-search" type="text" class="search form-control input-sm" placeholder="Search Student Info">
+                                    </div>
+                                    <table id="search-table" class="table table-hover table-bordered results" style="display: none;">
+                                        <thead id="header" style="width:30%;background-color:lightseagreen;color:white">
+                                            <tr class="warning no-result">
+                                                <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-rows" style="color:black"></tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-3 col-sm-3 col-xs-12" hidden>
+                                    <div class="autocomplete" style="width:245px;">
+                                        @*@Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm", id = "fatherNameSearch" })*@
+                                        <input type="text" name="AdmissionNo" id="inputAdmissionNo" class="form-control input-sm" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </fieldset>
+                    }
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm(Html.BeginForm("SearchFeeArrears", "FeeArrears", FormMethod.Post, new { enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classId" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+                                </div>
+                            </div>
+                            
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Name" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="RollNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+                            
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Cnic
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherCnic" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("GetArrearDetails", "FeeArrears", FormMethod.Post, new { target = "_blank" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Fee Arrears Details</label>
+
+                        <ul class="nav navbar-right panel_toolbox">
+
+                            <li>
+                            </li>
+                            <li>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                    <div class="x_content">
+                        <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" id="classTable" name="model">
+                                        <thead>
+                                            <tr class="headings">
+
+                                                <th style="max-width:100px;">
+                                                    Roll No
+                                                </th>
+                                                <th style="max-width:200px;">
+                                                    Name
+                                                </th>
+                                                <th style="max-width:200px;">
+                                                    Father Name
+                                                </th>
+                                                <th style="max-width:150px;">
+                                                    Class
+                                                </th>
+                                                <th style="max-width:150px;">
+                                                    Section
+                                                </th>
+                                                <th style="max-width:100px;">
+                                                    Arrears
+                                                </th>
+                                                <th>
+                                                </th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 0; i < Model.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td style="max-width:100px;">
+                                                            @Model[i].RollNumber
+                                                        </td>
+                                                        <td style="max-width:200px;">
+                                                            @Model[i].Name
+                                                        </td>
+                                                        <td style="max-width:200px;">
+                                                            @Model[i].Fathername
+                                                        </td>
+                                                        <td style="max-width:150px;">
+                                                            @Model[i].Class
+                                                        </td>
+                                                        <td style="max-width:150px;">
+                                                            @Model[i].Section
+                                                        </td>
+                                                        <td style="max-width:100px;">
+                                                            @Model[i].FeeBalance
+                                                        </td>
+
+                                                        <td style="max-width:100px;">
+                                                            @Html.ActionLink("  ", "ArrearDetail", "FeeArrears", new { studentId = Model[i].studentId }, new { style = "color: #31B0D5;font-size: 20px; margin-left: 10px", title = "View Or Add Detail", @class = "glyphicon glyphicon-th" })
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @*<div class="form-group">
+                        <div class="nav navbar-right">
+                        </div>
+
+                    </div>*@
+                        </form>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 420)
+           { 
+               <text> showNotification('Unable to Search Fee Arrear Detail.', 'Error', 'Error') </text>
+           }
+       }
+    }
+
+    function GetNameList() {
+        var i = 0;
+      @foreach (var item in (IEnumerable<string>)ViewData["nameList"])
+        {
+             <text>
+                  var tempObj = '@item';
+        var obj = {"Sr No" : tempObj.split(',')[9], "AdmissionNo" : tempObj.split(',')[0], "RollNo" : tempObj.split(',')[8], "Name" : tempObj.split(',')[1],
+            "FatherName" : tempObj.split(',')[2], "Class" : tempObj.split(',')[6],
+            "Section" : tempObj.split(',')[7], "FatherCNIC" : tempObj.split(',')[3],
+            "MobileNo" : tempObj.split(',')[4], "Address" : tempObj.split(',')[5]}
+        names[i++] = obj;
+        </text>
+    }
+    }
+
+    var names = [];
+
+    window.onload = function (e) {
+        $("#classTable").DataTable({ paging: false});
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        populateErrors();
+        getSectionList();
+       
+        GetNameList();
+        setTableData(names);
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classId").val();
+        if (classId.length == 0) {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+</script>

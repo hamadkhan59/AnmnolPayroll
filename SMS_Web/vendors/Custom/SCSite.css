@@ -1,0 +1,93 @@
+﻿  .btn-squar {
+        /*border-radius: 0 !important;*/
+        /*border-radius: 10px;*/
+        background-color:#17A2B8;
+        color:white;
+    }
+
+  .sc_panel_header {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:103.5%; margin-left:-18px;
+          height:38px;box-sizing: border-box;padding-right:-17px;
+        }
+
+   .sc_panel_header_sm1 {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:107.5%; margin-left:-18px;
+          height:38px;box-sizing: border-box;padding-right:-17px;
+        }
+
+    .sc_panel_header_sm {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:103.5%; margin-left:-18px;
+          height:35px;box-sizing: border-box;padding-right:-17px;
+        }
+
+    .sc_panel_header3 {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:103.9%; margin-left:-18px;
+          height:42px;box-sizing: border-box;padding-right:-17px;
+        }
+
+  .sc_panel_header_wider {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:103.5%; margin-left:-18px;
+          height:115px;box-sizing: border-box;padding-right:-17px;
+        }
+
+    .sc_panel_header1 {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          width:103.5%; margin-left:-18px;
+          height:38px;box-sizing: border-box;padding-right:-17px;
+        }
+
+     .sc_panel_header2 {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:107.5%; margin-left:-18px;
+          height:38px;box-sizing: border-box;padding-right:-17px;
+        }
+
+    .sc_panel_header_lg {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:102%; margin-left:-18px;
+          height:45px;box-sizing: border-box;padding-right:-17px;
+        }
+
+    .sc_panel_header_lg1 {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          width:102%; margin-left:-18px;
+          height:45px;box-sizing: border-box;padding-right:-17px;
+        }
+
+    .sc_panel_header_lg2 {
+          background-color:#17A2B8;color:white; font-weight:bold;
+          margin-top:-10px;width:103.5%; margin-left:-18px;
+          height:45px;box-sizing: border-box;padding-right:-17px;
+        }
+
+
+
+     .sc_help_btn {
+          margin-top:5px;border-radius: 50%;width:60px; height:25px;color:black;
+        }
+
+     .sc_panel_label {
+          margin-top:5px;
+          margin-left:10px;
+        }
+
+     .sc_panel_label_left {
+          margin-left:30px;
+        }
+
+     .sc_panel_label_top {
+          margin-top:2px;
+        }
+
+     .sc_them_color {
+          background-color:#17A2B8;
+        }
+
+       .sc_panel_squar {
+        border-radius: 0 !important;
+    }

@@ -1,0 +1,236 @@
+﻿@model SMS_DAL.Designation
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div hidden="hidden">@Html.ValidationSummary(false)</div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Designation Create</label>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                        </li>
+                        <li>
+                            @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+    
+
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Catagory 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.CatagoryId, new { @class = "form-control input-sm" })
+                                    @*@Html.ValidationMessageFor(model => model.ClassId)*@
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                                        @Html.ValidationMessageFor(model => model.Name)*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Name <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Description
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextAreaFor(model => model.Description, 3, 25, new { @class = "form-control input-sm" })
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Save" class="btn btn-squar" name="Create" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    <script>
+        function populateErrors()
+        {
+            @if (!Html.ViewData.ModelState.IsValid)
+             {
+                 <text> populateValidationErrors()  </text>
+             }
+
+            @if(ViewData["Error"] != null)
+           {
+               if ((int)@ViewData["Error"] == 2)
+               {
+                   <text> showNotification('Designation is saved succesfully.', 'Success', 'Success') </text>
+               }
+               else if ((int)@ViewData["Error"] == 11)
+               {
+                   <text> showNotification(' Designation is already saved.', 'Error', 'Error') </text>
+               }
+           else if ((int)@ViewData["Error"] == 420)
+               {
+                   <text> showNotification('Unable to save Designation.', 'Error', 'Error') </text>
+               }
+           else if ((int)@ViewData["Error"] == 3)
+               {
+                   <text> showNotification('Unable to delete Designation.', 'Error', 'Error') </text>
+               }
+            else if ((int)@ViewData["Error"] == 40)
+               {
+                   <text> showNotification('Unable to delete Designation, As Staff(s) are saved for this designation', 'Error', 'Error') </text>
+               }
+           else if ((int)@ViewData["Error"] == 4)
+               {
+                   <text> showNotification('Designation is deleted succesfully', 'Success', 'Success') </text>
+               }
+           }
+        }
+
+        window.onload = function (e) {
+            populateErrors();
+            ChangeDesignation();
+            $('#classTable').DataTable({ paging : false, searching : false});
+        }
+
+
+        function ChangeDesignation()
+        {
+            var designationId = $('#designationId').val();
+            $('#classTable > tbody').html("");
+            @foreach (var item in (IEnumerable<SMS_DAL.Designation>)ViewData["designations"])
+            {
+                 <text>
+
+            if(designationId == @(item.CatagoryId))
+            {
+                var tableRow = '<tr>' +
+                    '<td>' +
+                        '@(item.Name)' +
+                    '</td>' +
+                    '<td>' +
+                        '@(item.Description)' +
+                            '</td>' +
+
+                                    '<td style="color:blue;">' +
+                                        '@Html.ActionLink("  ", "Delete", new { id = item.Id }, new { onclick = "return ConfirmDelete('Are you sure you wish to delete this Designation?', " + item.Id + ", 'Designation');", style = "color: darkred;font-size: 15px;", title = "Delete", @class = "glyphicon glyphicon-trash" })' +
+                            '</td>' +
+                        '</tr>';
+            $("#classTable").find('tbody').append(tableRow);
+        }
+        </text>
+            }
+        }
+    </script>
+
+
+    <div class="x_panel">
+        <div class="x_title sc_panel_header">
+            <label class="nav navbar-left control-label sc_panel_label" align="left">Designation List </label>
+
+
+
+            <ul class="nav navbar-right panel_toolbox">
+
+                <li>
+                    @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                </li>
+                <li>
+                    @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                </li>
+            </ul>
+            <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12" align="right" style="margin-top:2px;">
+                <div>
+                    @Html.DropDownList("Id", (IEnumerable<SelectListItem>)ViewBag.CatagoryId, new { @class = "form-control input-sm", @onchange = "ChangeDesignation()", id = "designationId" })
+                    @*@Html.ValidationMessageFor(model => model.ClassId)*@
+                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                        @Html.ValidationMessageFor(model => model.Name)*@
+                </div>
+            </div>
+            <label class="nav navbar-right control-label col-md-2 col-sm-2 col-xs-12" align="right" for="last-name" style="margin-top:5px;">
+                Select Catagory
+            </label>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+
+            <div class="form-group">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="classTable">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    Designation
+                                </th>
+                                <th>
+                                    Desscription
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                            @*@foreach (var item in (IEnumerable<SMS_DAL.Designation>)ViewData["designations"])
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    
+                                    <td style="color:blue;">
+                                        
+                                    </td>
+                                </tr>
+                            }*@
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

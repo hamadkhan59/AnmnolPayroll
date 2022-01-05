@@ -1,0 +1,440 @@
+﻿@model List<SMS_DAL.ViewModel.StaffAttandanceModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Search Attendance</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div>
+                        @Html.ValidationSummary()
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                @*<button type="button" class="btn navbar-right" onclick="gotoSearch()">
+                        <span class="glyphicon glyphicon-search" style="color:white"></span> Attendance Sheet
+                    </button>*@
+                <div class="clearfix"></div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId", @style = "height:30px;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="DesignationId" id="designationId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="AttandanceDate" class="form-control input-sm" id="dob" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Mark" class="btn btn-squar" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+
+        <div class="row" id="searchPanelData" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Mark Attendance</label>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="table-responsive">
+
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" id="classTable">
+                                        <thead>
+                                            <tr class="headings">
+                                                <th class="column-title">
+                                                </th>
+                                                <th class="column-title">
+                                                    <input type="checkbox" id="cbAttendanceAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                    <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                                </th>
+                                                <th class="column-title">
+                                                    Status
+                                                </th>
+                                                <th class="column-title">
+                                                    Staff Id
+                                                </th>
+                                                <th class="column-title">
+                                                    Name
+                                                </th>
+                                                <th class="column-title">
+                                                    Time In 
+                                                </th>
+                                                <th class="column-title">
+                                                    Time Out
+                                                </th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 0; i < Model.Count; i++)
+                                                {
+                                                    <tr class="even pointer">
+                                                        <td>
+                                                            <button type="button" class="btn btn-xs btn-info btn-squar" onclick="GetStaffAttendanceDetail(@Model[i].Id)" data-toggle="modal" data-target=".bs-example-modal-sm">Detail</button>
+                                                        </td>
+                                                        <td>
+                                                            @if (Model[i].Status == 1)
+                                                            {
+                                                                <input type="checkbox" id="@("cbAttendance"+i)" style="width:20px;height:20px;" onclick="setStatusValue(@i);" checked/>
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="checkbox" id="@("cbAttendance"+i)" style="width:20px;height:20px;" onclick="setStatusValue(@i);" />
+                                                            }
+                                                            <input type="text" name="StatusId" value="@Model[i].Status" id="@("statusId"+i)" style="display: none;" />
+                                                        </td>
+
+                                                        <td>
+
+                                                            <select class="form-control input-sm" id="@("statusDropDownId"+i)" onchange="changeStatusValue(@i)">
+                                                                @if (Model[i].Status == 1)
+                                                                {
+                                                                    <option value="1" selected>Present</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="1">Present</option>
+                                                                }
+                                                                @if (Model[i].Status == 2)
+                                                                {
+                                                                    <option value="2" selected>Absent</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="2">Absent</option>
+                                                                }
+                                                                @if (Model[i].Status == 3)
+                                                                {
+                                                                    <option value="3" selected>Late</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="3">Late</option>
+                                                                }
+                                                                @if (Model[i].Status == 4)
+                                                                {
+                                                                    <option value="4" selected>Leave</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="4">Leave</option>
+                                                                }
+                                                                @if (Model[i].Status == 5)
+                                                                {
+                                                                    <option value="5" selected>Short Leave</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="5">Short Leave</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].StaffId, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Name, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @*@Html.TextBoxFor(m => m[i].Time, new { @class = "form-control input-sm", @type = "time", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })*@
+                                                            <input type="time" name="startTimes" value="@(Model[i].Time == null ? "09:00" : Model[i].Time)" id="@("startTime" + i)" @*readonly="readonly"*@ />
+                                                        </td>
+                                                        <td>
+                                                            @*@Html.TextBoxFor(m => m[i].Time, new { @class = "form-control input-sm", @type = "time", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })*@
+                                                            <input type="time" name="endTimes" value="@(Model[i].OutTime == null ? "09:00" : Model[i].OutTime)" id="@("endTime" + i)" @*readonly="readonly"*@ />
+                                                            @Html.HiddenFor(m => m[i].Date, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                            @Html.HiddenFor(m => m[i].Id, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                        </td>
+
+                                                    </tr>
+                                                    //i++;
+                                                }
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div>
+                                @*<div class="ln_solid"></div>*@
+                                @*<div class="nav navbar-right">
+                                    <input type="submit" value="Submit" id="submitStaffAttendance" onclick="return ConfirmAction('Are you sure, you want to submit the staff attendance?', 'submitStaffAttendance');"  name="Submit" class="btn btn-squar" />
+                                </div>*@
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+
+            @*</form>*@
+        }
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm sc_panel_squar" style="width:600px;margin-top:8%;">
+        <div class="modal-content sc_panel_squar">
+            <div class="modal-header" style="background-color:#151F2A;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color:white;">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2" style="color:white;font-weight:bold">Attendance Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="allownceTable" name="model">
+                        <thead style="color:black">
+                            <tr class="headings">
+
+                                <th style="min-width:80px;">
+                                    Time IN
+                                </th>
+                                <th style="min-width:100px;">
+                                    Time OUT
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tbody style="background-color:white;color:#2A3F54" id="classBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="height:80px;">
+                <button type="button" class="btn btn-lg btn-dark" data-dismiss="modal"> <span class="glyphicon glyphicon-remove"></span> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           {
+               <text> showNotification('Attendance is submitted succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to submit Attendance.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 300)
+           {
+               <text> showNotification('Unable to mark Attendance as selected day is Sunday.', 'Error', 'Error') </text>
+           }
+
+       }
+    }
+
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        populateErrors();
+        getDesignationList();
+        $('#dob').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#classTable').DataTable({ paging : false, searching : false});
+    }
+
+
+    function getDesignationList() {
+        var catagoryId = $("#catagoryId").val();
+        if(catagoryId.length == 0)
+        {
+            catagoryId = 0;
+        }
+        GetDesignation(catagoryId, 1, 'designationId');
+    }
+
+    function SetTime(index)
+    {
+        @{
+            <text>
+                var time = '@(DateTime.Now.TimeOfDay.ToString())';
+                //alert(time.substring(0, 5));
+                $("#startTime" + index).val(time.substring(0, 5));
+            </text>
+        }
+    }
+
+    function GetStaffAttendanceDetail(attId)
+    {
+        $("#allownceTable > tbody").html("");
+
+        $.post( AppDetail() +"/StaffSalary/GetStaffAttendanceDetail",
+            { attendanceId: attId },
+            function (response) {
+                //alert(response[0][0]);
+                for (var i = 0; i < response.length; i++) {
+
+                    tableRow = '<tr style="height:25px;color:black;" class="even pointer" id="allRow' + i + '">' +
+                            '<td><input type="time" name="startTimes" value="' + response[i][0] + '" /></td>' +
+                            '<td><input type="time" name="startTimes" value="' + response[i][1] + '" /></td>' +
+                            '</tr>';
+                   
+                    $("#allownceTable").find('tbody').append(tableRow);
+                }
+            }
+        );
+    }
+
+
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbAttendanceAll").is(':checked') == true)
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SetTime(i);
+                SelectElement("cbAttendance"+i, true);
+                var StatusValue = $('#statusDropDownId'+i).children('option').filter(':selected').val();
+                if(StatusValue == 1 || StatusValue == 2)
+                {
+                    var element = document.getElementById('statusDropDownId'+i);
+                    element.value = 1;
+                    $('#statusId'+i).val(1);
+                }
+            }
+        }
+        else
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("cbAttendance"+i, false);
+                var StatusValue = $('#statusDropDownId'+i).children('option').filter(':selected').val();
+                if(StatusValue == 1 || StatusValue == 2)
+                {
+                    var element = document.getElementById('statusDropDownId'+i);
+                    element.value = 2;
+                    $('#statusId'+i).val(2);
+                }
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+    function changeStatusValue(index)
+    {
+        if($("#cbAttendance"+index).is(':checked') == true)
+        {
+            var StatusValue = $('#statusDropDownId'+index).children('option').filter(':selected').val();
+            $('#statusId'+index).val(StatusValue);
+        }
+    }
+
+    function setStatusValue(index)
+    {
+        SetTime(index);
+        var StatusValue = $('#statusDropDownId'+index).children('option').filter(':selected').val();
+        if(StatusValue == 1 || StatusValue == 2)
+        {
+            if($("#cbAttendance"+index).is(':checked') == true)
+            {
+                var element = document.getElementById('statusDropDownId'+index);
+                element.value = 1;
+                $('#statusId'+index).val(1);
+            }
+            else
+            {
+                var element = document.getElementById('statusDropDownId'+index);
+                element.value = 2;
+                $('#statusId'+index).val(2);
+            }
+        }
+    }
+
+</script>

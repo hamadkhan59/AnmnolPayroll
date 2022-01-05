@@ -1,0 +1,188 @@
+﻿@model SMS_DAL.IssueChallanConfig
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Fee Configuration</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        
+                    </div>
+                </div>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 22}) + "'");"
+                          class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Late Fee Submission Fine Per Month 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Absents Fine Per Day 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.AttendanceDays, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Late Fee Submission Fine per Day 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.FinePerDay, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Student(s) Print Per Challan 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("StudentPerChallan", (IEnumerable<SelectListItem>)ViewBag.StudentPerChallan, new { @class = "form-control input-sm", id = "challanId" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                               Challan Printing First Statement 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Text1, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Challan Printing Second Statement 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Text2, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Challan Printing Third Statement 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Text3, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name">
+                                Challan Printing Fourth Statement 
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Text4, new { id = "txtPlace", @class = "form-control input-sm" })
+                                    @*@Html.TextBoxFor(model => model.Fine, new { id = "txtPlace", Value = ViewData["issueChallanConfigsFine"] })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Save" name="Create" class="btn btn-squar"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none" : "display:block") />
+                                    <input type="submit" value="Save" name="Update" class="btn btn-squar"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none") />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           { 
+               <text> showNotification('Fine is Saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 11)
+           { 
+               <text> showNotification('Fine is Already Created.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           { 
+               <text> showNotification('Unable to Create Fine.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 3)
+           { 
+               <text> showNotification('Unable to Delete Fine.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           { 
+               <text> showNotification('Fine is Deleted succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+                       
+    window.onload = function (e) {
+        //ChangeChalan();
+        populateErrors();
+
+        var challanId = '@(Model == null ? 0 : Model.StudentPerChallan)';
+
+        $('#challanId').val(challanId);
+    }
+
+</script>

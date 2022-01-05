@@ -1,0 +1,373 @@
+﻿@model List<SMS_DAL.ViewModel.StaffAttandanceModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Search Attendance</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div>
+                        @Html.ValidationSummary()
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                    </li>
+                    <li>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("StaffId", (IEnumerable<SelectListItem>)ViewBag.TakenBy, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                               From Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="FromDate" class="form-control input-sm" id="fromDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                               To Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="ToDate" class="form-control input-sm" id="toDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Search" name="AttendanceRequest1" class="btn btn-squar" />
+                            </div>
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+
+        <div class="row" id="searchPanelData" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Attendance Detail</label>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="table-responsive">
+
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" id="classTable">
+                                        <thead>
+                                            <tr class="headings">
+                                                <th class="column-title">
+                                                    <input type="checkbox" id="cbAttendanceAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                    <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                                </th>
+                                                <th class="column-title">
+                                                    Status
+                                                </th>
+                                                <th class="column-title">
+                                                    Date
+                                                </th>
+                                                <th class="column-title">
+                                                    Time In 
+                                                </th>
+                                                <th class="column-title">
+                                                    Time Out
+                                                </th>
+                                               
+                                                <th class="column-title">
+                                                    Comments
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+                                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 0; i < Model.Count; i++)
+                                                {
+                                                    <tr class="even pointer">
+                                                        <td>
+                                                            
+                                                            <input type="checkbox" id="@("cbAttendance"+i)" style="width:20px;height:20px;" onclick="setStatusValue(@i);" />
+                                                            <input type="text" name="StatusId" value="2" id="@("statusId"+i)" style="display: none;" />
+                                                        </td>
+
+                                                        <td>
+
+                                                            <select class="form-control input-sm" id="@("statusDropDownId"+i)" onchange="changeStatusValue(@i)">
+                                                                @if (Model[i].Status == 1)
+                                                                {
+                                                                    <option value="1" selected>Present</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="1">Present</option>
+                                                                }
+                                                                @if (Model[i].Status == 2)
+                                                                {
+                                                                    <option value="2" selected>Absent</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="2">Absent</option>
+                                                                }
+                                                                @if (Model[i].Status == 4)
+                                                                {
+                                                                    <option value="4" selected>Leave</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="4">Leave</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td>@Model[i].Date.ToString().Split(' ')[0]</td>
+                                                        <td>
+                                                            <input type="time" name="startTimes" value="@(Model[i].Time == null ? "09:00" : Model[i].Time)" id="@("startTime" + i)" @*readonly="readonly"*@ />
+                                                        </td>
+                                                        <td>
+                                                            <input type="time" name="endTimes" value="@(Model[i].OutTime == null ? "09:00" : Model[i].OutTime)" id="@("endTime" + i)" @*readonly="readonly"*@ />
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="text" class="form-control" name="Comments" id="@("Comments" + i)" />
+                                                        
+                                                            @Html.HiddenFor(m => m[i].Date, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                            @Html.HiddenFor(m => m[i].Id, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                            @Html.HiddenFor(m => m[i].StaffId, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                        </td>
+                                                    </tr>
+                                                    //i++;
+                                                }
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <div>
+                                @*<div class="ln_solid"></div>*@
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Submit" id="submitStaffAttendanceReq" onclick="return VerifyInputs();"  name="SubmitAttendanceRequest" class="btn btn-squar" />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+
+            @*</form>*@
+        }
+    </div>
+</div>
+
+<script>
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           { 
+               <text> showNotification('Attendance Request is submitted succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           { 
+               <text> showNotification('Unable to submit Attendance Request, Please try again later.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 300)
+           { 
+               <text> showNotification('Unable to mark Attendance as selected day is Sunday.', 'Error', 'Error') </text>
+           }
+       
+       }
+    }
+
+    var checkCount = 0;
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        populateErrors();
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        checkCount = 0;
+        $('#classTable').DataTable({ paging : false, searching : false});
+    }
+
+    function SetTime(index)
+    {
+        @{
+            <text>
+                var time = '@(DateTime.Now.TimeOfDay.ToString())';
+                //alert(time.substring(0, 5));
+                $("#startTime" + index).val(time.substring(0, 5));
+            </text>
+        }
+    }
+
+    
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbAttendanceAll").is(':checked') == true)
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SetTime(i);
+                SelectElement("cbAttendance"+i, true);
+                var StatusValue = $('#statusDropDownId'+i).children('option').filter(':selected').val();
+                if(StatusValue == 1 || StatusValue == 2)
+                {
+                    var element = document.getElementById('statusDropDownId'+i);
+                    element.value = 1;
+                    $('#statusId'+i).val(1);
+                }
+            }
+            checkCount = rowCount;
+        }
+        else
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("cbAttendance"+i, false);
+                var StatusValue = $('#statusDropDownId'+i).children('option').filter(':selected').val();
+                if(StatusValue == 1 || StatusValue == 2)
+                {
+                    var element = document.getElementById('statusDropDownId'+i);
+                    element.value = 2;
+                    $('#statusId'+i).val(2);
+                }
+            }
+            checkCount = 0;
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {    
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+    function changeStatusValue(index)
+    {
+        if($("#cbAttendance"+index).is(':checked') == true)
+        {
+            var StatusValue = $('#statusDropDownId'+index).children('option').filter(':selected').val();
+            $('#statusId'+index).val(StatusValue);
+        }
+    }
+
+    function setStatusValue(index)
+    {
+        SetTime(index);
+        ChangeCheckCkount(index);
+        var StatusValue = $('#statusDropDownId'+index).children('option').filter(':selected').val();
+        if(StatusValue == 1 || StatusValue == 2)
+        {
+            if($("#cbAttendance"+index).is(':checked') == true)
+            {
+                var element = document.getElementById('statusDropDownId'+index);
+                element.value = 1;
+                $('#statusId'+index).val(1);
+            }
+            else
+            {
+                var element = document.getElementById('statusDropDownId'+index);
+                element.value = 2;
+                $('#statusId'+index).val(2);
+            }
+        }
+    }
+
+    function ChangeCheckCkount(index)
+    {
+        if($("#cbAttendance"+index).is(':checked') == true)
+        {
+            checkCount++;
+        }
+        else
+        {
+            checkCount--;
+        }
+    }
+
+    function VerifyInputs()
+    {
+        if(checkCount == 0)
+        {
+            showNotification('Cant proceed, No record is selected', 'Error', 'Error')
+            return false;
+        }
+        
+        ConfirmAction('Are you sure, you want to submit the attendance request?', 'submitStaffAttendanceReq');
+        return false;
+    }
+</script>

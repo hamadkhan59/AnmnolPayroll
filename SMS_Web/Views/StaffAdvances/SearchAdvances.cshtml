@@ -1,0 +1,255 @@
+﻿@model List<SMS_DAL.ViewModel.StaffAdvanceModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+
+    window.onload = function (e) {
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        DisplaySheet();
+    }
+
+</script>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Search Advances</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div>
+                        @Html.ValidationSummary()
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("SearchStaffAdvances", "StaffAdvances", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId", @style = "height:30px;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="DesignationId" id="designationId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="StaffId" class="form-control input-sm"  style="height:30px;" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size:11px;">
+                                From Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="FromDate" class="form-control input-sm" id="fromDate" style="height:30px;" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size:11px;">
+                                To Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="ToDate" class="form-control input-sm" id="toDate" style="height:30px;" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Search Advances" name="CreateSheet" class="btn btn-squar" />
+                            </div>
+                            @*onclick="location.href='@Url.Action("CreateAttendanceSheet", "Attendance")'"*@
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@using (Html.BeginForm("CreateSalarySlip", "StaffSalary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+        <div class="row" id="searchPanelData" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Staff Advances Details</label>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+                        </ul>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="form-group">
+                            <div class="table-responsive">
+
+                                @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                                @*<fieldset>*@
+                                <table class="table table-striped table-bordered" id="classTable">
+                                    <thead>
+                                        <tr class="headings" id="tableHead">
+                                            <th class="column-title">
+                                                Staff Id
+                                            </th>
+                                            <th class="column-title">
+                                                Name
+                                            </th>
+                                            <th class="column-title">
+                                                Date
+                                            </th>
+                                            <th class="column-title">
+                                                Amount
+                                            </th>
+                                            <th class="column-title">
+                                                Remarks
+                                            </th>
+
+                                            <th class="column-title">
+                                                Actions
+                                            </th>
+                                           
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                        @if (Model != null)
+                                        {
+                                            int k = 0;
+                                            int total = 0;
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m[i].StaffId, new { Name = "StaffId", @style = "width:50px;height:20px;border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].StaffName
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Date
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Amount
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Remarks
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink(" ", "EditAdvance", "StaffAdvances", new { id = Model[i].Id }, new { style = "color: #31B0D5;font-size: 20px; margin-left: 10px", title = "Edit Advance", @class = "glyphicon glyphicon-edit" })
+                                                    </td>
+                                                </tr>
+                                                total += (int)Model[i].Amount;
+                                                k++;
+                                            }
+
+                                            if (k > 0)
+                                            {
+                                                <tr>
+                                                    <td>Total</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>@total</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+}
+
+<script>
+            window.onload = function (e) {
+                ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+                $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+                $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+                getDesignationList();
+                $('#classTable').DataTable({ paging : false});
+            }
+            function getDesignationList() {
+                var catagoryId = $("#catagoryId").val();
+                if(catagoryId.length == 0)
+                {
+                    catagoryId = 0;
+                }
+                GetDesignation(catagoryId, 1, 'designationId');
+            }
+
+
+</script>

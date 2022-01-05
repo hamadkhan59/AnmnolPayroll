@@ -1,0 +1,474 @@
+﻿@model List<SMS_DAL.ViewModel.StaffAttandanceModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        getDesignationList();
+        DisplaySheet();
+    }
+
+    function getDesignationList() {
+        var catagoryId = $("#catagoryId").val();
+        if(catagoryId.length == 0)
+        {
+            catagoryId = 0;
+        }
+        GetDesignation(catagoryId, 1, 'designationId');
+    }
+
+    function DisplaySheet() {
+        var rollnumber = "";
+        var studentCount = 0;
+        var tempCount = 0;
+        var isDisplay = true;
+        var absentCount = [];
+        var presentCount = [];
+        var lateCount = [];
+        var leaveCount = [];
+        var shortLeaveCount = [];
+        var tempDate = '';
+        @if (Model.Count > 0)
+        {
+
+            int i = 0;
+            foreach (var item in (IEnumerable<SMS_DAL.ViewModel.StaffAttandanceModel>)Model)
+            {
+                if (i > 0 && item.StaffId == Model[0].StaffId)
+                {
+                    break;
+                }
+                <text>
+        absentCount[studentCount] = 0;
+        presentCount[studentCount] = 0;
+        lateCount[studentCount] = 0;
+        leaveCount[studentCount] = 0;
+        shortLeaveCount[studentCount] = 0;
+        if(studentCount == 0)
+        {
+            rollnumber = @(item.StaffId);
+            studentCount++;
+        }
+        else
+        {
+            var tempRollNo = @(item.StaffId);
+            if(rollnumber == tempRollNo)
+            {
+                isDisplay = false;
+            }
+
+            if(isDisplay)
+                studentCount++;
+            rollnumber = tempRollNo;
+        }
+        var row =  '<tr id='+studentCount+'>' +
+            '<td style ="word-break:break-all;">' +
+                '@(item.StaffId)' +
+            '</td >' +
+            '<td style ="word-break:break-all;">' +
+                '@(item.Name)' +
+            '</td>' +
+           '<td style ="word-break:break-all;">' +
+                '@(item.FatherName)' +
+            '</td>';
+        if(isDisplay)
+            $("#tableData").append(row);
+        </text>
+                i++;
+            }
+
+
+            foreach (var item in (IEnumerable<SMS_DAL.ViewModel.StaffAttandanceModel>)Model)
+            {
+                <text>
+        tempCount++;
+        tempDate = '@item.Date';
+        if(tempCount == 1 || currentDate != tempDate)
+        {
+            currentDate = '@item.Date';
+            tempDate = '@item.Date';
+            tempCount = 1;
+            $('#tableHead').append('<th style="min-width:80px;">'+'@(item.Date.Value.Day + "/" + item.Date.Value.Month)'+'</th>');
+        }
+        var status = '@(item.CodeName)';
+        var statusValue = '';
+        statusValue = '<td style ="word-break:break-all;"> '+MockStatus(status)+' </td>';
+
+        if(status == "Present")
+        {
+            presentCount[tempCount - 1] = presentCount[tempCount - 1] + 1;
+        }
+        else if(status == "Absent")
+        {
+            absentCount[tempCount - 1] = absentCount[tempCount - 1] + 1;
+        }
+        else if(status == "Late")
+        {
+            lateCount[tempCount - 1] = lateCount[tempCount - 1] + 1;
+        }
+        else if(status == "Leave")
+        {
+            leaveCount[tempCount - 1] = leaveCount[tempCount - 1] + 1;
+        }
+        else if(status == "Short Leave")
+        {
+            shortLeaveCount[tempCount - 1] = shortLeaveCount[tempCount - 1] + 1;
+        }
+
+
+        var row =   statusValue;
+
+        tempDate = '@item.Date';
+        $('#'+tempCount).append(row);
+
+        if(studentCount == tempCount)
+        {
+            tempCount = 0;
+        }
+
+        </text>
+        }
+
+        <text>
+        $('#tableHead').append('<th style="min-width:80px;"><label>Presents</label></th>');
+        $('#tableHead').append('<th style="min-width:80px;"><label>Absents</label></th>');
+        $('#tableHead').append('<th style="min-width:80px;"><label>Lates</label></th>');
+        $('#tableHead').append('<th style="min-width:80px;"><label>Leaves</label></th>');
+        $('#tableHead').append('<th style="min-width:80px;"><label>Short Leaves</label></th>');
+        for(var i = 0; i < studentCount; i++)
+        {
+            var row = getEmprtyRows((i + 1)) + '<td style ="word-break:break-all;">' +presentCount[i]+ '</td><td style ="word-break:break-all;">'
+                +absentCount[i]+ '</td><td style ="word-break:break-all;">' +lateCount[i]+
+                '</td><td style ="word-break:break-all;">' +leaveCount[i]+ '</td><td style ="word-break:break-all;">' +shortLeaveCount[i]+ '</td>';
+            $('#'+(i + 1)).append(row);
+        }
+        </text>
+
+        }
+    }
+
+    function getEmprtyRows(index)
+    {
+        var totalRows = document.getElementById(1).cells.length;
+        var currentRows = document.getElementById(index).cells.length;
+
+        var rowDifference = Number(totalRows) - Number(currentRows) - 5;
+        var emptyCells = "";
+
+        for(var i = 0; i < rowDifference; i++)
+        {
+            emptyCells += "<td>N/A</td>"
+        }
+
+        return emptyCells;
+    }
+
+    function MockStatus(status)
+    {
+        var mockStatus = '';
+        if(status == 'Present')
+        {
+            mockStatus = 'P';
+        }
+        else if(status == 'Absent')
+        {
+            mockStatus = 'A';
+        }
+        else if(status == 'Late')
+        {
+            mockStatus = 'Lt';
+        }
+        else if(status == 'Leave')
+        {
+            mockStatus = 'L';
+        }
+        else if(status == 'Short Leave')
+        {
+            mockStatus = 'SL';
+        }
+
+        return mockStatus;
+    }
+
+</script>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Attendance Detail</label>
+                @*<div class="col-md-6 col-sm-6 col-xs-12">
+                        <div>
+                            @Html.ValidationSummary()
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 0) ? "display:block;color:green;font-size:11px;" : "display:none")>
+                                Attendance is submitted succesfully.
+                            </label>
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Unable to submit Attendance.
+                            </label>
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 300) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Unable to mark Attendance as selected day is Sunday.
+                            </label>
+                        </div>
+                    </div>*@
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("CreateAttendanceSheet", "StaffAttendance", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId", @style = "height:30px;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="DesignationId" id="designationId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="StaffId" class="form-control input-sm" id="staffId" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                From Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="FromDate" class="form-control input-sm" id="fromDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                To Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="ToDate" class="form-control input-sm" id="toDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="last-name" id="lblError" style="color:red">
+                            </label>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Search" name="CreateSheet" class="btn btn-squar" />
+                            </div>
+                            @*onclick="location.href='@Url.Action("CreateAttendanceSheet", "Attendance")'"*@
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkStaffId()
+    {
+        var staffId = $("#staffId").val();
+        //alert(staffId);
+        if (staffId == null || staffId == '')
+        {
+            $("#lblError").text("Please Enter Valid StaffId");
+            return false;
+        }
+        else if (Number(staffId) <= 0)
+        {
+            $("#lblError").text("Please Enter Valid StaffId");
+            return false;
+        }
+        $("#lblError").text("");
+        return true;
+    }
+
+</script>
+
+
+
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Attendance Sheet</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+
+            </div>
+
+            <div class="x_content">
+
+                <div class="form-group">
+                    <div class="table-responsive">
+
+                        @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                            @*<fieldset>*@
+                        <div class="form-group row">
+                            <table class="table table-striped table-bordered" id="classTable" style="margin-left:10px;">
+                                <thead>
+                                    <tr class="headings" id="tableHead">
+                                       
+                                        <th  style="min-width:100px;">
+                                            Staff Id
+                                        </th>
+                                        <th  style="min-width:120px; ">
+                                            Name
+                                        </th>
+                                        <th  style="min-width:140px;">
+                                            Father Name
+                                        </th>
+                                    </tr>
+
+                                </thead>
+                                <tbody style="background-color:white;color:#2A3F54" id="tableData">
+                                    @*@if (Model != null && Model.Count > 0)
+                                        {
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                @*<tr>
+                                                    <td></td>
+                                                    <td>
+                                                        @Model[i].Date
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Time
+                                                    </td>
+                                                    <td>
+                                                        @if (Model[i].Status > 0)
+                                                        {
+                                                            <label class="control-label" align="left" for="first-name" style="color:green;font-size:11px;">
+                                                                P
+                                                            </label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="control-label" align="left" for="first-name" style="color:red;font-size:11px;">
+                                                                A
+                                                            </label>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }*@
+                                </tbody>
+
+                            </table>
+                        </div>
+                        @*<div class="form-group row">
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-11">
+                                        <input type="submit" value="Submit" name="Submit" class="btn btn-squar" />
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*</fieldset>*@
+
+                        @*</form>*@
+                        @*}*@
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@*<table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AttandanceDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student.RollNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AttandanceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.RollNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                </td>
+            </tr>
+        }
+
+    </table>*@

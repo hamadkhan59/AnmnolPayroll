@@ -1,0 +1,218 @@
+﻿@model SMS_DAL.Student
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Fee Arrear Detail</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        @*@Html.ValidationSummary()*@
+                        @*<label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Fee Arrear Detail is Saved succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Fee Head is Deleted succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Save Fee Arrear Detail.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Delete Fee Head.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 11) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Fee Head is Already Created.
+                        </label>*@
+                        @*<label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                Student Cards generated succesfully.
+                            </label>*@
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", @readonly = "readonly", @style = "-webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;" })
+                                </div>
+                            </div>
+                             
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm", @readonly = "readonly", @style = "-webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                CNIC
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control input-sm", @readonly = "readonly", @style = "-webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                       
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 10)
+           { 
+               <text> showNotification('Fee Arrear Detail is Saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 11)
+           { 
+               <text> showNotification('Fee Arrear is Already Created.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           { 
+               <text> showNotification('Unable to Save Fee Arrear Detail.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 3)
+           { 
+               <text> showNotification('Unable to Delete Fee Arrear.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           { 
+               <text> showNotification('Fee Arrear is Deleted succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+    window.onload = function (e) {
+        //ChangeChalan();
+        $("#classTable").DataTable({ searching: false, paging: false});
+        populateErrors();
+    }
+
+</script>
+<div class="x_panel">
+    @using (Html.BeginForm("SaveArrearDetails", "FeeArrears", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+    <fieldset>
+        <div class="x_title sc_panel_header">
+            <label class="nav navbar-left control-label sc_panel_label" align="left">Fee Heads List </label>
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                </li>
+
+                <li>
+                    @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+
+            <input type="hidden" value="@Model.id" class="form-control input-sm" name="studentId" />
+            <div class="form-group">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="classTable">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    Head Name
+                                </th>
+                                <th>
+                                    Arrear Amount
+                                </th>
+                                <th>
+                                    Discount
+                                </th>
+                                <th>
+                                    Add Amount
+                                </th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+
+                            @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.FeeArrearViewModel>)ViewData["feeHeads"])
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="hidden" value="@item.FeeHeadId" class="form-control input-sm" name="feeHeadIds" />
+                                        @Html.TextBoxFor(modelItem => item.HeadName, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(modelItem => item.ArrearAmount, new { Name = "arrearAmounts", @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control input-sm" name="studentDisounts" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control input-sm" name="addAmounts" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <div class="nav navbar-right">
+                        <input type="submit" value="Save" align="right" onclick="return ConfirmAction('Are you sure, You want to save these Arrears', 'arrearDetail')" id="arrearDetail" class="btn btn-squar"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+        }
+</div>

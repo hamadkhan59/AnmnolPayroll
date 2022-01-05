@@ -1,0 +1,770 @@
+﻿@model List<SMS_DAL.ViewModel.IssuedChallanViewModel>
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+
+
+<head>
+    <link rel="stylesheet" href="../../assets/css/Table-with-search-1.css">
+    <script src="../../assets/js/Table-with-search.js"></script>
+    <script src="~/vendors/Custom/QuickSearch.js"></script>
+</head>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left" sc_panel_label>Issue Chalan Search</label>
+
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 18}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-12 nav navbar-right" style="margin-top:2px;">
+                    @using (Html.BeginForm(Html.BeginForm("SearchByAdmissionNo", "IssueChalan", FormMethod.Post, new { id = "fastPayForm", enctype = "multipart/form-data" })))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <fieldset>
+
+                            <div class="form-group row">
+
+                                <div class="col-6 col-md-12">
+                                    <div class="pull-left" style="width:100%">
+                                        <input id="medicine-search" type="text" class="search form-control input-sm" placeholder="Search Student Info">
+                                    </div>
+                                    <table id="search-table" class="table table-hover table-bordered results" style="display: none;">
+                                        <thead id="header" style="width:30%;background-color:lightseagreen;color:white">
+                                            <tr class="warning no-result">
+                                                <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-rows" style="color:black"></tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-3 col-sm-3 col-xs-12" hidden>
+                                    <div class="autocomplete" style="width:245px;">
+                                        @*@Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm", id = "fatherNameSearch" })*@
+                                        <input type="text" name="AdmissionNo" id="inputAdmissionNo" class="form-control input-sm" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </fieldset>
+                    }
+                </div>
+                
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm(Html.BeginForm("SearchIssueChalan", "IssueChalan", FormMethod.Post, new { enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Year
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("YearId", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", id = "yearIdSearch" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Month
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("MonthId", (IEnumerable<SelectListItem>)ViewBag.MonthId, new { @class = "form-control input-sm", id = "monthIdSearch" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="text" name="RollNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="text" name="Name" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Cnic
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherCnic" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Chalan No
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="number" name="ChalanNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Admission No
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="text" name="AdmissionNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Father Contact
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherContact" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("SaveIssueChalan", "IssueChalan", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+
+                        <ul class="nav navbar-right panel_toolbox">
+
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+
+                        </ul>
+
+                        <label class="nav navbar-right control-label col-md-2 col-sm-2 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                        </label>
+
+                        <div class="nav navbar-right col-md-2 col-sm-2 col-xs-12" align="right" style="margin-top:2px;">
+                            <div>
+                                <input type="button" value="Create Finance Account" onclick="return RouteToFinanceAccount()" align="right" class="btn btn-sm" style="color:black" />
+                            </div>
+                        </div>
+
+                        <div class="nav navbar-right col-md-2 col-sm-2 col-xs-12" align="right" style="margin-top:2px;">
+                            <div>
+                                <select class="form-control input-sm" name="FinanceAccountId" id="financeAccountId"></select>
+                            </div>
+                        </div>
+
+                        <div class="nav navbar-right col-md-2 col-sm-2 col-xs-12" align="right" style="margin-top:2px;">
+                            <div>
+                                @Html.DropDownList("AccountTypeId", (IEnumerable<SelectListItem>)ViewBag.AccountTypeId, new { @class = "form-control input-sm", @onchange = "ChangeAccountType()", id = "accountTypeId" })
+                            </div>
+                        </div>
+
+                        <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" style="margin-top:5px;font-size: 11px;" align="right">
+                            Pay To
+                        </label>
+
+                        <div class="nav navbar-right col-md-2 col-sm-2 col-xs-12" align="right" style="margin-top:2px;">
+                            <div>
+                                <input type="date" name="DueDate" class="form-control input-sm" id="dueDate">
+                                <input type="hidden" name="BranchId" class="form-control input-sm" id="BranchId" value="@ViewData["branchId"]">
+                            </div>
+                        </div>
+                        <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" style="margin-top:5px;font-size: 11px;" align="right" for="last-name">
+                            Due Date
+                        </label>
+
+
+                        <div class="row" style="margin-top:15px;margin-left:-1%">
+
+                        </div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                            <input type="hidden" class="custom-control-input" name="Print" value="0" style="width:20px;height:20px;" id="isPrint">
+                            <input type="hidden" class="custom-control-input" name="PrintSingleChallan" value="@(ViewData["SingleChallan"] == null ? 0 : 1)" style="width:20px;height:20px;">
+
+
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" id="classTable"  name="model">
+                                        <thead>
+                                            <tr class="headings">
+                                                <th>
+                                                </th>
+                                                <th>
+                                                    <input type="checkbox" id="cbSelectAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                    @if (Model != null && Model.Count > 0)
+                                                    {
+                                                        <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" value="0" id="statusIdAll" style="display: none;" />
+                                                    }
+                                                </th>
+                                                <th style="max-width:80px;">
+                                                    Issued
+                                                </th>
+                                                <th style="max-width:80px;">
+                                                    Roll No
+                                                </th>
+                                                <th style="max-width:200px;">
+                                                    Name
+                                                </th>
+                                                <th style="max-width:120px;">
+                                                    Contact
+                                                </th>
+                                                <th style="max-width:200px;">
+                                                    Chalan
+                                                </th>
+                                                <th style="max-width:170px;">
+                                                    Due Date
+                                                </th>
+                                                <th style="max-width:80px;">
+                                                    Amount
+                                                </th>
+
+                                                <th style="max-width:80px;">
+                                                    Fine
+                                                </th>
+                                                <th style="max-width:80px;">
+                                                    Balance
+                                                </th>
+                                                <th style="max-width:80px;">
+                                                    Advance
+                                                </th>
+
+                                                <th style="min-width:120px;" hidden="hidden">
+                                                    Annual Charges
+                                                </th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 0; i < Model.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <button type="button" class="btn btn-xs btn-info btn-squar" onclick="GetChallanDetail(@i)" data-toggle="modal" data-target=".bs-example-modal-sm">Detail</button>
+                                                        </td>
+                                                        <td>
+                                                            <input type="checkbox" class="custom-control-input" name="ChalanIds" value="@Model[i].Id" style="width:20px;height:20px;" id="@("tableId" + i)">
+                                                        </td>
+                                                        <td style="max-width:80px;">
+                                                            @if (Model[i].IsPaid == "Yes")
+                                                            {
+                                                                <label class="nav control-label" style="font-size: 11px;color:green">Yes</label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="nav control-label" style="font-size: 11px;color:red">No</label>
+                                                            }
+                                                        </td>
+                                                        <td style="max-width:80px;">
+                                                            @Model[i].RollNumber
+                                                        </td>
+                                                        <td>
+                                                            @Model[i].Name
+                                                        </td>
+                                                        <td style="max-width:120px;">
+                                                            @Model[i].Contact_1
+                                                        </td>
+
+                                                        <td style="max-width:200px;">
+                                                            @Model[i].Chalan
+                                                        </td>
+                                                        <td style="max-width:170px;">
+                                                            @Model[i].DueDate.ToString().Split(' ')[0]
+                                                        </td>
+                                                        <td style="max-width:80px;">
+                                                            @Model[i].Amount
+                                                        </td>
+                                                        <td style="max-width:80px;">
+                                                            @Model[i].Fine
+                                                        </td>
+                                                        <td style="max-width:80px;">
+                                                            @Model[i].Balance
+                                                        </td>
+                                                        <td style="max-width:80px;">
+                                                            @Model[i].Advance
+                                                        </td>
+
+                                                        <td hidden="hidden">
+                                                            @Html.TextBoxFor(m => m[i].AnnualCharges, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group">
+                                    <div class="nav navbar-right">
+                                        @if (ViewData["SingleChallan"] == null)
+                                        {
+                                            <input type="submit" value="Reset the Challan(s)" align="right" onclick="return setPrint(2)" class="btn btn-squar"  id="resetChallan" />
+                                        }
+                                        <input type="submit" value="Create Pdf" align="right" onclick="return setPrint(1)" class="btn btn-squar"  />
+                                        @if (ViewData["SingleChallan"] == null)
+                                        {
+                                            <input type="submit" value="Save" onclick="return CheckFinanceAccount()" align="right" class="btn btn-squar" id="saveChallan"  />
+                                        }
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm sc_panel_squar" style="width:600px;margin-top:8%;">
+        <div class="modal-content sc_panel_squar">
+            <div class="modal-header" style="background-color:#151F2A;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color:white;">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2" style="color:white;font-weight:bold">Fee Challan Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="allownceTable" name="model">
+                        <thead style="color:black">
+                            <tr class="headings">
+
+                                <th style="min-width:80px;">
+                                    Fee Head
+                                </th>
+                                <th style="min-width:100px;">
+                                    Amount
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tbody style="background-color:white;color:#2A3F54" id="classBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="height:80px;">
+                <button type="button" class="btn btn-lg btn-squar" data-dismiss="modal"> <span class="glyphicon glyphicon-ok"></span> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 4)
+            {
+                <text> showNotification('Issue Challan is saved succesfully.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 20)
+            {
+                <text> showNotification('Annual Charges of selected student(s) is reset successfully.', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to Save Issued Challan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 5)
+            {
+                <text> showNotification('Issue Chalan for all selected student(s) to Create Pdf.', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 6)
+            {
+                <text> showNotification('Select Student(s) to Issue Chalan.', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 7)
+            {
+                <text> showNotification('Select Student(s) to Create Pdf of Issued Chalan(s).', 'Info', 'Info') </text>
+            }
+            else if ((int)@ViewData["Error"] == 8)
+            {
+                <text> showNotification('Due Date must be greater than Issued date.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 109)
+            {
+                <text> showNotification('Some of the challans are not issued, Please issue first.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 10)
+            {
+                <text> showNotification('Search Student(s) to Create Pdf of Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 515)
+            {
+                <text> showNotification('No Fine Settings is defined, please defince settings to Issue Challan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 11)
+            {
+                <text> showNotification('Search Student(s) to save Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 12)
+            {
+                <text> showNotification('Please select the correct month to Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 60)
+            {
+                <text> showNotification('Select Student(s) to Reset Issue Chalan.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 4420)
+            {
+                <text> showNotification('Unable to reset the selected Challan(s).', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 120)
+            {
+                <text> showNotification('Some of the Challan(s) are paid, Unpay them to reset the Challan(s)', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 40)
+            {
+                <text> showNotification('Selected Student(s) Challan(s) are reset succefully.', 'Success', 'Success') </text>
+            }
+
+        }
+    }
+
+    function GetNameList() {
+        var i = 0;
+        @foreach (var item in (IEnumerable<string>)ViewData["nameList"])
+        {
+              <text>
+        var tempObj = '@item';
+        var obj = {"AdmissionNo" : tempObj.split(',')[0], "RollNo" : tempObj.split(',')[8], "Name" : tempObj.split(',')[1],
+            "FatherName" : tempObj.split(',')[2], "Class" : tempObj.split(',')[6],
+            "Section" : tempObj.split(',')[7], "FatherCNIC" : tempObj.split(',')[3],
+            "MobileNo" : tempObj.split(',')[4], "Address" : tempObj.split(',')[5]}
+        names[i++] = obj;
+        </text>
+    }
+    }
+
+    $(document).ready(function() {
+        $('#classTable').DataTable( {
+            "lengthMenu": [[-1], ["All"]],
+            paging: false, searching : false
+        } );
+    } );
+
+
+    var names = [];
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        ChangeAccountType();
+        populateErrors();
+
+        $('#dueDate').val('@(DateTime.Now.AddDays(7).ToString("yyyy-MM-dd"))');
+
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+
+        $("#monthIdSearch").get(0).selectedIndex = month;
+
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        if (classId != 0) {
+            $("#classId").val(classId);
+        }
+        getSectionList();
+
+        GetNameList();
+        setTableData(names);
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classId").val();
+        if (classId.length == 0) {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function setPrevSearchVals() {
+        var sectionId = '@(ViewData["GlobalSectionId"] == null ? 0 : (int)ViewData["GlobalSectionId"])';
+        var monthId = '@(ViewData["GlobalMonthId"] == null ? 0 : (int)ViewData["GlobalMonthId"])';
+        var yearId = '@(ViewData["GlobalYearId"] == null ? 0 : (int)ViewData["GlobalYearId"])';
+
+        if(sectionId != 0)
+        {
+            $("#sectionId").val(sectionId);
+        }
+
+
+        if(monthId != 0)
+        {
+            $("#monthIdSearch").val(monthId);
+        }
+
+        if(yearId != 0)
+        {
+            $("#yearIdSearch").val(yearId);
+        }
+    }
+
+    function GetChallanDetail(index)
+    {
+        $("#allownceTable > tbody").html("");
+
+        var rowCount = $('#statusIdAll').val();
+        var allownceCount = 0;
+        for( var i = 0 ; i < rowCount; i++)
+        {
+            if($("#tableId"+i).is(':checked') == true || i == index)
+            {
+                var challanId =  $("#tableId"+i).val();
+                $.post( AppDetail() +"/IssueChalan/GetChallanDetail",
+                    { challanId: challanId },
+                    function (response) {
+                        //alert(response[0][0]);
+                        for (var i = 0; i < response.length; i++) {
+
+                            var tableRow = '';
+                            if(response[i][0].trim() == 'Arrears' || response[i][0].trim() == 'Extra Charges')
+                            {
+                                tableRow = '<tr style="height:25px;color:red;font-weight:bold;background-color:lightgray;" class="even pointer" id="allRow' + allownceCount + '">' +
+                                    '<td>' + response[i][0] + '</td>' +
+                                    '<td>' + response[i][1] + '</td>' +
+                                    '</tr>';
+                            }
+                            else if(response[i][0].trim() == 'Total')
+                            {
+                                tableRow = '<tr id="allRow' + allownceCount + '">' +
+                                    '<td style="font-weight:bold;color:black;">' + response[i][0] + '</td>' +
+                                    '<td style="font-weight:bold;color:black;">' + response[i][1] + '</td>' +
+                                    '</tr>';
+                            }
+                            else
+                            {
+                                tableRow = '<tr class="even pointer" id="allRow' + allownceCount + '">' +
+                                   '<td>' + response[i][0] + '</td>' +
+                                   '<td>' + response[i][1] + '</td>' +
+                                   '</tr>';
+                            }
+
+                            $("#allownceTable").find('tbody').append(tableRow);
+                            allownceCount++;
+                        }
+                    }
+                 );
+
+                break;
+            }
+        }
+
+    }
+
+   
+    function setPrint(value)
+    {
+        $("#isPrint").val(value);
+
+        if(value == 2)
+        {
+            ConfirmAction('Are you sure, you want to reset the Issued challans?', 'resetChallan');
+            return false;
+        }
+
+        return true;
+    }
+
+    function CheckFinanceAccount()
+    {
+        var accountType = $("#accountTypeId option:selected").text();
+        var accountCount = $("#financeAccountId").children('option').length;
+
+        if(Number(accountCount) == 1)
+        {
+            showNotification('No Pay To ' +accountType+ ' Account is opened, Please open the Finance Account then Issue Challan', 'Error', 'Error')
+            return false;
+        }
+        else
+        {
+            ConfirmAction('Are you sure, you want to Issue the challans?', 'saveChallan');
+        }
+
+        return false;
+    }
+
+    function RouteToFinanceAccount()
+    {
+        var accountType = $("#accountTypeId").val();
+        if(accountType.trim() == 1)
+        {
+            window.location.href = AppDetail() + "/BankAccount/Index";
+        }
+        else
+        {
+            window.location.href = AppDetail() + "/CashAccount/Index";
+        }
+    }
+
+   
+
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbSelectAll").is(':checked') == true)
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, true);
+            }
+        }
+        else
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, false);
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+
+    function ChangeAccountType()
+    {
+        var accountTypeId = $("#accountTypeId").val();
+        var branchId = $("#BranchId").val();
+        if(accountTypeId == 1)
+        {
+            accountTypeId = 13;
+        }
+        else
+        {
+            accountTypeId = 14;
+        }
+        $.ajax({
+            type: "GET",
+            url: AppDetail() + '/api/Common/getFinanceAccount?typeId=' + accountTypeId + '&&branchId=' + branchId + '&&isLoadAll=1',
+            contentType: 'application/json',
+            success: function (result) {
+                $("#financeAccountId").html(result);
+            },
+            error: function (res) {
+                showNotification('Unable to load account', 'Error', 'Error')
+            }
+        });
+    }
+
+</script>

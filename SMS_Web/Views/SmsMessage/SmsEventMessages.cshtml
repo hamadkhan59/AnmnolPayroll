@@ -1,0 +1,363 @@
+﻿@model List<SMS_DAL.ViewModel.SmsModel>
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("SaveSmsEventMessages", "SmsMessage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">SMS Event Message Create</label>
+                @*<div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 12}) + "'");"
+                           class="btn btn-success btn-xs" style="border-radius: 50%;width:60px; height:25px;" />
+                </div>*@
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                <fieldset>
+                   
+                    <div class="form-group row">
+
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name" style="font-size: 11px;">
+                            Event
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div>
+                                @if (ViewData["Operation"] == null || (int)ViewData["Operation"] == 0)
+                                {
+                                    @Html.DropDownList("SmsModel.EventId", (IEnumerable<SelectListItem>)ViewBag.EventId, new { @class = "form-control input-sm", onchange = "getSearchSmsEventId()", Id = "SmsEventId" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("SmsModel.EventId", (IEnumerable<SelectListItem>)ViewBag.EventId, new { @class = "form-control input-sm", @disabled = "true" })
+                                }
+                                @*@Html.ValidationMessageFor(model => model.ClassId)*@
+                                @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                                    @Html.ValidationMessageFor(model => model.Name)*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="last-name" style="font-size: 11px;">
+                            Message
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div>
+                                @*<input id="last-name" name="last-name" required="required" class="form-control input-sm col-md-7 col-xs-12" type="text">*@
+                                @if (ViewData["Operation"] == null || (int)ViewData["Operation"] == 0)
+                                {
+                                    @Html.DropDownList("SmsModel.TemplateName", (IEnumerable<SelectListItem>)ViewBag.MessageId, new { @class = "form-control input-sm", onchange = "getSearchSmsMessageId()", Id = "SmsMessageId" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownList("SmsModel.TemplateName", (IEnumerable<SelectListItem>)ViewBag.MessageId, new { @class = "form-control input-sm", @disabled = "true" })
+                                }
+                                @*@Html.ValidationMessageFor(model => model.SectionId)*@
+                            </div>
+                        </div>
+                    </div>
+                  
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @*<button type="submit" class="btn btn-sm btn-primary">Cancel</button>*@
+                            @*<input type="submit" value="Save" name="SubmitLeaving" class="btn btn-sm btn-info btn-squar" />*@
+                            <input type="submit" value="Save" name="SaveSmsEventMessages" class="btn btn-squar"
+                                   style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none;" : "display:block;") />
+
+                            @*<input type="submit" value="Don't Send SMS" onclick="setDontSend(1)" name="SubmitLeaving" class="btn btn-squar" />
+                            <input type="submit" value="Send SMS" name="SubmitLeaving" class="btn btn-squar" />*@
+
+
+                            @*<input type="submit" value="Save" name="SaveSmsEventMessages" class="btn btn-squar"
+                                   style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none;" : "display:block;") />
+                            <input type="submit" value="Save" name="Update" class="btn btn-squar"
+                                   style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;" : "display:none;") />*@
+
+                            @*<button type="submit" class="btn btn-sm btn-info">Submit</button>*@
+                        </div>
+
+                    </div>
+                </fieldset>
+                @*</form>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@*Awais*@
+
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">SMS Event Lists</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("SaveSmsEventMessagesss", "SmsMessage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                       
+                        <div class="form-group">
+                            <div class="table-responsive">
+                                <input type="hidden" class="custom-control-input" name="IsDontSend" value="0" style="width:20px;height:20px;" id="isDontSend">
+                                <table class="table table-striped table-bordered" id="classTable">
+                                    <thead>
+                                        <tr class="headings">
+                                            @*<th>
+                                                <input type="checkbox" id="cbSelectAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                            </th>
+                                            <th>
+                                                Send Message
+                                            </th>*@
+                                            <th>
+                                                Event Name
+                                            </th>
+                                            @*<th>
+                                                Event Detail
+                                            </th>*@
+                                            <th>
+                                                Message
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                        @if (Model != null)
+                                        {
+                                            int i = 0;
+                                            foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    @*<td>
+                                                        <input type="checkbox" name="eventIds" value="@Model[i].EventId" style="width:20px;height:20px;" onclick="ChangeCheckCkount(@i);" id="@("tableId"+i)">
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.SmsFlagDescription)
+                                                    </td>*@
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.EventName)
+                                                    </td>
+                                                    @*<td>
+                                                        @Html.DisplayFor(modelItem => item.EventDetail)
+                                                    </td>*@
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.TemplateName)
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 1)
+            {
+                <text> showNotification(' The Name Field is Required.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 1)
+            {
+                <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 421)
+            {
+                <text> showNotification('Please select sms event(s) / Message to save the detial.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 422)
+            {
+                <text> showNotification('SMS Message Code is already Exist.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 11)
+            {
+                <text> showNotification(' SMS Message Login Id is already Exist.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 1421)
+            {
+                <text> showNotification('SMS Message Name is already Exist.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 1422)
+            {
+                <text> showNotification('SMS Message Code is already Exist.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 111)
+            {
+                <text> showNotification('SMS Message Login Id is already Exist.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 3)
+            {
+                <text> showNotification('SMS Message to delete SMS Message.', 'Error', 'Error') </text>
+            }
+             else if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to save sms event detail.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 425)
+            {
+                <text> showNotification('Sms Parameters are inValid.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 2)
+            {
+                <text> showNotification('SMS Event detail is saved succesfully.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 4)
+            {
+                <text> showNotification('SMS Message is deleted succesfully.', 'Success', 'Success') </text>
+            }
+        }
+    }
+
+
+    window.onload = function (e) {
+        populateErrors();
+        getSearchSmsEventId();
+        getSearchSmsMessageId();
+        $('#classTable').DataTable( {
+            paging: false
+        } );
+    }
+    
+    function getSearchSmsEventId() {
+        
+        var SmsMessageEventVar = $("#SmsEventId").val();
+        //alert(SmsMessageNameVar)
+        $.post( AppDetail() +"/SmsMessage/getSearchSmsEventIdInfo",
+                    { SmsMessageEventId : SmsMessageEventVar },
+                    function (response) {
+                        //$("#MessageTextChange").val(response);
+                    }
+                 );
+    }
+
+    function getSearchSmsMessageId() {
+        
+        var SmsEventMessageVar = $("#SmsMessageId").val();
+        //alert(SmsMessageNameVar)
+        $.post( AppDetail() +"/SmsMessage/getSearchSmsMessageIdInfo",
+                    { SmsEventMessageId : SmsEventMessageVar },
+                    function (response) {
+                        //$("#MessageTextChange").val(response);
+                    }
+                 );
+    }
+
+    function setDontSend(Value)
+    {
+        $("#isDontSend").val(Value);
+    }
+
+    function VerifyPassword() {
+        var password = $("#txtPassword").val();
+        var confirmPassword = $("#txtConfirmPassword").val();
+
+        if (password == '' && confirmPassword == '') {
+            showNotification('Please enter password.', 'Error', 'Error')
+            //document.getElementById('lblError').innerHTML = 'Please enter password';
+            return false;
+        }
+
+        if (password == confirmPassword) {
+            document.getElementById('lblError').innerHTML = '';
+            return true;
+        }
+        else {
+            showNotification('Password is not matched.', 'Error', 'Error')
+            //document.getElementById('lblError').innerHTML = 'Password is not matched';
+            return false;
+        }
+    }
+
+    function getUsersByGroup() {
+        var rows = $('table > tbody tr');
+        var groupId = $("#cbGroupId").val();
+        if (groupId == null || groupId == '') {
+            rows.show();
+        }
+        else {
+            var showRows = rows.filter('.' + groupId).show();
+            rows.not(showRows).hide();
+        }
+    }
+
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbSelectAll").is(':checked') == true)
+        {
+            checkCount = rowCount;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, true);
+                //$("#tableId"+i).attr('checked', true);
+            }
+        }
+        else
+        {
+            checkCount = 0;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, false);
+
+                //$("#tableId"+i).attr('checked', false);
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+</script>

@@ -1,0 +1,1111 @@
+﻿@model SMS_DAL.StudentInquiry
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title">
+                <h2>Student @((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "Edit" : "Create")</h2>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div>
+                        @*@Html.ValidationSummary()*@
+
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Student is saved succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 230) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Student Admission Charges is saved succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 1230) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Student Regular Fee Plan is saved succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Save Student.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 1420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Save Student Admission Charges.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 11) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Student is already exist
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 2420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Save Student Regular Fee Plan.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to delete Student.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:12px;" : "display:none")>
+                            Student is deleted succesfully.
+                        </label>
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up" id="clickUp"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+
+                </ul>
+                <button id="searchBtnCreate" type="button" class="btn btn-info btn-squar navbar-right" onclick="gotoSearch()"
+                        style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;" : "display:none")>
+                    <span class="glyphicon glyphicon-search" style="color:white"></span> Search
+                </button>
+                <button id="createBtnSearch" type="button" class="btn btn-info btn-squar navbar-right" onclick="gotoSearch()"
+                        style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) == 0) ? "display:block;" : "display:none")>
+                    <span class="glyphicon glyphicon-plus" style="color:white"></span> Create
+                </button>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <br>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div>
+                                        @Html.ValidationSummary()
+
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                                            Student is saved succesfully.
+                                        </label>
+
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                            Unable to Save Student.
+                                        </label>
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                            Unable to delete Student.
+                                        </label>
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:12px;" : "display:none")>
+                                            Student is deleted succesfully.
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>*@
+
+
+
+
+
+                        <!-- Bootstrap core JavaScript
+                        ================================================== -->
+                        <!-- Placed at the end of the document so the pages load faster -->
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+                        <style>
+                            body {
+                                padding: 10px;
+                            }
+
+                            #exTab1 .tab-content {
+                                color: #73879C;
+                                background-color: white;
+                                padding: 5px 15px;
+                            }
+
+                            #exTab2 h3 {
+                                color: white;
+                                background-color: #428bca;
+                                padding: 5px 15px;
+                            }
+
+                            /* remove border radius for the tab */
+
+                            #exTab1 .nav-pills > li > a {
+                                border-radius: 0;
+                            }
+
+                            /* change border radius for the tab , apply corners on top*/
+
+                            #exTab3 .nav-pills > li > a {
+                                border-radius: 4px 4px 0 0;
+                            }
+
+                            #exTab3 .tab-content {
+                                color: white;
+                                background-color: #428bca;
+                                padding: 5px 15px;
+                            }
+
+                            .btn-squar {
+                                border-radius: 0 !important;
+                            }
+
+                            .boxed {
+                                border: 1px solid #DDDDDD;
+                                margin-left: -15px;
+                                margin-right: -15px;
+                                height: 320px;
+                            }
+
+                            .nav-boxed {
+                                border: 1px solid #DDDDDD;
+                            }
+
+                            .padded-ends {
+                                padding-left: 20px;
+                                padding-right: 20px;
+                                /*margin-right:20px;*/
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Name <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.Name)
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Class
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control", onchange = "getSectionList()", id = "classId" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.ClassId)
+
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        DOB <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.DateOfBirth, new { @type = "date", @class = "form-control", id = "dob" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.DateOfBirth)
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Gender
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("GenderCode", (IEnumerable<SelectListItem>)ViewBag.GenderCode, new { @class = "form-control" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.GenderCode)
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Nationality
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Nationality, new { @class = "form-control" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.Nationality)
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Relegion
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("ReligionCode", (IEnumerable<SelectListItem>)ViewBag.ReligionCode, new { @class = "form-control" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.ReligionCode)
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Cast
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Cast, new { @class = "form-control", @id = "campus" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.Cast)
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        B.Form No.
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.BFormNo, new { @class = "form-control", @id = "campus" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.BFormNo)
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Admission Date <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.AdmissionDate, new { @type = "date", @class = "form-control", id = "admissionDate" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.AdmissionDate)
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Session
+                                    </label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("Session.Id", (IEnumerable<SelectListItem>)ViewBag.SessionId, new { @class = "form-control" })
+                                            <p style="color:red;" />@Html.ValidationMessageFor(model => model.SessionId)
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group row">
+
+                                    @*<label class="control-label col-md-2 col-sm-2 col-xs-2" align="left" for="first-name" style="font-size: 12px;">
+                                            Upload Image<span class="required" style="color:red;">*</span>
+                                        </label>*@
+                                    <div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+
+                                            @{
+                    var imgSrc = "";
+                    if (Model != null && Model.StdImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(Model.StdImage);
+                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                    }
+
+                    <img id="stdImage" src="@imgSrc" style="width:200px;height:200px;align-items:center" />
+                                            }
+                                            <input class="img-show" type='file' id="imgInp" style="margin-top:20px;" onchange="readURL(this);" />
+                                        </div>
+                                        <!-- col ends here -->
+                                        <br />
+                                        <br />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="height:400px;">
+                                <div id="exTab1" class="container">
+                                    <ul class="nav nav-pills nav-tabs-justified">
+                                       
+                                        <li class="nav-boxed">
+                                            <a href="#2a" data-toggle="tab">Parents Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#3a" data-toggle="tab">Address Info</a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content clearfix">
+                                       
+                                        <div class="tab-pane active boxed" id="2a">
+                                            @*<h3>Content's background color is the same for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px;">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Father Name <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.FatherName)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Occupation
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherOccupation, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.FatherOccupation)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    CNIC <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.FatherCNIC)
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#1 <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Contact_1, new { @class = "form-control", @placeholder = "xxxx-xxxxxxx" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.Contact_1)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#2
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Contact_2, new { @class = "form-control", @placeholder = "xxxx-xxxxxxx" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.Contact_2)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Email
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "some@example.com" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.Email)
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Mother Name <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.MotherName)
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Mother Occupation <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherOccupation, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.MotherOccupation)
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Mother CNIC <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherCnic, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.MotherName)
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#1
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherContact1, new { @class = "form-control", @placeholder = "xxxx-xxxxxxx" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.MotherContact1)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#2
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherContact2, new { @class = "form-control", @placeholder = "xxxx-xxxxxxx" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.MotherContact2)
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Guardian Name <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardianName, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.GuardianName)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Guardian CNIC <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardinCnic, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.GuardinCnic)
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Guardian Contact <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardinContact, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.GuardinContact)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane boxed" id="3a">
+                                            @*<h3>@*We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                    Current Address <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                    Permanent Address
+                                                </label>
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row padded-ends">
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                        Current Address <span class="required" style="color:red;">*</span>
+                                                    </label>*@
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.CurrentAddress, 3, 25, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.CurrentAddress)
+                                                    </div>
+                                                </div>
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                        Permanent Address
+                                                    </label>*@
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.PermanentAddress, 3, 25, new { @class = "form-control" })
+                                                        <p style="color:red;" />@Html.ValidationMessageFor(model => model.PermanentAddress)
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+                                        </div>
+                                        
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Parents Info</legend>
+                            </div>*@
+
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Address Info</legend>
+                            </div>*@
+
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Admission Pre Reqs</legend>
+                            </div>*@
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Student Photo</legend>
+                            </div>*@
+
+
+
+                        @*<div class="ln_solid"></div>*@
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <div class="nav navbar-right">
+                                    <input type="submit" id="createBtn" value="Save" name="Create" class="btn btn-info btn-squar navbar-right" onclick="return UploadPreviousHistory(this)"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none; " : "display:block;") />
+                                    <input type="submit" id="updateBtn" value="Save" name="Update" class="btn btn-info btn-squar navbar-right" onclick="return UploadPreviousHistory(this)"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;" : "display:none") />
+                                </div>
+                                <input type="submit" value="Print" name="Print" class="btn btn-info btn-squar navbar-right" onclick="UploadPreviousHistory()"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+
+                                <input type="submit" value="Admission Charges" name="AdmissionCharges" class="btn btn-info btn-squar navbar-right"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px " : "display:none") />
+                                <input type="submit" value="Regulr Fee Plan" name="RegularFee" class="btn btn-info btn-squar navbar-right"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+
+
+                            </div>
+                            @*<div class="row col-md-12 col-sm-12 col-xs-12">
+                                <input type="submit" value="Regulr Fee Plan" name="Print" class="btn btn-dark btn-squar col-md-offset-5" onclick="UploadImage()" @*style="margin-top:-60px;"*@ @*/>*@
+                                @*<input type="submit" value="Admission Charges Plan" name="Print" class="btn btn-dark btn-squar col-md-offset-7" onclick="UploadImage()" style="margin-top:-60px;" />
+                                        <input type="submit" value="Save" name="Create" class="btn btn-dark btn-squar col-md-offset-10" onclick="UploadImage()"
+                                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none" : "display:block") />
+                                        <input type="submit" value="Edit" name="Update" class="btn btn-dark btn-squar col-md-offset-10" onclick="UploadImage()"
+                                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none") />
+                                        <input type="submit" value="Print" name="Print" class="btn btn-dark btn-squar col-md-offset-11" onclick="UploadImage()" style="margin-top:-60px;" />
+                                    </div>*@
+                            </div>
+                        </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title">
+                <h2>Search Student</h2>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <br>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 12px;">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassSection.ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control", onchange = "getSearchSectionList()", id = "classIdSearch" })
+                                    <p style="color:red;" />@Html.ValidationMessageFor(model => model.ClassSection.ClassId)
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 12px;">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassSection.SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, "All", new { @class = "form-control", id = "sectionIdSearch" })
+                                    <p style="color:red;" />@Html.ValidationMessageFor(model => model.ClassSection.SectionId)
+
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 12px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.RollNumber, new { @class = "form-control", id = "rollNoSearch" })
+                                    <p style="color:red;" />@Html.ValidationMessageFor(model => model.RollNumber)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 12px;">
+                                Name <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", id = "nameSearch" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 12px;">
+                                Father Name <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control", id = "fatherNameSearch" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 12px;">
+                                Father CNIC <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control", id = "fatherCnic" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-info btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title">
+                <h2>Student List</h2>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action" id="classTable">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        <h2>Class</h2>
+                                    </th>
+                                    <th>
+                                        <h2>Section</h2>
+                                    </th>
+                                    <th>
+                                        <h2>RollNumber</h2>
+                                    </th>
+
+                                    <th>
+                                        <h2>Name</h2>
+                                    </th>
+                                    <th>
+                                        <h2>FatherName</h2>
+                                    </th>
+                                    <th>
+                                        <h2>Actions</h2>
+                                    </th>
+                                </tr>
+
+                            </thead>
+                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                @if (ViewData["student"] != null)
+                                {
+                                    foreach (var item in (IEnumerable<SMS_DAL.Student>)ViewData["student"])
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (item.StdImage != null)
+                                                {
+                                                    var base64 = Convert.ToBase64String(item.StdImage);
+                                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                                                    <img src="@imgSrc" style="width:50px;height:50px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="" style="width:50px;height:50px;" />
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ClassSection.Class.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ClassSection.Section.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RollNumber)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FatherName)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "Index", new { id = item.id }, new { style = "color: blue;" })
+                                                @*@Html.ActionLink("Details", "Details", new { id = item.RegisterCourseId }) |*@
+                                                @*@Html.ActionLink("Delete", "Delete", new { id = item.id }, new { onclick = "return confirm('Are you sure you wish to delete this Student?');", style = "color: blue;" })*@
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    window.onload = function (e) {
+        getSectionList();
+        resetSearch();
+
+        @if(Model != null )
+        {
+            <text>
+        $('#dob').val('@(Model.DateOfBirth.Value.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+        $('#admissionDate').val('@(Model.AdmissionDate.Value.ToString("yyyy-MM-dd"))');
+        getStudentHistory();
+        </text>
+        }
+        else
+        {
+            <text>
+                $('#dob').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+                $('#admissionDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+                gotoCreate();
+
+            </text>
+        }
+    }
+
+
+    function EnableCampus() {
+        //var admType = $("#admType").val();
+        //if (admType == '3')
+        //    document.getElementById("campus").readOnly = false;
+        //else
+        //    document.getElementById("campus").readOnly = true;
+    }
+    function getRollNumber() {
+        var classId = $("#classId").val();
+        var sectionId = $("#sectionId").val();
+        //alert(classId);
+        $.ajax({
+            url: '/Student/GetRollNumber',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { 'classId': classId, 'sectionId': sectionId },
+            statusCode: {
+                200: function (data) {
+                    var json2 = JSON.parse(data);
+                    $('#rollNumber').val(json2);
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function UploadImage() {
+        debugger;
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: "/Student/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                return true;
+            });
+
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+
+
+        //UploadPreviousHistory();
+    }
+
+    function UploadPreviousHistory(event)
+    {
+        //alert(event.name)
+        var boolFlag = false;
+        if(UploadImage() == true)
+        {
+            var historyList = [];
+            var rowCount = document.getElementById("preEduTable").rows.length;
+
+            if(rowCount > 1)
+            {
+                for( var i = 1; i < rowCount; i++)
+                {
+                    var rowData = document.getElementById("preEduTable").rows[i].cells;
+                    var campusName = rowData[1].innerHTML;
+                    var withdrawalClass = rowData[2].innerHTML;
+                    var studyDuration = rowData[3].innerHTML;
+                    //alert(campusName)
+                    var history = {
+                        CampusName: campusName,
+                        WithdrawlClass : withdrawalClass,
+                        StudyDuration: studyDuration
+                    };
+                    historyList[i-1] = history;
+                }
+
+                debugger
+                 $.ajax({
+                    url: '/Student/UploadPreviousHistory',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(historyList),// JSON.stringify(tagsList) },//JSON.stringify({ 'tagsList': tagsList }),
+                    statusCode: {
+                        200: function () {
+                            return true;
+                        },
+                        500: function () {
+                            return false;
+                        }
+                    },
+                    jsonp: 'jsonp'
+                });
+                boolFlag = false;
+
+                 $(document).ajaxStop(function() {
+                     //alert(0)
+                     if(event.name =="Create")
+                     {
+                         document.getElementById("createBtn").onclick = true;
+                         $("#createBtn").click()
+                     }
+                     else
+                     {
+                         document.getElementById("updateBtn").onclick = true;
+                         $("#updateBtn").click()
+                     }
+                 });
+            }
+            else
+            {
+                boolFlag = true;
+            }
+        }
+
+        return boolFlag;
+    }
+
+    $.when(ajax1(), ajax2(), ajax3(), ajax4()).done(function(a1, a2, a3, a4){
+        // the code here will be executed when all four ajax requests resolve.
+        // a1, a2, a3 and a4 are lists of length 3 containing the response text,
+        // status, and jqXHR object for each of the four ajax calls respectively.
+    });
+
+    
+
+    function AddEducationDetails()
+    {
+        var campusName = $('#campusName').val();
+        var withdrawalClass = $('#withdrawlClass').val();
+        var studyDuration = $('#studyDuration').val();
+
+        if(campusName == null || campusName.length == 0)
+        {
+            $('#errorPreEdu').text("Please enter campus name");
+        }
+        else if(withdrawalClass == null || withdrawalClass.length == 0)
+        {
+            $('#errorPreEdu').text("Please enter withdrawal class");
+        }
+        else if(studyDuration == null || studyDuration.length == 0)
+        {
+            $('#errorPreEdu').text("Please enter study duration");
+        }
+        else
+        {
+            var rowCount = document.getElementById("preEduTable").rows.length - 1;
+            $('#errorPreEdu').text("");
+            $('#campusName').val("");
+            $('#withdrawlClass').val("");
+            $('#studyDuration').val("");
+            var button = '<button type="button" class="btn btn-squar btn-dark btn-xs navbar-right" onclick="DeletePreviousEducation(0,'+rowCount+')"> X </button>';
+            var rowData = '<tr id="tableRowHis'+rowCount+'" style="height:35px;"><td></td><td>' +campusName+ '</td><td>' +withdrawalClass+ '</td><td>' +studyDuration+ '</td><td>' +button+ '</td></tr>';
+            $('#preEduTable tbody').append(rowData);
+        }
+    }
+
+        function DeletePreviousEducation(educationId, index)
+        {
+            //alert(index)
+            //alert(educationId)
+            ////document.getElementById("myTable").deleteRow(index);
+            //deleteRow('tableRowHis'+index);
+            //if(educationId > 0)
+            //{
+
+            //}
+            var row = document.getElementById('tableRowHis'+index);
+            row.parentNode.removeChild(row);
+
+        }
+
+        //function deleteRow(rowid)
+        //{
+        //    var row = document.getElementById(rowid);
+        //    row.parentNode.removeChild(row);
+        //}
+
+        function gotoSearch() {
+            $('#clickUp').click();
+
+            if($("#searchBtnCreate").is(":visible"))
+            {
+                document.getElementById('searchBtnCreate').style.display = "none";
+            }
+            else
+            {
+                document.getElementById('searchBtnCreate').style.display = "block";
+            }
+
+            if($("#createBtnSearch").is(":visible"))
+            {
+                document.getElementById('createBtnSearch').style.display = "none";
+            }
+            else
+            {
+                document.getElementById('createBtnSearch').style.display = "block";
+            }
+        }
+
+        function gotoCreate() {
+            $('#clickUp').click();
+
+        }
+        function resetSearch() {
+
+            $('#fatherNameSearch').val("");
+            $('#nameSearch').val("");
+            $('#rollNoSearch').val("");
+            $('#fatherCnic').val("");
+
+        }
+
+        function getSearchSectionList() {
+            var classId = $("#classIdSearch").val();
+            //alert(classId);
+            $("#sectionIdSearch").html("");
+            //$("#sectionIdSearch").append('<option value='+0+'>All</option>');
+            @foreach (var item in (IEnumerable<SMS_DAL.ClassSection>)ViewData["classSection"])
+        {
+
+            <text>
+            if(classId == '')
+            {
+                var id = @(item.Section.Id);
+                var name = '@(item.Section.Name)';
+                $("#sectionIdSearch").append('<option value='+id+'>'+name+'</option>');
+            }
+            else if(classId == @(item.ClassId))
+                {
+                    var id = @(item.Section.Id);
+                    var name = '@(item.Section.Name)';
+            $("#sectionIdSearch").append('<option value='+id+'>'+name+'</option>');
+        }
+        </text>
+    }
+
+    }
+</script>
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@

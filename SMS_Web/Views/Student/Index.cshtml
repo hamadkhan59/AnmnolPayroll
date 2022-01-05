@@ -1,0 +1,1825 @@
+﻿@model SMS_DAL.Student
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+
+    .txt-squar {
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /*body {
+         /*font: 16px Arial; */
+    }
+
+    */ .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+    }
+
+    input {
+        border: 1px solid gray;
+        background-color: white;
+        /*padding: 10px;*/
+        font-size: 13px;
+    }
+
+        input[type=text] {
+            background-color: white;
+            width: 100%;
+        }
+
+    /*input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+        }*/
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+            .autocomplete-items div:hover {
+                /*when hovering an item:*/
+                background-color: #e9e9e9;
+            }
+
+    .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+</style>
+
+
+<script>
+
+
+</script>
+
+<head>
+    <link rel="stylesheet" href="../../assets/css/Table-with-search-1.css">
+    <script src="../../assets/js/Table-with-search.js"></script>
+</head>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header_lg2">
+                <label class="nav navbar-left sc_panel_label control-label" align="left">Student @((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "Edit" : "Create")</label>
+                <div class="col-md-1 col-sm-1 col-xs-12"></div>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <div>
+                        @using (Html.BeginForm(Html.BeginForm("SearchByAdmissionNo", "Student", FormMethod.Post, new { id = "fastPayForm", enctype = "multipart/form-data" })))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div hidden="hidden">@Html.ValidationSummary(false)</div>
+
+                            <fieldset>
+                                <div class="col-6 sc_panel_label_top" >
+                                    <div class="pull-left sc_panel_label_top" style="width:100%">
+                                        <input id="medicine-search" type="text" class="search form-control sc_panel_label_top input-sm" name="admissionNo" placeholder="Quick Search Student Info">
+                                    </div>
+                                    <table id="search-table" class="table table-hover table-bordered results" style="display: none;">
+                                        <thead id="header" style="width:30%;background-color:lightseagreen;color:white">
+                                            <tr class="warning no-result">
+                                                <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-rows"  style="color:black"></tbody>
+                                    </table>
+                                </div>
+                            </fieldset>
+                        }
+                    </div>
+                </div>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 1}) + "'");"
+                           class="btn sc_help_btn btn-xs"/>
+                </div>
+               
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div>
+                                        @Html.ValidationSummary()
+
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:11px" : "display:none" )>
+                                            Student is saved succesfully.
+                                        </label>
+
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px" : "display:none")>
+                                            Unable to Save Student.
+                                        </label>
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:11px" : "display:none")>
+                                            Unable to delete Student.
+                                        </label>
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:11px" : "display:none")>
+                                            Student is deleted succesfully.
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>*@
+
+
+
+
+
+                        <!-- Bootstrap core JavaScript
+                        ================================================== -->
+                        <!-- Placed at the end of the document so the pages load faster -->
+
+                        <style>
+                                /*body {
+                              padding : 10px ;
+
+                            }*/
+
+                                #exTab1 .tab-content {
+                                    color: #73879c;
+                                    background-color: white;
+                                    padding: 5px 15px;
+                                }
+
+                                #exTab2 h3 {
+                                    color: white;
+                                    background-color: #428bca;
+                                    padding: 5px 15px;
+                                }
+
+                                /* remove border radius for the tab */
+
+                                #exTab1 .nav-pills > li > a {
+                                    border-radius: 0;
+                                }
+
+                                /* change border radius for the tab , apply corners on top*/
+
+                                #exTab3 .nav-pills > li > a {
+                                    border-radius: 4px 4px 0 0;
+                                }
+
+                                #exTab3 .tab-content {
+                                    color: white;
+                                    background-color: #428bca;
+                                    padding: 5px 15px;
+                                }
+
+                                
+
+                                .boxed {
+                                    border: 1px solid #DDDDDD;
+                                    margin-left: -15px;
+                                    margin-right: -15px;
+                                    height: 320px;
+                                }
+
+                                .nav-boxed {
+                                    border: 1px solid #DDDDDD;
+                                }
+
+                                .padded-ends {
+                                    padding-left: 20px;
+                                    padding-right: 20px;
+                                    /*margin-right:20px;*/
+                                }
+                        </style>
+                        <div class="row">
+                            <div class="col-md-9">
+
+                                @if (@Model == null)
+                                {
+                                    <div class="form-group row">
+
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                            Load Inquiry
+                                        </label>
+                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                            <div>
+                                                <input type="text" class="form-control input-sm" value="" id="txtInquiryNo">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-2 col-sm-2 col-xs-12" style="margin-top:-2px;">
+                                            <div class="form-group">
+                                                <div class="nav navbar-right">
+                                                    <input type="button" value="Load Inquiry" name="Search" class="btn btn-squar"
+                                                           onclick="location.href='@Url.Action("LoadInquiry", "Student")?inquirynumber=' + $('#txtInquiryNo').val()" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Name <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Roll No
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.RollNumber, new { @class = "form-control input-sm", id = "rollNumber", @readonly = "readonly" })
+                                            <input type="hidden" class="form-control input-sm" value="@(Model == null ? "0" : Model.RollNumber)" id="txtRollNoHidden" hidden="hidden">
+                                            <input type="hidden" class="form-control input-sm" value="@(Model == null ? "0" : Session["ClassId"])" id="txtClassIdHidden" hidden="hidden">
+                                            <input type="hidden" class="form-control input-sm" value="@(Model == null ? "0" : Session["SectionId"])" id="txtSectionIdHidden" hidden="hidden">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        @Html.ActionLink("Class", "Index", "Class", new { id = 0 }, new { title="Click to add new Class" })
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getSectionList()", id = "classId" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        @Html.ActionLink("Section", "Index", "Section", new { id = 0 }, new { title = "Click to add new Secion" })
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            <select class="form-control input-sm" name="SectionId" id="sectionId" onchange="getRollNumber()"></select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        DOB <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            <input type="hidden" name="StudentId" value="@(Model == null ? 0 : Model.id)" />
+                                            @Html.TextBoxFor(model => model.DateOfBirth, new { @type = "date", @class = "form-control input-sm", id = "dob" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Gender
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("Gender.Id", (IEnumerable<SelectListItem>)ViewBag.GenderCode, new { @class = "form-control input-sm" })
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Nationality
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Nationality, new { @class = "form-control input-sm" })
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Relegion
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("Relegion.Id", (IEnumerable<SelectListItem>)ViewBag.ReligionCode, new { @class = "form-control input-sm" })
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Cast
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Cast, new { @class = "form-control input-sm", @id = "campus" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        B.Form No.
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.BFormNo, new { @class = "form-control input-sm", @id = "campus" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                        Status
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.LeavingStatu.StatusName, new { @class = "form-control input-sm", id = "rollNumber", @readonly = "readonly" })
+                                        </div>
+                                        <div hidden="hidden">
+                                            @Html.TextBoxFor(model => model.LeavingStatus, new { @class = "form-control input-sm", id = "rollNumber", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.CheckBoxFor(model => model.IsEVS, new { @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block" })
+                                            <label class="control-label" style="font-size:11px">
+                                                Is Non Evs Student
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group row">
+
+                                    @*<label class="control-label col-md-2 col-sm-2 col-xs-2" align="left" for="first-name" style="font-size: 11px">
+                                            Upload Image<span class="required" style="color:red;">*</span>
+                                        </label>*@
+                                    <div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+
+                                            @{
+                                var imgSrc = "";
+                                if (Model != null && Model.StdImage != null)
+                                {
+                                    var base64 = Convert.ToBase64String(Model.StdImage);
+                                    imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                                }
+
+                                <img id="stdImage" src="@(Model != null && Model.StdImage != null ? imgSrc : "/user.jpg")" style="width:200px;height:200px;align-items:center" />
+                                            }
+                                            <input class="img-show" type='file' id="imgInp" style="margin-top:20px;" onchange="readURL(this);" />
+                                        </div>
+                                        <!-- col ends here -->
+                                        <br />
+                                        <br />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="height:400px;">
+                                <div id="exTab1" class="container">
+                                    <ul class="nav nav-pills nav-tabs-justified">
+                                        <li class="active nav-boxed">
+                                            <a href="#1a" data-toggle="tab">Admission Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#2a" data-toggle="tab">Parents Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#3a" data-toggle="tab">Address Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#4a" data-toggle="tab">Previous Education</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#5a" data-toggle="tab">Document Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#6a" data-toggle="tab">Medical History</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#7a" data-toggle="tab">Transport Detail</a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content clearfix">
+                                        <div class="tab-pane active boxed" id="1a">
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Admission Type
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.DropDownList("AdmissionType", (IEnumerable<SelectListItem>)ViewBag.AdmissionType, new { @class = "form-control input-sm", @id = "admType" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Previous Campus
+
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.PreviousCampus, new { @class = "form-control input-sm", @id = "campus" })
+                                                    </div>
+                                                </div>
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Withdrawal Class
+
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.WithDrawalClass, new { @class = "form-control input-sm", @id = "campus" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Study Duration
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.StudyDuration, new { @class = "form-control input-sm", @id = "campus" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Admission Date <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.AdmissionDate, new { @type = "date", @class = "form-control input-sm", id = "admissionDate" })
+                                                    </div>
+                                                </div>
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    
+                                                    @Html.ActionLink("Session", "Index", "Session", new { id = 0 }, new { title = "Click to add new Session" })
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.DropDownList("Session.Id", (IEnumerable<SelectListItem>)ViewBag.SessionId, new { @class = "form-control input-sm" })
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row padded-ends">
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Admission Incharge
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.AdmissionIncharge, new { @class = "form-control input-sm", @id = "campus" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Admission No
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.AdmissionNo, new { @class = "form-control input-sm", @id = "campus" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane boxed" id="2a">
+                                            @*<h3>Content's background color is the same for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px;">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Father Name <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm" })
+                                                        @Html.HiddenFor(model => model.SrNo, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Occupation
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherOccupation, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    CNIC <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control input-sm", @placeholder = "xxxxx-xxxxxxx-x" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Contact#1 <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Contact_1, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Contact#2
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Contact_2, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Email
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-sm", @placeholder = "some@example.com" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Mother Name
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Mother Occupation
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherOccupation, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Mother CNIC
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherCnic, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Contact#1
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherContact1, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Contact#2
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherContact2, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Guardian Name
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardianName, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Guardian CNIC
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardinCnic, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Guardian Contact
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardinContact, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane boxed" id="3a">
+                                            @*<h3>@*We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Current Address <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Permanent Address
+                                                </label>
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row padded-ends">
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                        Current Address <span class="required" style="color:red;">*</span>
+                                                    </label>*@
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.CurrentAddress, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                        Permanent Address
+                                                    </label>*@
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.PermanentAddress, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends" style="margin-top:10px">
+                                                <label class="control-label col-md-4 col-sm-4 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Father Workplace Address
+                                                </label>
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+
+                                                </div>
+                                                <label class="control-label col-md-4 col-sm-4 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Mother Workplace Address
+                                                </label>
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row padded-ends">
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.FatherWorkplace, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.MotherWorkplace, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane boxed" id="7a">
+                                            @*<h3>@*We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Driver
+                                                </label>
+                                                <div class="col-md-1 col-sm-1 col-xs-12">
+
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Van Strength
+                                                </label>
+                                                <div class="col-md-1 col-sm-1 col-xs-12">
+
+                                                </div>
+
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Stop Name <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-1 col-sm-1 col-xs-12">
+
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Van Fee
+                                                </label>
+                                                <div class="col-md-1 col-sm-1 col-xs-12">
+
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row padded-ends">
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                        Current Address <span class="required" style="color:red;">*</span>
+                                                    </label>*@
+
+                                                <div class="col-md-3 col-sm-3  col-xs-12">
+                                                    <div>
+                                                        @Html.DropDownList("DriverId", (IEnumerable<SelectListItem>)ViewBag.DriverId, new { @class = "form-control input-sm", @onchange = "GetDriverStop();", id = "driverStopId" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3  col-xs-12">
+                                                    <div>
+                                                        <input type="number" id="vanStrength" class="form-control input-sm" readonly="readonly" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div class="autocomplete" style="width:100%;">
+                                                        @Html.TextBoxFor(model => model.StopName, new { @class = "form-control input-sm", id = "currentAddress", @onfocusout = "GetStopCharges();", @onchange = "GetStopCharges();", @readonly = "readonly" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3  col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.VanFee, new { @class = "form-control input-sm", id = "VanFee", @readonly = "readonly" })
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+
+                                                <div class="form-group">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered" id="stopBody">
+                                                            <thead>
+                                                                <tr class="headings">
+                                                                    <th>
+                                                                        Stop Name
+                                                                    </th>
+                                                                    <th>
+                                                                        Rent
+                                                                    </th>
+
+                                                                </tr>
+
+                                                            </thead>
+                                                            <tbody style="background-color:white;color:#2A3F54" id="stopBody1">
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane boxed" id="6a">
+                                            @*<h3>@*We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+                                                <label class="control-label col-md-6 col-sm-6 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Has your child ever suffered from any serious Illness or allergies? If YES specify
+                                                </label>
+
+                                                <label class="control-label col-md-6 col-sm-6 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Does the child have any physical disability? If YES specify
+                                                </label>
+
+                                            </div>
+                                            <div class="form-group row padded-ends">
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.SeriousIllness, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.PhysicalDisability, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends" style="margin-top:10px">
+                                                <label class="control-label col-md-6 col-sm-6 col-xs-12" align="left" for="last-name" style="font-size: 11px">
+                                                    Does the child have any learning disabilities? If YES specify
+                                                </label>
+
+                                            </div>
+                                            <div class="form-group row padded-ends">
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.LearningDiability, 3, 25, new { @class = "form-control input-sm" })
+                                                        //Html.ValidationMessageFor(model => model.LearningDiability)
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane boxed" id="5a">
+                                            @*<h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+
+                                                <label id="errorLbl" style="color:red;"></label>
+                                                <div class="col-md-2 col-sm-2 col-xs-12" style="margin-left:-30px;">
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage1" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp1" style="margin-top:20px;" onchange="readURLDocImage(this, 1);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.ChildPictures == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 1 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp1', 'cbStdDoc1');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage2" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp2" style="margin-top:20px;" onchange="readURLDocImage(this, 2);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.CNIC == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 2 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp2', 'cbStdDoc2');">
+                                                            <span class=" glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage3" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp3" style="margin-top:20px;" onchange="readURLDocImage(this, 3);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsMotherCnic == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 3 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp3', 'cbStdDoc3');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage4" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp4" style="margin-top:20px;" onchange="readURLDocImage(this, 4);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.BirthCertificate == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 4 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp4', 'cbStdDoc4');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage5" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp5" style="margin-top:20px;" onchange="readURLDocImage(this, 5);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsDeclarationBirth == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 5 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp5', 'cbStdDoc5');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage6" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp6" style="margin-top:20px;" onchange="readURLDocImage(this, 6);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.SchoolLeaving == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 6 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp6', 'cbStdDoc6');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage7" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp7" style="margin-top:20px;" onchange="readURLDocImage(this, 7);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsEmergencyInformation == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 7 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp7', 'cbStdDoc7');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage8" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp8" style="margin-top:20px;" onchange="readURLDocImage(this, 8);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsPhysicalLikeness == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 8 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp8', 'cbStdDoc8');">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                                    <div>
+                                                        @*<input class="form-control input-sm" type="checkbox" onclick="return false;" name="ChildPictures" value="@(Model == null ? false : Model.ChildPictures)" id="cbStdDoc1" />*@
+                                                        @Html.CheckBoxFor(model => model.ChildPictures, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc1" })
+                                                        <label class="control-label" style="font-size:11px">
+                                                            Student Pictures
+                                                        </label>
+                                                    </div>
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.CNIC, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc2" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            Father CNIC
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsMotherCnic, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc3" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            Mother CNIC
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.BirthCertificate, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc4" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            Birth Certificate (Issued By Nadra)
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsDeclarationBirth, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc5" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            Declaration (Birth Certificate)
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.SchoolLeaving, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc6" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            School Leaving Certificate (If applicable)
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsEmergencyInformation, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc7" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            Emergency Information Form
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsPhysicalLikeness, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc8" })
+                                                        <label class="control-label" style="font-size: 11px">
+                                                            Authorization to Reproduce Physical Likeness
+                                                        </label>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-xs-12" style="margin-left:-30px;">
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage9" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp9" style="margin-top:20px;" onchange="readURLDocImage(this, 9);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsMedicalProcedure == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 9 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp9', 'cbStdDoc9');">
+                                                            <span class=" glyphicon glyphicon-upload">
+                                                            </span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage10" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp10" style="margin-top:20px;" onchange="readURLDocImage(this, 10);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsVaccination == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 10 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp10', 'cbStdDoc10');">
+                                                            <span class=" glyphicon glyphicon-upload">
+                                                            </span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="row nav navbar-right">
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                                            <img id="stdImage11" src="" style="width:200px;height:200px;align-items:center" />
+                                                            <input class="img-show" type='file' id="imgInp11" style="margin-top:20px;" onchange="readURLDocImage(this, 11);" />
+                                                        </div>
+
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right"
+                                                                onclick="location.href='@((Model == null || Model.IsNadraBformNo == false) ? "#" : @Url.Action("GetStudentDoc", new { studentId = Model == null ? 0 : Model.id, imageId = 11 }))'">
+                                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                                        </button>
+
+                                                        <div class="navbar-right" style="width:10px;"></div>
+                                                        <button type="button" style="margin-right:10px;" class="btn btn-sm btn-sm btn-info btn-squar navbar-right" onclick="SelectFile('imgInp11', 'cbStdDoc11');">
+                                                            <span class=" glyphicon glyphicon-upload">
+                                                            </span>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsMedicalProcedure, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc9" })
+                                                        <label class="control-label" align="left" for="last-name" style="font-size: 11px;">
+                                                            Emergency Medical Procedure
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsVaccination, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc10" })
+                                                        <label class="control-label" align="left" for="last-name" style="font-size: 11px">
+                                                            Vaccination
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="margin-top:7px;">
+                                                        @Html.CheckBoxFor(model => model.IsNadraBformNo, new { onclick = "return false;", @class = "form-control input-sm", @style = "width:15px;height:15px;display:inline-block", @id = "cbStdDoc11" })
+                                                        <label class="control-label" align="left" for="last-name" style="font-size: 11px">
+                                                            NADRA'S Form B.
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane boxed" id="4a">
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Campus Name
+
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        <input type="text" class="form-control input-sm" id="campusName">
+                                                    </div>
+                                                </div>
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Withdrawal Class
+
+                                                </label>
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                    <div>
+                                                        <input type="text" class="form-control input-sm" id="withdrawlClass">
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                                    Study Duration
+
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        <input type="text" class="form-control input-sm" id="studyDuration">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 col-sm-1 col-xs-12">
+                                                    <button type="button" class="btn btn-sm btn-info btn-squar navbar-right" style="margin-right:10px;" onclick="AddEducationDetails()">
+                                                        Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row padded-ends" style="margin-top:5px;">
+
+                                                <label id="errorPreEdu" class="control-label col-md-8 col-sm-8 col-xs-12" align="left" for="first-name" style="font-size: 11pxcolor:red">
+
+                                                </label>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="table-responsive padded-ends" style="height:150px;">
+                                                    <table class="table table-striped table-bordered" id="preEduTable">
+                                                        <thead>
+                                                            <tr class="headings">
+                                                                <th>
+                                                                    Campus Name
+                                                                </th>
+                                                                <th>
+                                                                    Withdrawal Class
+                                                                </th>
+                                                                <th>
+                                                                    Study Duration
+                                                                </th>
+                                                                <th>
+
+                                                                </th>
+                                                            </tr>
+
+                                                        </thead>
+                                                        <tbody style="background-color:white;color:#2A3F54" id="classBody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Parents Info</legend>
+                            </div>*@
+
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Address Info</legend>
+                            </div>*@
+
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Admission Pre Reqs</legend>
+                            </div>*@
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Student Photo</legend>
+                            </div>*@
+
+
+
+                        @*<div class="ln_solid"></div>*@
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <div class="nav navbar-right">
+                                    <input type="submit" id="createBtn" value="Save" name="Create" class="btn btn-squar navbar-right" onclick="return UploadPreviousHistory(this)"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none; " : "display:block;") />
+                                    <input type="submit" id="updateBtn" value="Save" name="Update" class="btn btn-squar navbar-right" onclick="return UploadPreviousHistory(this)"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;" : "display:none") />
+                                </div>
+                                <input type="submit" value="Print" name="Print" class="btn btn-squar navbar-right" onclick="UploadPreviousHistory()"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+
+                                @*<input type="submit" value="Admission Charges" name="AdmissionCharges" class="btn btn-squar navbar-right"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px " : "display:none") />*@
+
+                                <input type="submit" value="Regular Fee Plan" name="RegularFee" class="btn btn-squar navbar-right"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+
+
+                            </div>
+                            @*<div class="row col-md-12 col-sm-12 col-xs-12">
+                                <input type="submit" value="Regulr Fee Plan" name="Print" class="btn btn-sm btn-dark btn-squar col-md-offset-5" onclick="UploadImage()" @*style="margin-top:-60px;"*@ @*/>*@
+                                @*<input type="submit" value="Admission Charges Plan" name="Print" class="btn btn-sm btn-dark btn-squar col-md-offset-7" onclick="UploadImage()" style="margin-top:-60px;" />
+                                        <input type="submit" value="Save" name="Create" class="btn btn-sm btn-dark btn-squar col-md-offset-10" onclick="UploadImage()"
+                                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none" : "display:block") />
+                                        <input type="submit" value="Edit" name="Update" class="btn btn-sm btn-dark btn-squar col-md-offset-10" onclick="UploadImage()"
+                                               style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none") />
+                                        <input type="submit" value="Print" name="Print" class="btn btn-sm btn-dark btn-squar col-md-offset-11" onclick="UploadImage()" style="margin-top:-60px;" />
+                                    </div>*@
+                            </div>
+                        </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function populateErrors()
+    {
+        @if (!Html.ViewData.ModelState.IsValid)
+        {
+            <text> populateValidationErrors()  </text>
+        }
+
+      @if(ViewData["Error"] != null)
+      {
+          if ((int)@ViewData["Error"] == 2)
+          {
+              <text> showNotification('Student is saved succesfully.', 'Success', 'Success') </text>
+          }
+          else if ((int)@ViewData["Error"] == 230)
+          {
+              <text> showNotification('Student Admission Charges is saved succesfully.', 'Success', 'Success') </text>
+          }
+          else if ((int)@ViewData["Error"] == 1230)
+          {
+              <text> showNotification('Student Regular Fee Plan is saved succesfully.', 'Success', 'Success') </text>
+          }
+      else if ((int)@ViewData["Error"] == 11)
+          {
+              <text> showNotification('Student is already exist.', 'Error', 'Error') </text>
+          }
+           else if ((int)@ViewData["Error"] == 111)
+          {
+              <text> showNotification('As no class section is defined yet, so student cant be enrolled. Please add new class and section first.', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 112)
+          {
+              <text> showNotification('As no section is defined in class yet, so student cant be enrolled. Please add new section in class first.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 1)
+          {
+              <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 420)
+          {
+              <text> showNotification('Unable to Save Student.', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 500)
+          {
+              <text> showNotification('A student with this admission No is already added please enter correct data.', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 520)
+          {
+              <text> showNotification('No session is created for school, so create a session and then start your proceedings', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 1420)
+          {
+              <text> showNotification(' Unable to Save Student Admission Charges.', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 2420)
+          {
+              <text> showNotification('Unable to Save Student Regular Fee Plan.', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 1421)
+          {
+              <text> showNotification('Unable to Load Inquiry information, because student is failed in admission test.', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 1422)
+          {
+              <text> showNotification('No Student Inquiry Found.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 3)
+          {
+              <text> showNotification('Unable to delete Student.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 4)
+          {
+              <text> showNotification('Student is deleted succesfully.', 'Success', 'Success') </text>
+          }
+      }
+    }
+
+    var names = [];
+
+    window.onload = function (e) {
+        populateErrors();
+        getSectionList();
+
+        $("input").attr("autocomplete", "off");
+        @if (Model != null)
+        {
+            <text>
+            $('#dob').val('@(Model.DateOfBirth.Value.ToString("yyyy-MM-dd"))');
+            $('#admissionDate').val('@(Model.AdmissionDate.Value.ToString("yyyy-MM-dd"))');
+            $('#classId').val('@Session["ClassId"]');
+            $('#sectionId').val('@Session["SectionId"]');
+            getStudentHistory();
+            </text>
+        }
+        else
+        {
+            <text>
+            $('#dob').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+            $('#admissionDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+
+            </text>
+        }
+
+        GetDriverStop();
+        GetNameList();
+        data = names;
+        setTableData();
+    }
+
+
+    function getSectionList()
+    {
+        var sectionId = $("#txtSectionIdHidden").val();
+        var classId = $("#classId").val();
+        GetClassSection(classId, 0, 'sectionId', 1, sectionId);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function SelectFile(index, cbIndex)
+    {
+        $('#'+index).trigger('click');
+        $('#'+cbIndex).trigger('click');
+
+    }
+
+
+
+    function readURLDocImage(input, index) {
+        debugger;
+
+        //document.getElementById('cbStdDoc'+index).checked = true;
+
+        $('#cbStdDoc'+index).prop('checked', true);
+        $('#cbStdDoc'+index).attr('checked','checked');
+        $('#cbStdDoc'+index).val($('#cbStdDoc'+index).prop('checked'));
+
+        //val(cb.prop('checked'))
+
+        debugger;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage'+index)
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function UploadDocs()
+    {
+        var data = new FormData();
+        for(var i = 1 ; i <= 11; i++)
+        {
+            var files = $("#imgInp"+i).get(0).files;
+            if (files.length > 0) {
+                data.append("UploadedImage" +i, files[0]);
+            }
+        }
+
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: AppDetail() + "/Student/UploadStudentDocs",
+            contentType: false,
+            processData: false,
+            data: data
+        });
+    }
+
+    function UploadImage() {
+        debugger;
+        UploadDocs();
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: AppDetail() + "/Student/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                return true;
+            });
+
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+
+        //UploadPreviousHistory();
+    }
+
+    function UploadPreviousHistory(event)
+    {
+        //alert(event.name)
+        var boolFlag = false;
+        if(UploadImage() == true)
+        {
+            var historyList = [];
+            var rowCount = document.getElementById("preEduTable").rows.length;
+
+            if(rowCount > 1)
+            {
+                for( var i = 1; i < rowCount; i++)
+                {
+                    var rowData = document.getElementById("preEduTable").rows[i].cells;
+                    var campusName = rowData[0].innerHTML;
+                    var withdrawalClass = rowData[1].innerHTML;
+                    var studyDuration = rowData[2].innerHTML;
+                    //alert(campusName)
+                    var history = {
+                        CampusName: campusName,
+                        WithdrawlClass : withdrawalClass,
+                        StudyDuration: studyDuration
+                    };
+                    historyList[i-1] = history;
+                }
+
+                debugger
+                 $.ajax({
+                    url: AppDetail() + '/Student/UploadPreviousHistory',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(historyList),// JSON.stringify(tagsList) },//JSON.stringify({ 'tagsList': tagsList }),
+                    statusCode: {
+                        200: function () {
+                            return true;
+                        },
+                        500: function () {
+                            return false;
+                        }
+                    },
+                    jsonp: 'jsonp'
+                });
+                boolFlag = false;
+
+                 $(document).ajaxStop(function() {
+                     //alert(0)
+                     if(event.name =="Create")
+                     {
+                         document.getElementById("createBtn").onclick = true;
+                         $("#createBtn").click()
+                     }
+                     else
+                     {
+                         document.getElementById("updateBtn").onclick = true;
+                         $("#updateBtn").click()
+                     }
+                 });
+            }
+            else
+            {
+                boolFlag = true;
+            }
+        }
+
+        return boolFlag;
+    }
+
+    function getStudentHistory()
+    {
+        var studentId = 0;
+        @if (Model != null)
+        {
+            <text>
+        studentId = @Model.id;
+        </text>
+        }
+        $.post( AppDetail() +"/Student/GetStudentPreviousStudyHistory",
+                    { studentId: studentId },
+                    function (response) {
+                        //alert(response[0][0]);
+                        for (var i = 0; i < response.length; i++) {
+
+                            var button = '<button type="button" class="btn btn-sm btn-squar btn-dark btn-xs navbar-right" onclick="DeletePreviousEducation('+response[i][3]+','+i+')"> X </button>';
+                            var rowData = '<tr id="tableRowHis'+i+'" style="height:25px;"><td>' +response[i][0]+ '</td><td>' +response[i][1]+ '</td><td>' +response[i][2]+ '</td><td>' +button+ '</td></tr>';
+                            $('#preEduTable tbody').append(rowData);
+                        }
+                    }
+                 );
+    }
+
+    function AddEducationDetails()
+    {
+        var campusName = $('#campusName').val();
+        var withdrawalClass = $('#withdrawlClass').val();
+        var studyDuration = $('#studyDuration').val();
+
+        if(campusName == null || campusName.length == 0)
+        {
+            $('#errorPreEdu').text("Please enter campus name");
+        }
+        else if(withdrawalClass == null || withdrawalClass.length == 0)
+        {
+            $('#errorPreEdu').text("Please enter withdrawal class");
+        }
+        else if(studyDuration == null || studyDuration.length == 0)
+        {
+            $('#errorPreEdu').text("Please enter study duration");
+        }
+        else
+        {
+            var rowCount = document.getElementById("preEduTable").rows.length - 1;
+            $('#errorPreEdu').text("");
+            $('#campusName').val("");
+            $('#withdrawlClass').val("");
+            $('#studyDuration').val("");
+            var button = '<button type="button" class="btn btn-sm btn-squar btn-dark btn-xs navbar-right" onclick="DeletePreviousEducation(0,'+rowCount+')"> X </button>';
+            var rowData = '<tr id="tableRowHis'+rowCount+'" style="height:35px;"><td>' +campusName+ '</td><td>' +withdrawalClass+ '</td><td>' +studyDuration+ '</td><td>' +button+ '</td></tr>';
+            $('#preEduTable tbody').append(rowData);
+        }
+    }
+
+    function DeletePreviousEducation(educationId, index)
+    {
+        //alert(index)
+        //alert(educationId)
+        ////document.getElementById("myTable").deleteRow(index);
+        //deleteRow('tableRowHis'+index);
+        //if(educationId > 0)
+        //{
+
+        //}
+        var row = document.getElementById('tableRowHis'+index);
+        row.parentNode.removeChild(row);
+
+    }
+    
+
+    
+
+
+    function setTableData()
+    {
+        debugger;
+        var headers = "";
+        var rows = "";
+        headers += "<tr style='height:30px;'>";
+        for (item in data[0]) {
+            header += "<th>" + item + "</th>";
+        }
+        header += "</tr>";
+        $("#header").html(header);
+
+        var num_keys = Object.keys(data[0]).length;
+
+
+        for (item in data) {
+            rows += "<tr onclick='placeName(this);'>";
+            for (var i = 0; i < num_keys; i++) {
+                rows += "<td>" + data[item][Object.keys(data[item])[i]] + "</td>";
+            }
+            rows += "</tr>";
+        }
+
+        $("#table-rows").html(rows);
+    }
+
+
+
+    function highlightFirst() {
+        $('#search-table tbody tr').removeClass('highlight');
+        $("#search-table tbody tr:visible:first").addClass("highlight");
+        // $('#search-table tbody tr').filter(':visible').first().addClass("highlight");
+    }
+    function highlight(tableIndex) {
+        // Just a simple check. If .highlight has reached the last, start again
+        if( (tableIndex + 1) > $('#search-table tbody tr').length )
+            tableIndex = 0;
+
+        // Element exists?
+        if($('#search-table tbody tr:eq('+tableIndex+')').length > 0)
+        {
+            // Remove other highlights
+            $('#search-table tbody tr').removeClass('highlight');
+
+            // Highlight your target
+            $('#search-table tbody tr:eq('+tableIndex+')').addClass('highlight');
+        }
+    }
+
+    function placeName(row) {
+        $("#medicine-search").val($(row).children("td:first").html());
+        $("#inputName").val($(row).children("td:nth-child(3)").html());
+        $("#inputFatherName").val($(row).children("td:nth-child(4)").html());
+        $('#search-table tbody tr.highlight').removeClass("highlight");
+        $(row).addClass("highlight");
+
+        $("#search-table").hide();
+        document.getElementById('fastPayForm').submit();
+    }
+
+
+    $('#goto_first').click(function() {
+        highlight(0);
+    });
+
+    $('#goto_prev').click(function() {
+        highlight($('#search-table tbody tr:visible tr.highlight').index() - 1);
+    });
+
+    $('#goto_next').click(function() {
+        highlight($('#search-table tbody tr:visible tr.highlight').index() + 1);
+    });
+
+    $('#goto_last').click(function() {
+        highlight($('#search-table tbody tr:visible tr:last').index());
+    });
+
+    $(document).keydown(function (e) {
+
+        switch(e.which)
+        {
+            case 38:
+                index = $('#search-table tbody tr.highlight').index() - 1;
+                for(let i=index; i >= 0; i--) {
+                    if (index >= 0) {
+                        if (!$('#search-table tbody tr:eq('+index+')').is(":visible"))
+                            index--;
+                    }
+                    else {
+                        index = $('#search-table tbody tr:visible:last').index();
+                        break;
+                    }
+                }
+                highlight(index < 0 ? $('#search-table tr:visible:last').index() : index);
+                break;
+            case 40:
+                index = $('#search-table tbody tr.highlight').index() + 1;
+                for (let i=index; i < $('#search-table tbody tr').length; i++) {
+                    if (index < $('#search-table tbody tr').length) {
+                        if (!$('#search-table tbody tr:eq('+index+')').is(":visible"))
+                            index++;
+                    }
+                    else {
+                        index = 0;
+                        break
+                    }
+                }
+                highlight(index >= $('#search-table tbody tr').length ? $('#search-table tbody tr:visible:first').index() : index);
+                break;
+            case 13:
+                $("#medicine-search").val($('#search-table tbody tr.highlight').children("td:first").html());
+                $('#search-table tbody tr.highlight').removeClass("highlight");
+                $('#search-table tbody tr:visible:first tr.highlight').addClass("highlight");
+                $("#search-table").hide();
+                break;
+        }
+
+
+        $("#medicine-search").on("change paste keyup", function (e) {
+            if ($(this).val() == '' || e.which == 13) {
+                $("#search-table").hide();
+            }
+            else {
+                $("#search-table").show();
+            }
+            if (e.which != 40 && e.which != 38) {
+                highlightFirst();
+            }
+        });
+
+    });
+
+
+
+    function GetNameList() {
+        var i = 0;
+        @foreach (var item in (IEnumerable<string>)ViewData["nameList"])
+        {
+            <text>
+                    var tempObj = '@item';
+                    var obj = {"Sr No" : tempObj.split(',')[9], "AdmissionNo" : tempObj.split(',')[0], 
+                        "RollNo" : tempObj.split(',')[8], "Name" : tempObj.split(',')[1],
+                        "FatherName" : tempObj.split(',')[2], "Class" : tempObj.split(',')[6],
+                        "Section" : tempObj.split(',')[7], "FatherCNIC" : tempObj.split(',')[3],
+                        "MobileNo" : tempObj.split(',')[4], "Address" : tempObj.split(',')[5]}
+                    names[i++] = obj;
+            </text>
+        }
+    }
+
+</script>

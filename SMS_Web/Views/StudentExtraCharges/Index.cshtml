@@ -1,0 +1,340 @@
+﻿@model IEnumerable<SMS_DAL.ViewModel.StudentExtraChargesViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@using (Html.BeginForm(Html.BeginForm("SavestudentExtraCharges", "StudentExtraCharges", FormMethod.Post, new { enctype = "multipart/form-data" })))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Student Extra Charges</label>
+                    <div class="nav navbar-right">
+                        <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 27}) + "'");"
+                                     class="btn sc_help_btn btn-xs" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+    
+
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classId" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="RollNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Year
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("YearId", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", id = "yearIdSearch" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Month
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("MonthId", (IEnumerable<SelectListItem>)ViewBag.MonthId, new { @class = "form-control input-sm", id = "monthIdSearch" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Amount
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="Amount" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="last-name">
+                                Fee Head <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("FeeHeadId", (IEnumerable<SelectListItem>)ViewBag.FeeHeadId, new { @class = "form-control input-sm" })
+                                </div>
+                            </div>
+                            
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Description
+                            </label>
+                            <div class="col-md-7 col-sm-7 col-xs-12">
+                                <div>
+                                    <input type="text" name="Description" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                           
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" align="right" value="Search" name="Search" onclick="SetSearch();" class="btn btn-squar" />
+                                <input type="submit" align="right" value="Save" onclick="return ConfirmAction('Are you sure, You want to save the Student Extra Charges', 'saveCharges')" id="saveCharges" name="Save" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+          {
+              if ((int)@ViewData["Error"] == 10)
+              {
+                  <text> showNotification('Charges are saved succesfully.', 'Success', 'Success') </text>
+              }
+          else if ((int)@ViewData["Error"] == 11)
+              {
+                  <text> showNotification('Charges are reversed succesfully.', 'Success', 'Success') </text>
+              }
+          else if ((int)@ViewData["Error"] == 420)
+              {
+                  <text> showNotification('Student Extra Charges is not saved', 'Error', 'Error') </text>
+              }
+               else if ((int)@ViewData["Error"] == 501)
+              {
+                  <text> showNotification('Challans are issued with these extra charges, So in order to delete this charges reset the Issued Challan(s)', 'Error', 'Error') </text>
+              }
+              else if ((int)@ViewData["Error"] == 3420)
+              {
+                  <text> showNotification('Please enter Amount to save charges.', 'Error', 'Error') </text>
+              }
+              else if ((int)@ViewData["Error"] == 1420)
+              {
+                  <text> showNotification('Unable to Search Student Extra Charges', 'Error', 'Error') </text>
+              }
+              else if ((int)@ViewData["Error"] == 2420)
+              {
+                  <text> showNotification('Unable to Delete Student Extra Charges', 'Error', 'Error') </text>
+              }
+              else if ((int)@ViewData["Error"] == 421)
+              {
+                  <text> showNotification('Please Reset the Challan(s), to add extra charges for this criteria', 'Error', 'Error') </text>
+                  <text> showNotification('You cant add extra charges to this criteria, As Challan(s) are issued for this criteria', 'Error', 'Error') </text>
+              }
+          }
+    }
+
+    window.onload = function (e) {
+        $("#classTable").DataTable();
+        ShowSearchPanel(@((Model == null || Model.Count() == 0) ? 0 : Model.Count()));
+        populateErrors();
+
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        if (classId != 0) {
+            $("#classId").val(classId);
+        }
+        getSectionList();
+    }
+
+    function setPrevSearchVals() {
+        var sectionId = '@(ViewData["GlobalSectionId"] == null ? 0 : (int)ViewData["GlobalSectionId"])';
+
+
+        if (sectionId != 0) {
+            $("#sectionId").val(sectionId);
+        }
+    }
+function getSectionList() {
+        var classId = $("#classId").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classId").val();
+        if (classId.length == 0) {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function SetSearch()
+    {
+        $.ajax({
+            url: AppDetail() + '/StudentExtraCharges/SetSrearch',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            statusCode: {
+                200: function (data) {
+
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+
+</script>
+
+
+    <div class="row" id="searchPanelData" style="display:none;">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Student Extra Charges Detail </label>
+
+
+
+                    <ul class="nav navbar-right panel_toolbox">
+
+                        <li>
+                            @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                        </li>
+                        <li>
+                            @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                        </li>
+                    </ul>
+                    <div class="nav navbar-right col-md-4 col-sm-4 col-xs-4" align="right">
+                        <div>
+                        </div>
+                    </div>
+                    <label class="nav navbar-right control-label col-md-2 col-sm-2 col-xs-12" align="right" for="last-name">
+                        @*Select Chalan*@
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" id="classTable">
+                                <thead>
+                                    <tr class="headings">
+                                        <th>
+                                            Date
+                                        </th>
+                                        <th>
+                                            For Month
+                                        </th>
+                                        <th>
+                                            Head
+                                        </th>
+                                        <th>
+                                            Amount
+                                        </th>
+                                        <th>
+                                            Assign To
+                                        </th>
+                                        <th>
+                                            Description
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+
+                                </thead>
+                                <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ForMonth)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.HeadName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.HeadAmount)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Criteria)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Descroption)
+                                                </td>
+                                                <td style="color:blue;">
+                                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.ClassSectionId }, new { style = "color: blue;" }) |
+                                                        @Html.ActionLink("Details", "Details", new { id = item.ClassSectionId }) |*@
+                                                    @*<a onclick="deleteRecord(12)" href="JavaScript:void(0)">Delete</a>*@
+                                                    @Html.ActionLink("   ", "Delete", new { id = item.Id }, new { onclick = "return ConfirmDelete('Are you sure you wish to Unapply this Charges?', " + item.Id + ", 'StudentExtraCharges');", style = "color: darkred;font-size: 15px;", title = "Delete", @class = "glyphicon glyphicon-trash" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}

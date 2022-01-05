@@ -1,0 +1,61 @@
+﻿@model SMS_DAL.StaffAttandancePolicy
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>StaffAttandancePolicy</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LateInTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LateInTime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.HalfDayTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.HalfDayTime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Designation.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Designation.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AllowLeavesCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AllowLeavesCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LateInSattlementCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LateInSattlementCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SalaryDeduction)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalaryDeduction)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

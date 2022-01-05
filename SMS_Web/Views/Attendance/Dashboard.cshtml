@@ -1,0 +1,457 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<style>
+    .tile {
+        color: white;
+        margin-right: 5px;
+        border-radius: 3px;
+        height: 100px;
+        width: 15%;
+        background-color: #2A3F54;
+    }
+
+    .tile-div {
+        width: 110%;
+    }
+
+    .tileHeading {
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+<div role="main">
+    <div class="">
+        
+
+
+        <div class="row top_tiles" style="margin: 0px 0 0 0;">
+            <div class="x_panel">
+
+                <div class="sc_panel_header x_title">
+
+
+                    <div class="col-md-10">
+                        <h2 class="nav navbar-left control-label" align="left">Attendance Detail Summary</h2>
+                    </div>
+
+
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+                    <div class="row tile-div">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54">
+                                <h5 id="count0" class="tileHeading">0</h5>
+                                <p style="color:#17a2b8;margin-top:25px;font-weight:bold"> <i class="fa fa-recycle" aria-hidden="true" style="font-size:25px;color:#17a2b8;"></i> Present </p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="count1" class="tileHeading">0</h5>
+                                <p style="color:#DC3545;margin-top:25px;font-weight:bold"> <i class="fa fa-joomla" aria-hidden="true" style="font-size:25px;color:#DC3545;"> </i> Absent</p>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="count2" class="tileHeading">0</h5>
+                                <p style="color:#55f4f5;margin-top:25px;font-weight:bold"> <i class="fa fa-question-circle" aria-hidden="true" style="font-size:25px;color:#55f4f5;"> </i> Late</p>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="count3" class="tileHeading">0</h5>
+                                <p style="color:#f77c98;margin-top:25px;font-weight:bold"> <i class="fa fa-gear" aria-hidden="true" style="font-size:25px;color:#f77c98;"> </i> Leave</p>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="count4" class="tileHeading">0</h5>
+                                <p style="color:orange;margin-top:25px;font-weight:bold"> <i class="fa fa-leanpub" aria-hidden="true" style="font-size:25px;color:orange;"> </i> Short Leave</p>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" style="background-color:#2A3F54;">
+                                <h5 id="total" class="tileHeading">0</h5>
+                                <p style="color:#58b462;margin-top:25px;font-weight:bold"> <i class="fa fa-weibo" aria-hidden="true" style="font-size:25px;color:#58b462;"> </i> Total Students</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+        <br />
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-7">
+                            <h2>Student Attendance Figures</h2>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                            Search
+                        </label>
+
+                        <div class="col-md-4">
+                            <div id="attendanceFiguresDatePicker" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                <span style="color:black">December 30, 2018 - January 28, 2020</span> <b class="caret"></b>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="x_content">
+                        <div class="demo-container" style="height:350px">
+                            <div class="demo-placeholder" style="width: 100%; height:350px;">
+                                <div class="row">
+                                    <div id="StudentPresence" class="col-lg-4"></div>
+                                    <div id="StudentPresenceByClass" class="col-lg-4"></div>
+                                    <div id="StudentPresenceBySection" class="col-lg-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="clearfix"></div>
+                            @*<div class="demo-container">
+                <div id="StudentPresence" class="demo-placeholder" style="width: 100%; height:350px;"></div>
+            </div>*@
+                        </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="dashboard_graph x_panel">
+                    <div class="row x_title sc_panel_header_lg">
+
+                        <div class="col-md-5">
+                            <h2>Student Attendance Details</h2>
+                        </div>
+
+                        <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="left" for="first-name">
+                            Search
+                        </label>
+
+                        <div class="col-md-4">
+                            <div id="attendanceStatsDatePicker"  style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                <span style="color:black">December 30, 2018 - January 28, 2020</span> <b class="caret"></b>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <select onchange="onViewChanged()" id="view" style="color:black;background: #fff; cursor: pointer; padding: 5px 20px; border: 1px solid #ccc" class="pull-right">
+                                <option value="day">Day View</option>
+                                <option value="month">Month View</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="x_content">
+                        <div class="demo-container" style="height:250px">
+                            <div id="attendanceDetails" class="demo-placeholder" style="width: 100%; height:250px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+    </div>
+</div>
+<!-- /page content -->
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        showAttendanceDetailsDetails(null, null);
+        InitializeDatePicker('attendanceStatsDatePicker', showAttendanceDetailsDetails);
+        InitializeDatePicker('attendanceFiguresDatePicker', ShowStudentPresence);
+        ShowStudentPresence(null, null);
+    });
+
+    var from = null; var to = null; var view = "day";
+
+    function onViewChanged() {
+        view = $("#view").val();
+        showAttendanceDetailsDetails(from, to);
+    }
+
+    
+
+    function showAttendanceDetailsDetails(_from, _to) {
+        from = _from;
+        to = _to;
+
+        if (SetDayViewOneMonth(from, to, view) == false)
+        {
+            return;
+        }
+
+        var options = {
+            chart: {
+                renderTo: 'attendanceDetails',
+                type: 'line'
+            },
+            title: {
+                text: 'Attendance from (' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ') to (' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY")) + ')'
+            },
+
+            xAxis: {
+                title: {
+                    text: 'Date'
+                },
+                categories: []
+            },
+            yAxis: [{ //--- Primary yAxis
+                title: {
+                    text: 'Attendance'
+                }
+            }, { //--- Secondary yAxis
+                title: {
+                    text: 'Attendance'
+                },
+                opposite: true
+            }],
+
+            series: [
+            ],
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    enableMouseTracking: true
+                }
+            },
+        };
+
+        var feeDetailChart = null;
+        $.getJSON(AppDetail() + "/Attendance/GetAttendanceStatsByDate?from=" + from + "&to=" + to + "&view=" + view, null, function (response) {
+            options.series = [];
+            if (view == "day") {
+                options.xAxis.categories = response.Dates.map(n => moment(n).format("DD/MM/YYYY"));
+            } else {
+                options.xAxis.categories = response.Months;
+            }
+
+            for (var i = 0; i < response.StudentAttendanceStats.length; i++) {
+                options.series.push({ name: response.StudentAttendanceStats[i].StatusCode, data: response.StudentAttendanceStats[i].Data });
+            }
+            feeDetailChart = new Highcharts.Chart(options);
+        })//end json
+    }
+
+    function ShowStudentPresence(from, to) {
+        var options = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                renderTo: 'StudentPresence',
+                type: 'pie'
+            },
+            title: {
+                text: 'Attendance from (' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ') to (' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY")) +')'
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} <br> {point.percentage:.1f}%<br>total: {point.total}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+
+            series: []
+        };
+
+        var series1 = {
+            name: 'Student',
+            colorByPoint: true,
+            data: [],
+            point: {
+                events: {
+                    click: function (event) {
+                        ShowStudentPresenceByClass(from, to, this.id, this.name);
+                        //window.location.href = AppDetail() + '/Attendance/AttendanceSheet?statusId=' + this.id;
+                    }
+                }
+            }
+        };
+
+        $.getJSON(AppDetail() + "/Attendance/GetAttendanceStatsByMonth?from=" + from + "&to=" + to, null, function (data) {
+            var total = 0;
+            for (var i = 0; i < data.length; i++) {
+                total += data[i].Count;
+            }
+            $("#total").html(total.toLocaleString());
+            if(total == 0){
+                total = 1;
+            }
+            for (var i = 0; i < data.length; i++) {
+                var tempObj = {};
+                tempObj.name = data[i].StatusCode;
+                tempObj.y = data[i].Count;
+                tempObj.id = data[i].StatusId;
+                series1.data.push(tempObj);
+
+                $("#count"+i).html(data[i].Count.toLocaleString() +" ("+(data[i].Count/total*100).toLocaleString()+"%)");
+                $("#status"+i).html(data[i].StatusCode);
+            }
+
+            options.series = [];
+            options.series.push(series1);
+            chart = new Highcharts.Chart(options);
+
+            if(data.length > 0){
+                ShowStudentPresenceByClass(from, to, data[0].StatusId, data[0].StatusCode);
+            }
+        })//end json
+
+
+    }
+
+    function ShowStudentPresenceByClass(from, to, statusId, statusCode) {
+        var options = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                renderTo: 'StudentPresenceByClass',
+                type: 'pie'
+            },
+            title: {
+                text: statusCode + ' students from (' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ') to (' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY")) + ')'
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} <br> {point.percentage:.1f}%<br>total: {point.total}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+
+            series: []
+        };
+
+        var series1 = {
+            name: 'Student',
+            colorByPoint: true,
+            data: [],
+            point: {
+                events: {
+                    click: function (event) {
+                        ShowStudentPresenceBySection(from, to, this.id, this.statusCode, this.classId, this.name);
+                        //window.location.href = AppDetail() + '/Attendance/AttendanceSheet?statusId=' + this.id;
+                    }
+                }
+            }
+        };
+
+        $.getJSON(AppDetail() + "/Attendance/GetAttendanceStatsByMonth?from=" + from + "&to=" + to + "&statusId=" + statusId, null, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var tempObj = {};
+                tempObj.name = data[i].ClassName;
+                tempObj.y = data[i].Count;
+                tempObj.id = data[i].StatusId;
+                tempObj.classId = data[i].ClassId;
+                tempObj.statusCode = data[i].StatusCode;
+                series1.data.push(tempObj);
+            }
+
+            options.series = [];
+            options.series.push(series1);
+            chart = new Highcharts.Chart(options);
+            if(data.length > 0){
+                ShowStudentPresenceBySection(from, to, data[0].StatusId, data[0].StatusCode, data[0].ClassId, data[0].ClassName);
+            }else{
+                ShowStudentPresenceBySection(from, to, 0, null, 0, null);
+            }
+        })//end json
+
+
+    }
+
+    function ShowStudentPresenceBySection(from, to, statusId, statusCode, classId, className) {
+        var options = {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                renderTo: 'StudentPresenceBySection',
+                type: 'pie'
+            },
+            title: {
+                text: (statusCode != null ? (statusCode + ' students of class ' + className) : 'Stats') + ' from ' + (from != null ? moment(from).format("DD/MM/YYYY") : moment().startOf('month').format("DD/MM/YYYY")) + ' to ' + (to != null ? moment(to).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY"))
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} <br> {point.percentage:.1f}%<br>total: {point.total}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+
+            series: []
+        };
+
+        var series1 = {
+            name: 'Student',
+            colorByPoint: true,
+            data: [],
+            point: {
+                events: {
+                    click: function (event) {
+                        window.location.href = AppDetail() + '/Attendance/CreateFilteredAttendanceSheet?statusId=' + this.id +"&classId="+this.classId +"&sectionId="+this.sectionId +"&from=" + from + "&to=" + to ;
+                    }
+                }
+            }
+        };
+
+        $.getJSON(AppDetail() + "/Attendance/GetAttendanceStatsByMonth?from=" + from + "&to=" + to + "&statusId=" + statusId + "&classId="+classId, null, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var tempObj = {};
+                tempObj.name = data[i].ClassName + " " + data[i].SectionName;
+                tempObj.y = data[i].Count;
+                tempObj.id = data[i].StatusId;
+                tempObj.classId = data[i].ClassId;
+                tempObj.sectionId = data[i].SectionId;
+                series1.data.push(tempObj);
+            }
+
+            options.series = [];
+            options.series.push(series1);
+            chart = new Highcharts.Chart(options);
+
+        })//end json
+
+
+    }
+</script>

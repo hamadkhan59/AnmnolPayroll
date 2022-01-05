@@ -1,0 +1,731 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9E25D190-26A1-4865-BAB9-CCBBFA75287C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SMS_DAL</RootNamespace>
+    <AssemblyName>SMS_DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonServiceLocator">
+      <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net45\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\Import Utility\DataImport\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Activity.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityMark.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityMarksDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AdmissionType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AllowLeave.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Allownce.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AnnualCharge.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AppConstHelper.cs" />
+    <Compile Include="AppUser.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ArreartHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Attandance.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendanceRequest.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendanceRequestDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendanceRequestStatu.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bank.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BankAccount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BehaviourCategory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BehaviourParameter.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BioMatrixCount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Branch.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Challan.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChallanFeeHeadDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChallanStudentDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChapterTopic.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Class.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassResult.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassSection.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CLASS_LEVEL.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DABase.cs" />
+    <Compile Include="DailyDairy.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DailyTest.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DailyTestsDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DALConstants.cs" />
+    <Compile Include="DataAnnotations\Allownce.cs" />
+    <Compile Include="DataAnnotations\FinanceFifthLvlAccount.cs" />
+    <Compile Include="DataAnnotations\FinanceFirstLvlAccount.cs" />
+    <Compile Include="DataAnnotations\FinanceFourthLvlAccount.cs" />
+    <Compile Include="DataAnnotations\FinanceSeccondLvlAccount.cs" />
+    <Compile Include="DataAnnotations\FinanceThirdLvlAccount.cs" />
+    <Compile Include="DataAnnotations\DesignationCatagory.cs" />
+    <Compile Include="DataAnnotations\Designation.cs" />
+    <Compile Include="DataAnnotations\Session.cs" />
+    <Compile Include="DataAnnotations\StaffAttandancePolicy.cs" />
+    <Compile Include="DataAnnotations\Staff.cs" />
+    <Compile Include="DataAnnotations\Challan.cs" />
+    <Compile Include="DataAnnotations\BankAccount.cs" />
+    <Compile Include="DataAnnotations\ExamType.cs" />
+    <Compile Include="DataAnnotations\ExamTerm.cs" />
+    <Compile Include="DataAnnotations\FeeHead.cs" />
+    <Compile Include="DataAnnotations\Student.cs" />
+    <Compile Include="DataAnnotations\StudentInquiry.cs" />
+    <Compile Include="DataAnnotations\RegisterCourse.cs" />
+    <Compile Include="DataAnnotations\Subject.cs" />
+    <Compile Include="DataAnnotations\Section.cs" />
+    <Compile Include="DataAnnotations\Class.cs" />
+    <Compile Include="DateSheet.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DateSheetConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Designation.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DesignationCatagory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DirectoryViewOption.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities.cs" />
+    <Compile Include="Exam.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExamPaper.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExamResult.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExamTerm.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExamType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtraChargesHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeArrearsDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeBalance.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeHead.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeIncrementHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeIncrementHistoryDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FILTER.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceAccountLevel.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceDAL.cs" />
+    <Compile Include="FinanceFifthLvlAccount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceFirstLvlAccount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceFourthLvlAccount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceMode.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceSeccondLvlAccount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinanceThirdLvlAccount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fine.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Gender.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Grade.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GradesConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GroupPermission.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Head.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IssueChalanDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IssueChallanConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IssuedChallan.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Item.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemPurchase.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemSale.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemStock.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemVendor.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JournalEntry.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JournalEntryCreditDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JournalEntryDebitDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JournalEntrySummary.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JournalVoucher.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LateInCount.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeavingReason.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeavingStatu.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MeritalStatu.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Month.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MonthlyType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethod.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Permission.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PreviousGrade.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PreviousStudyHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PurchaseOrder.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterCourse.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Relegion.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RemarksConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="REPORT.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DAL_Exam_Reports.cs" />
+    <Compile Include="Reports\DAL_Fee_Reports.cs" />
+    <Compile Include="Reports\DAL_Finance_Reports.cs" />
+    <Compile Include="Reports\DAL_Staff_Reports.cs" />
+    <Compile Include="Reports\DAL_Student_Reports.cs" />
+    <Compile Include="REPORT_FILTERS.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ResultType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SACPaidCatalog.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SaleOrder.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScDbModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScDbModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScDbModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScDbModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScDbModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="SchoolConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Section.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Session.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SessionSubject.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SessionUser.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SMSDal.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SmsEvent.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsEventParam.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsMessage.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsParam.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SmsRepository\IRepository\IAdmissionChargesRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IAttendanceRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IBehaviourRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IStaffBehaviourRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\ITimeTableRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\ITransportRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IFinanceAccountRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IExamRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IFeePlanRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\ILeavingReasonRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IClassSubjectRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\ISecurityRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IStaffRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\ISubjectRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IClassRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IClassSectionRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IPreviousHitoryRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\ISectionRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IStudentRepository.cs" />
+    <Compile Include="SmsRepository\QueryResult.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\AdmissionChargesRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\AttendanceRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\BehaviourRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\StaffBehaviourRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\TimeTableRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\TransportRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\FinanceAccountRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\ExamRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\FeePlanRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\LeavingReasonRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\ClassSubjectRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\SecurityRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\StaffRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\SubjectRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\ClassRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\ClassSectionRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\PreviousHistoryRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\SectionRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\StudentRepositoryImp.cs" />
+    <Compile Include="SmsVender.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spStudentResultAccumulative_Result.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spStudentResult_Result.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spTranscriptResultAccumulative_Result.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="spTranscriptResult_Result.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_Get_Student_Result_Result.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Staff.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAdvance.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAllownce.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAttandance.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAttandancePolicy.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAttendanceDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAttendanceLog.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAttendanceRequest.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffAttendanceRequestDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffBehaviour.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffBehaviourCategory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffBehaviourParameter.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffDegree.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffHoliday.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffMiscWithdraw.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffPaymentApproval.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffSalary.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffSalaryIncrementHistory.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StaffType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StoredProcedureParams.cs" />
+    <Compile Include="Student.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentAdmissionCharge.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentAttendanceStatu.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentBehaviour.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentDocument.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtraCharge.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentExtraChargesDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentInquiry.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudentPerChallan.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Subject.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubjectChapter.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemConfig.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TermChapter.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestStatu.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TimeTable.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransportCharge.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransportDriver.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransportDriverStop.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TransportStop.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserGroup.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Vendor.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\ChapterTopicViewModel.cs" />
+    <Compile Include="ViewModel\ClassSectionModel.cs" />
+    <Compile Include="ViewModel\DDModel.cs" />
+    <Compile Include="ViewModel\SmsModel.cs" />
+    <Compile Include="ViewModel\DailyTestViewModel.cs" />
+    <Compile Include="ViewModel\ActivityMarksViewModel.cs" />
+    <Compile Include="ViewModel\BehaviourViewModel.cs" />
+    <Compile Include="ViewModel\DashboardDataViewModels.cs" />
+    <Compile Include="ViewModel\FinanceDashboardViewModel.cs" />
+    <Compile Include="ViewModel\ScheduleViewModel.cs" />
+    <Compile Include="ViewModel\StaffDashboardDataViewModels.cs" />
+    <Compile Include="ViewModel\TransportDriverStopModel.cs" />
+    <Compile Include="ViewModel\SubjectModel.cs" />
+    <Compile Include="ViewModel\ResultModel.cs" />
+    <Compile Include="ViewModel\IssueChallanDetailModel.cs" />
+    <Compile Include="ViewModel\MonthDetailModel.cs" />
+    <Compile Include="ViewModel\PermissionModel.cs" />
+    <Compile Include="ViewModel\SessionModel.cs" />
+    <Compile Include="ViewModel\StaffAdvanceModel.cs" />
+    <Compile Include="ViewModel\StudentExtraChargesViewModel.cs" />
+    <Compile Include="ViewModel\DebitEntry.cs" />
+    <Compile Include="ViewModel\FeeArrearViewModel.cs" />
+    <Compile Include="ViewModel\ReportModel.cs" />
+    <Compile Include="ViewModel\SalarySheetViewModel.cs" />
+    <Compile Include="ViewModel\SACPaidCatalogViewModel.cs" />
+    <Compile Include="ViewModel\ChallanDetailViewModel.cs" />
+    <Compile Include="ViewModel\ExamResultViewModel.cs" />
+    <Compile Include="ViewModel\IssuedChallanViewModel.cs" />
+    <Compile Include="ViewModel\StaffSalaryHistoryViewModel.cs" />
+    <Compile Include="ViewModel\StudentChallanViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceModel.cs" />
+    <Compile Include="ViewModel\FeeIncrementModel.cs" />
+    <Compile Include="ViewModel\StudentModel.cs" />
+    <Compile Include="ViewModel\UserChallanModel.cs" />
+    <Compile Include="WeeklyType.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Year.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="YoutubeVideo.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="ScDbModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ScDbModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ScDbModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ScDbModel.edmx</DependentUpon>
+      <LastGenOutput>ScDbModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="ScDbModel.edmx.diagram">
+      <DependentUpon>ScDbModel.edmx</DependentUpon>
+    </None>
+    <None Include="ScDbModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ScDbModel.edmx</DependentUpon>
+      <LastGenOutput>ScDbModel.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{3ff34a2e-db70-4527-a5a8-95e9ec267ed8}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,295 @@
+﻿@model SMS_DAL.SchoolConfig
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">School Config</label>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 10}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+<div class="clearfix"></div>
+</div>
+
+<div class="x_content">
+
+    @using (Html.BeginForm())
+               {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div >
+                    @*<label class="control-label" align="left" for="first-name"
+                        style=@((Convert.ToInt32(ViewData["Error"]) == 1) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                        The Name Field is Required.
+                    </label>
+                    <label class="control-label" align="left" for="first-name"
+                           style=@((Convert.ToInt32(ViewData["Error"]) == 11) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                        Class is already added.
+                    </label>
+                    <label class="control-label" align="left" for="first-name"
+                           style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                        Class is saved succesfully.
+                    </label>
+                    <label class="control-label" align="left" for="first-name"
+                           style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                        Unable to delete Class.
+                    </label>
+                    <label class="control-label" align="left" for="first-name"
+                           style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                        Unable to Save Class.
+                    </label>
+                    <label class="control-label" align="left" for="first-name"
+                           style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:12px;" : "display:none")>
+                        Class is deleted succesfully.
+                    </label>*@
+</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                School Name <span class="required annotation">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @Html.TextBoxFor(model => model.SchoolName, new { @class = "form-control input-sm" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                Campus Name
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @Html.TextBoxFor(model => model.CampusName, new { @class = "form-control input-sm" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                Phone No
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @Html.TextBoxFor(model => model.PhoneNo, new { @class = "form-control input-sm" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                Emails
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-sm" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                School Logo
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @{
+                   var imgSrc = "";
+                   if (Model != null && Model.SchoolLogo != null)
+                   {
+                       var base64 = Convert.ToBase64String(Model.SchoolLogo);
+                       imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                   }
+
+                <img id="stdImage" src="@(Model != null && Model.SchoolLogo != null ? imgSrc : "/user.jpg")" style="width:200px;height:200px;align-items:center" />
+                    }
+                    <input class="img-show" type='file' id="imgInp" style="margin-top:20px;" onchange="readURL(this);" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                Principal Signature
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @{
+                        var imgSrc2 = "";
+                        if (Model != null && Model.PrincipalSignature != null)
+                        {
+                            var base64 = Convert.ToBase64String(Model.PrincipalSignature);
+                            imgSrc2 = String.Format("data:image/gif;base64,{0}", base64);
+
+                        }
+
+                        <img id="stdImage2" src="@(Model != null && Model.PrincipalSignature != null ? imgSrc2 : "/user.jpg")" style="width:200px;height:200px;align-items:center" />
+                    }
+                    <input class="img-show" type='file' id="imgInp2" style="margin-top:20px;" onchange="readURL2(this);" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="last-name">
+                Card Template
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <div>
+                    @{
+                   var imgSrc1 = "";
+                   if (Model != null && Model.CardImage != null)
+                   {
+                       var base64 = Convert.ToBase64String(Model.CardImage);
+                       imgSrc1 = String.Format("data:image/gif;base64,{0}", base64);
+
+                   }
+
+                <img id="stdImage1" src="@(Model != null && Model.CardImage != null ? imgSrc1 : "/user.jpg")" style="width:500px;height:300px;align-items:center" />
+                    }
+                    <input class="img-show" type='file' id="imgInp1" style="margin-top:20px;" onchange="readURL1(this);" />
+                </div>
+            </div>
+        </div>
+
+        <div class="ln_solid"></div>
+        <div class="form-group">
+            <div class="col-md-3 col-sm-3 col-xs-12">
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <input type="submit" id="createBtn" value="Save" name="Create" class="btn btn-info" onclick="return UploadDocs(this)"
+                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none;" : "display:block;") />
+            </div>
+        </div>
+    </fieldset>
+                 @*</form>*@
+               }
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           {
+               <text> showNotification(' Information is updated succesfully.', 'Success', 'Success') </text>
+           }
+           else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to save information', 'Error', 'Error') </text>
+           }
+       }
+    }
+
+    $(document).ready(function () {
+        populateErrors();
+    });
+
+    
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURL1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage1')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURL2(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage2')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    function UploadDocs(event)
+    {
+        var data = new FormData();
+       
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+        }
+
+        files = $("#imgInp1").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage1", files[0]);
+        }
+
+        files = $("#imgInp2").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage2", files[0]);
+        }
+
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: AppDetail() + "/SchoolConfig/UploadStudentDocs",
+            contentType: false,
+            processData: false,
+            data: data
+        });
+
+        $(document).ajaxStop(function() {
+            //alert(0)
+            if(event.name =="Create")
+            {
+                document.getElementById("createBtn").onclick = true;
+                $("#createBtn").click()
+            }
+        });
+
+        return false;
+    }
+
+</script>

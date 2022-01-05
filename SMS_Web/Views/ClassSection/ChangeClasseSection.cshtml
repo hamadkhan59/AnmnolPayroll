@@ -1,0 +1,425 @@
+﻿@model List<SMS_DAL.ViewModel.StudentModel>
+
+@{
+    ViewBag.Title = "Promote";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Search Student</label>
+                
+
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm("SearchChangeClasseSection", "ClassSection", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classIdSearch" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="RollNo" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.RollNumber, new { @class = "form-control input-sm", id = "rollNoSearch" })
+                                        @Html.ValidationMessageFor(model => model.RollNumber)*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Name" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch" })*@
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherName" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm", id = "fatherNameSearch" })*@
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father CNIC
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherCnic" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control input-sm", id = "fatherCnic" })*@
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Father Contact
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherContact" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch" })*@
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Admission No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="AdmissionNo" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch" })*@
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("SaveChangeClassSection", "ClassSection", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row" id="searchPanelData" style="display:none;">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Student List</label>
+                    <ul class="nav navbar-right panel_toolbox">
+
+                        <li>
+                            @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                        </li>
+                        <li>
+                            @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                        </li>
+
+                    </ul>
+
+                    <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12" style="margin-top:2px;">
+                        <div>
+                            <select class="form-control input-sm" name="PromoteSectionId" id="sectionIdList"></select>
+                        </div>
+                    </div>
+                    <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" style="margin-top:5px;font-size: 11px;" align="right" for="first-name">
+                        Section
+                    </label>
+                    <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12" style="margin-top:2px;">
+                        <div>
+                            @Html.DropDownList("PromoteClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "SearchSectionList()", id = "classIdList" })
+
+                        </div>
+                    </div>
+                    <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" style="margin-top:5px;font-size: 11px;" align="right" for="first-name">
+                        Class
+                    </label>
+                    <input type="hidden" value="0" id="MakeSequence" name="MakeSequence" />
+                    <input type="hidden" value="@((Model == null || Model.Count == 0) ? 0 : Model[0].Id)" name="OrderStudentId" />
+
+                </div>
+
+                <div class="x_content">
+
+                    <div class="form-group">
+                        <label class="nav navbar-right" style=" color:red" id="errorLabel"></label>
+                        <div class="table-responsive" >
+                            <table class="table table-striped table-bordered" id="classTable">
+                                <thead>
+                                    <tr class="headings">
+                                        <th>
+                                            <input type="checkbox" id="cbSelectAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                            <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                        </th>
+                                        <th>
+                                            Class
+                                        </th>
+                                        <th>
+                                            Section
+                                        </th>
+                                        <th>
+                                            RollNumber
+                                        </th>
+
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            FatherName
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+                                <tbody style="background-color:white;color:#2A3F54" id="classBody">
+
+                                    @if (Model != null)
+                                    {
+                                        int i = 0;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="studentIds" value="@Model[i].Id" style="width:20px;height:20px;" onclick="ChangeCheckCkount(@i);" id="@("tableId"+i)">
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ClassName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SectionName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RollNumber)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FatherName)
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Order Class" name="SubmitLeaving" onclick="return MakeOrderClass();" id="savePromote" class="btn btn-squar" />
+                                <input type="submit" value="Save" name="SubmitLeaving" onclick="return CheckCountValue();" id="savePromote" class="btn btn-squar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+   {
+       if ((int)@ViewData["Error"] == 2)
+       {
+           <text> showNotification('Marks Sheet is saved succesfully.', 'Success', 'Success') </text>
+       }
+   else if ((int)@ViewData["Error"] == 11)
+       {
+           <text> showNotification('Fee Head is already added to Chalaln.', 'Error', 'Error') </text>
+       }
+   else if ((int)@ViewData["Error"] == 420)
+       {
+           <text> showNotification('Unable to change class section Students.', 'Error', 'Error') </text>
+       }
+     else if ((int)@ViewData["Error"] == 421)
+       {
+           <text> showNotification('Unable to ordered class roll no.', 'Error', 'Error') </text>
+       }
+   else if ((int)@ViewData["Error"] == 100)
+       {
+           <text> showNotification('Students class section is changed succesfully.', 'Success', 'Success') </text>
+       }
+   else if ((int)@ViewData["Error"] == 110)
+       {
+           <text> showNotification('Class Roll No is ordered succesfully.', 'Success', 'Success') </text>
+       }
+   else if ((int)@ViewData["Error"] == 300)
+       {
+           <text> showNotification('Unable to mark Attendance as selected day is Sunday..', 'Error', 'Error') </text>
+       }
+   else if ((int)@ViewData["Error"] == 4)
+       {
+           <text> showNotification('Exam is deleted succesfully.', 'Success', 'Success') </text>
+       }
+   }
+    }
+
+
+    var checkCount = 0;
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        populateErrors();
+        checkCount = 0;
+        $('#classTable').DataTable( {
+            paging: false, searching : false
+        } );
+
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+
+        if(classId != 0)
+        {
+            $("#classIdSearch").val(classId);
+        }
+        getSectionList();
+        SearchSectionList();
+    }
+    function getSectionList() {
+        var classId = $("#classIdSearch").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classIdSearch").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function SearchSectionList() {
+        var classId = $("#classIdList").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionIdList', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function setPrevSearchVals() {
+        var sectionId = '@(ViewData["GlobalSectionId"] == null ? 0 : (int)ViewData["GlobalSectionId"])';
+
+
+        if (sectionId != 0) {
+            $("#sectionId").val(sectionId);
+        }
+    }
+
+    function MakeOrderClass() {
+        $("#MakeSequence").val(1);
+        return true;
+    }
+
+    function ChangeCheckCkount(index)
+    {
+        if($("#tableId"+index).is(':checked') == true)
+        {
+            checkCount++;
+        }
+        else
+        {
+            checkCount--;
+        }
+    }
+
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbSelectAll").is(':checked') == true)
+        {
+            checkCount = rowCount;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, true);
+                //$("#tableId"+i).attr('checked', true);
+            }
+        }
+        else
+        {
+            checkCount = 0;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, false);
+
+                //$("#tableId"+i).attr('checked', false);
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+
+    function CheckCountValue()
+    {
+        if(checkCount > 0)
+        {
+            $("#errorLabel").text("");
+        }
+        else
+        {
+            showNotification('Cant proceed, No student is loaded or selected', 'Error', 'Error')
+            return false;
+        }
+
+        ConfirmAction('Are you sure, you want to change the class section of the students?', 'savePromote');
+        return false;
+    }
+
+</script>

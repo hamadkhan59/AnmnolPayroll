@@ -1,0 +1,792 @@
+﻿@model SMS_DAL.ViewModel.MonthlyWaveOffModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<head>
+    @*<link rel="stylesheet" href="../../css/print.css">*@
+
+
+    <link rel="stylesheet" href="../../assets/css/Table-with-search-1.css">
+
+
+    <script src="../../assets/js/Table-with-search.js"></script>
+
+</head>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Monthly Wave Off</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        @Html.ValidationSummary()
+                    </div>
+                </div>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 19}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm(Html.BeginForm("SearchMonthlyWaveOff", "IssueChalan", FormMethod.Post, new { id = "fastPayForm", enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+
+                        <div class="form-group row">
+
+                            <div class="col-6 col-md-12">
+                                <div class="pull-left" style="width:100%">
+                                    <input id="medicine-search" type="text" class="search form-control input-sm" placeholder="Search Student Info">
+                                </div>
+                                <table id="search-table" class="table table-hover table-bordered results" style="display: none;">
+                                    <thead id="header" style="width:30%;background-color:lightseagreen;color:white">
+                                        <tr class="warning no-result">
+                                            <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-rows"></tbody>
+                                </table>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="form-group row" hidden="hidden">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Chalan No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="autocomplete" style="width:245px;">
+                                    <input type="text" name="RollNo" id="inputRollNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="autocomplete" style="width:245px;">
+                                    <input type="text" name="Name" id="inputName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="autocomplete" style="width:245px;">
+                                    <input type="text" name="FatherName" id="inputFatherName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Admission No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div class="autocomplete" style="width:245px;">
+                                    <input type="text" name="AdmissionNo" id="inputAdmissionNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                      
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .txt-squar {
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /*body {
+         /*font: 16px Arial; */
+    }
+
+    */ .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+    }
+
+    input {
+        border: 1px solid gray;
+        background-color: white;
+        /*padding: 10px;*/
+        font-size: 13px;
+    }
+
+        input[type=text] {
+            background-color: white;
+            width: 100%;
+        }
+
+    /*input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+        }*/
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+            .autocomplete-items div:hover {
+                /*when hovering an item:*/
+                background-color: #e9e9e9;
+            }
+
+    .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+</style>
+
+<div class="row" id="searchPanelData">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("SaveMonthlyWaveOff", "IssueChalan", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel" id="panel1">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Pending Fee Details </label>
+
+                    </div>
+
+                    <div class="x_content">
+
+
+
+                        <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                            <input type="hidden" class="custom-control-input" name="isPrint" value="0" style="width:20px;height:20px;" id="isPrint">
+                            <div class="form-group">
+
+                                <div class="row">
+
+
+                                    <div class="col-md-12" id="div1">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered" id="allownceTable">
+                                                <thead>
+                                                    <tr class="headings">
+
+                                                        <th style="min-width:80px;" class="nosort">
+                                                            <label>Fee Head</label>
+                                                        </th>
+                                                        <th style="min-width:100px;" class="nosort">
+                                                            <label>Total Amount</label>
+                                                        </th>
+
+                                                        <th style="min-width:100px;" class="nosort">
+                                                            <label>Paid Amount</label>
+                                                        </th>
+
+                                                        <th style="min-width:100px;" class="nosort">
+                                                            <label>Discount</label>
+                                                        </th>
+
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody style="background-color:white;color:#2A3F54" id="classBody">
+
+                                                    @if (Model != null && Model.ChallanDetail != null)
+                                                    {
+                                                        var total = 0;
+                                                        var paid = 0;
+                                                        var discount = 0;
+                                                        for (int i = 0; i < ((List<SMS_DAL.ViewModel.IssuedChallanDetailModel>)Model.ChallanDetail).Count(); i++)
+                                                        {
+                                                            total += Model.ChallanDetail[i].TotalAmount;
+                                                            paid += Model.ChallanDetail[i].PaidAmount;
+                                                            discount += Model.ChallanDetail[i].Discount;
+                                                            <tr style="height:25px;">
+
+                                                                <td height="80%">
+                                                                    @Model.ChallanDetail[i].HeadDetail
+                                                                </td>
+                                                                <td height="80%">
+                                                                    @Model.ChallanDetail[i].TotalAmount
+                                                                </td>
+                                                                <td height="80%">
+                                                                    @Model.ChallanDetail[i].PaidAmount
+                                                                </td>
+                                                                <td height="80%">
+                                                                    @Html.TextBoxFor(m => Model.ChallanDetail[i].Discount, new { Name = "Discount", @class = "form-control input-sm", @style = "background-color: transparent;", @id = ("textbox" + i) })
+                                                                    @Html.HiddenFor(m => Model.ChallanDetail[i].IssueChallanDetailId, new { Name = "DetailId", @class = "form-control input-sm", @style = "background-color: transparent;", @hidden="hidden", @id = ("textbox" + i) })
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+
+                                                        <tr style="height:25px;font-size:14px;">
+                                                            <td style="height:25px;">
+                                                                Total
+                                                            </td>
+                                                            <td style="height:25px;" id="totalSum">
+                                                                @total
+                                                            </td>
+                                                            <td style="height:25px;" id="totalSum">
+                                                                @paid
+                                                            </td>
+                                                            <td style="height:25px;" id="totalSum">
+                                                                @discount
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row" style="margin-top:20px;" id="btnDiv">
+                                    <div class="nav navbar-right">
+                                        <input type="submit" value="Save Discount" onclick="return ConfirmAction('Are you sure, you want to save the fee discount?', 'saveFeeDiscount');" id="saveFeeDiscount" class="btn btn-squar" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="x_panel" id="panel3">
+                    <div class="x_title sc_panel_header_sm">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Student Details </label>
+                    </div>
+
+                    <div class="x_content">
+
+                        <div class="row">
+
+
+                            <div class="col-md-12" style="padding-right: 20px; padding-left: 20px; height: inherit;" id="div2">
+
+                                <div class="form-group col-md-4">
+
+                                    <div class="row">
+
+                                        <label class="nav control-label col-md-3 col-sm-3 col-xs-12" align="left" style="font-size: 11px;" for="last-name">
+                                            Roll No
+                                        </label>
+
+                                        <div class="nav col-md-9 col-sm-9 col-xs-12">
+                                            <div>
+                                                <input type="text" name="Class" value="@(Model == null ? "" : Model.Student.RollNumber)" style="background-color: white" class="form-control input-sm" readonly="readonly">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row" style="margin-top:10px;">
+
+                                        <label class="nav control-label col-md-3 col-sm-3 col-xs-12" align="left" style="font-size: 11px;" for="last-name">
+                                            Class
+                                        </label>
+
+                                        <div class="nav col-md-9 col-sm-9 col-xs-12">
+                                            <div>
+                                                <input type="text" name="Class" value="@(Model == null ? "" : Model.Student.ClassName)" style="background-color: white" class="form-control input-sm" readonly="readonly">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="form-group col-md-4">
+
+                                    <div class="row" style="margin-top:10px;">
+
+                                        <label class="nav control-label col-md-3 col-sm-3 col-xs-12" align="left" style="font-size: 11px;" for="last-name">
+                                            Name
+                                        </label>
+
+                                        <div class="nav col-md-9 col-sm-9 col-xs-12">
+                                            <div>
+                                                <input type="text" name="Class" value="@(Model == null ? "" : Model.Student.Name)" style="background-color: white" class="form-control input-sm" readonly="readonly">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row" style="margin-top:10px;">
+
+                                        <label class="nav control-label col-md-3 col-sm-3 col-xs-12" align="left" style="font-size: 11px;" for="last-name">
+                                            Section
+                                        </label>
+
+                                        <div class="nav col-md-9 col-sm-9 col-xs-12">
+                                            <div>
+                                                <input type="text" name="Section" value="@(Model == null ? "" : Model.Student.SectionName)" style="background-color: white" class="form-control input-sm" readonly="readonly">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group col-md-4">
+
+                                    <div class="row" style="margin-top:10px;">
+
+                                        <label class="nav control-label col-md-3 col-sm-3 col-xs-12" align="left" style="font-size: 11px;" for="last-name">
+                                            FatherName
+                                        </label>
+
+                                        <div class="nav col-md-9 col-sm-9 col-xs-12">
+                                            <div>
+                                                <input type="text" name="Class" value="@(Model == null ? "" : Model.Student.FatherName)" style="background-color: white" class="form-control input-sm" readonly="readonly">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    $("#search-table").hide();
+    $("#medicine-search").on("change paste keyup", function () {
+        if ($(this).val() == '') {
+            $("#search-table").hide();
+        }
+        else {
+            $("#search-table").show();
+        }
+    });
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 100)
+           {
+               <text> showNotification('Fee Discount is saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to Save Fee Discount.', 'Error', 'Error') </text>
+           }
+       }
+    }
+
+    var names = [];
+    var fathernames = [];
+    //var data = [];
+    var click = 0;
+    window.onload = function (e) {
+        $("#allownceTable1").DataTable({searching: false, paging: false, info: false});
+        resetSearch();
+        populateErrors();
+        //getFine();
+        //ChangeDuesStatus();
+
+        //$("#yearIdSearch").val("2017");
+        //$("#monthIdSearch").val("November");
+
+        $('#paidDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+
+        $("input").attr("autocomplete", "off");
+
+        GetNameList();
+        //GetFatherNameList();
+
+        autocomplete(document.getElementById("inputName"), names);
+        data = names;
+
+        setTableData();
+
+        @if (Model == null)
+        {
+            <text>  
+        
+                $("#panel1").hide();
+                $("#panel2").hide();
+                $("#panel3").hide(); 
+        
+            </text>
+        }
+       
+
+        $('#paidDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+
+    }
+
+
+    function setTableData()
+    {
+        debugger;
+        var headers = "";
+        var rows = "";
+        headers += "<tr style='height:30px;'>";
+        for (item in data[0]) {
+            header += "<th>" + item + "</th>";
+        }
+        header += "</tr>";
+        $("#header").html(header);
+
+        var num_keys = Object.keys(data[0]).length;
+
+
+        for (item in data) {
+            rows += "<tr onclick='placeName(this);'>";
+            for (var i = 0; i < num_keys; i++) {
+                rows += "<td>" + data[item][Object.keys(data[item])[i]] + "</td>";
+            }
+            rows += "</tr>";
+        }
+
+        $("#table-rows").html(rows);
+    }
+
+
+
+    function highlightFirst() {
+        $('#search-table tbody tr').removeClass('highlight');
+        $("#search-table tbody tr:visible:first").addClass("highlight");
+        // $('#search-table tbody tr').filter(':visible').first().addClass("highlight");
+    }
+    function highlight(tableIndex) {
+        // Just a simple check. If .highlight has reached the last, start again
+        if( (tableIndex + 1) > $('#search-table tbody tr').length )
+            tableIndex = 0;
+
+        // Element exists?
+        if($('#search-table tbody tr:eq('+tableIndex+')').length > 0)
+        {
+            // Remove other highlights
+            $('#search-table tbody tr').removeClass('highlight');
+
+            // Highlight your target
+            $('#search-table tbody tr:eq('+tableIndex+')').addClass('highlight');
+        }
+    }
+
+    function placeName(row) {
+        $("#medicine-search").val($(row).children("td:first").html());
+        $("#inputName").val($(row).children("td:nth-child(3)").html());
+        $("#inputFatherName").val($(row).children("td:nth-child(4)").html());
+        $("#inputRollNo").val($(row).children("td:nth-child(2)").html());
+        $("#inputAdmissionNo").val($(row).children("td:nth-child(1)").html());
+        $('#search-table tbody tr.highlight').removeClass("highlight");
+        $(row).addClass("highlight");
+
+        $("#search-table").hide();
+        document.getElementById('fastPayForm').submit();
+    }
+
+
+    $('#goto_first').click(function() {
+        highlight(0);
+    });
+
+    $('#goto_prev').click(function() {
+        highlight($('#search-table tbody tr:visible tr.highlight').index() - 1);
+    });
+
+    $('#goto_next').click(function() {
+        highlight($('#search-table tbody tr:visible tr.highlight').index() + 1);
+    });
+
+    $('#goto_last').click(function() {
+        highlight($('#search-table tbody tr:visible tr:last').index());
+    });
+
+    $(document).keydown(function (e) {
+
+        switch(e.which)
+        {
+            case 38:
+                index = $('#search-table tbody tr.highlight').index() - 1;
+                for(let i=index; i >= 0; i--) {
+                    if (index >= 0) {
+                        if (!$('#search-table tbody tr:eq('+index+')').is(":visible"))
+                            index--;
+                    }
+                    else {
+                        index = $('#search-table tbody tr:visible:last').index();
+                        break;
+                    }
+                }
+                highlight(index < 0 ? $('#search-table tr:visible:last').index() : index);
+                break;
+            case 40:
+                index = $('#search-table tbody tr.highlight').index() + 1;
+                for (let i=index; i < $('#search-table tbody tr').length; i++) {
+                    if (index < $('#search-table tbody tr').length) {
+                        if (!$('#search-table tbody tr:eq('+index+')').is(":visible"))
+                            index++;
+                    }
+                    else {
+                        index = 0;
+                        break
+                    }
+                }
+                highlight(index >= $('#search-table tbody tr').length ? $('#search-table tbody tr:visible:first').index() : index);
+                break;
+            case 13:
+                $("#medicine-search").val($('#search-table tbody tr.highlight').children("td:first").html());
+                $('#search-table tbody tr.highlight').removeClass("highlight");
+                $('#search-table tbody tr:visible:first tr.highlight').addClass("highlight");
+                $("#search-table").hide();
+                break;
+        }
+
+
+        $("#medicine-search").on("change paste keyup", function (e) {
+            if ($(this).val() == '' || e.which == 13) {
+                $("#search-table").hide();
+            }
+            else {
+                $("#search-table").show();
+            }
+            if (e.which != 40 && e.which != 38) {
+                highlightFirst();
+            }
+        });
+
+    });
+
+
+
+    function GetNameList() {
+        var i = 0;
+        @foreach (var item in (IEnumerable<string>)ViewData["nameList"])
+        {
+               <text>
+                    var tempObj = '@item';
+        var obj = {"AdmissionNo" : tempObj.split(',')[0], "RollNo" : tempObj.split(',')[8], "Name" : tempObj.split(',')[1],
+            "FatherName" : tempObj.split(',')[2], "Class" : tempObj.split(',')[6],
+            "Section" : tempObj.split(',')[7], "FatherCNIC" : tempObj.split(',')[3],
+            "MobileNo" : tempObj.split(',')[4], "Address" : tempObj.split(',')[5]}
+                    names[i++] = obj;
+               </text>
+        }
+    }
+
+    
+    
+    
+    
+
+    function calculateTotal()
+    {
+        var txtList = document.getElementsByClassName("txt-squar");
+        var i;
+        var total  = 0;
+        for (i = 0; i < txtList.length; i++) {
+            total += Number(txtList[i].value);
+        }
+        document.getElementById('txtTotal').value = total;
+        //alert(total);
+    }
+
+    
+
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function(e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false;}
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                //if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                /*create a DIV element for each matching element:*/
+                if (arr[i].toUpperCase().indexOf(val.toUpperCase()) !== -1) {
+                    b = document.createElement("DIV");
+                    b.style.fontSize = "12px";
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function(e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+
+    function SubmitForm(event)
+    {
+        var key = event.keyCode || event.charCode;
+        if( key == 8 || key == 46 )
+        {
+            click = 0;
+        }
+        else
+        {
+            setTimeout(myFunction,1000);
+            click++;
+        }
+    }
+
+    function myFunction()
+    {
+        if(click == 1)
+        {
+            document.getElementById('fastPayForm').submit();
+        }
+        click--;
+    }
+
+</script>
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@*@section Scripts {
+        @Scripts.Render("bundles/jqueryval")
+    }*@

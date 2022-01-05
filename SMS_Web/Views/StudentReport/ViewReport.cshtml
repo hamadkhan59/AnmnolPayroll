@@ -1,0 +1,354 @@
+﻿@model SMS_DAL.Student
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+
+    function ChechkIsReportSelected() {
+        var reportId = $('#ddlStudentReports').val();
+        if (Number(reportId) <= 0) {
+            showNotification('Please select a report to view the details.', 'Error', 'Error')
+            return false;
+        }
+        return true;
+    }
+
+    $(document).ready(function(){
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to fetch report data, please try again later.', 'Error', 'Error') </text>
+            }
+        }
+
+        //hide all filters
+        hideAll();
+        populateYears();
+        //load reports for student module
+        $.ajax({
+            type: "GET",
+            url: AppDetail() + '/api/Common/getReports?moduleId=1',
+            contentType: 'application/json',
+            success: function (result) {
+                $("#ddlStudentReports").html(result);
+            },
+            error: function (res) {
+                alert('failure: ' + res);
+            }
+        });
+
+
+        $("#btnReportExcel").hover (function(){
+            SetSession();
+        });
+
+        $("#btnReportWord").hover (function(){
+            SetSession();
+        });
+
+        $("#btnReportPDF").hover (function(){
+            SetSession();
+        });
+
+        //on changing report
+        $("#ddlStudentReports").change(function(){
+            //hide all initially
+            hideAll();
+            var rID = $("#ddlStudentReports").val();
+            if(rID == -1)
+                return;
+
+            $.ajax({
+                type: "GET",
+                url: AppDetail() + '/api/Common/getReportFilters?reportId='+ rID,
+                contentType: 'application/json',
+                success: function (result) {
+                    if(result.length ==0)
+                        return;
+
+                    debugger;
+                    for(var i=0;i<result.length;i++)
+                    {
+                        var classname="filter" + result[i].FILTER_ID;
+                        document.getElementsByClassName(classname)[0].style.display = 'block';
+                    }
+                },
+                error: function (res) {
+                    alert('failure: ' + res);
+                }
+            });
+
+        });
+
+
+
+    });
+
+    function hideAll()
+    {
+        $('.filter1, .filter2, .filter3, .filter4, .filter5, .filter6, .filter9, .filter7, .filter200, .filter201, .filter2019').hide();
+    }
+
+    function SetSession()
+    {
+        debugger;
+        var reportModel = {
+            reportName : $("#ddlStudentReports :selected").text(),
+            reportId : $('#ddlStudentReports').val(),
+            fromDate : $('#fromDate').val(),
+            toDate : $('#toDate').val(),
+            classId : $('#classIdSearch').val(),
+            sectionId : $('#sectionIdSearch').val(),
+            genderId : $('#ddlGenders').val(),
+            attendanceStatusId : $('#ddlAttendanceStatus').val(),
+            directoryOptionId : $('#ddlDirectoryOption').val(),
+            year : $('#ddlYear').val(),
+            name : $('#nameSearch').val(),
+            month : $("#ddlMonths :selected").text(),
+            rollNo : $('#rollNoSearch').val()
+        }
+        debugger;
+        $.ajax({
+            type: "Post",
+            url: AppDetail() + '/api/Common/setStudentReportSession',
+            contentType: 'application/json',
+            data: JSON.stringify(reportModel),
+            success: function (result) {
+
+            },
+            error: function (res) {
+                alert('failure: ' + res);
+            }
+        });
+    }
+
+    function populateYears()
+    {
+
+        $.ajax({
+            type: "GET",
+            url: AppDetail() + '/api/Common/getYears',
+            contentType: 'application/json',
+            success: function (result) {
+                $("#ddlYear").html(result);
+            },
+            error: function (res) {
+                alert('failure: ' + res);
+            }
+        });
+
+
+    }
+
+
+    function getSectionList() {
+        var classId = $("#classIdSearch").val();
+        //alert(classId);
+        $("#sectionIdSearch").html("");
+        $("#sectionIdSearch").append('<option value='+0+'>All</option>');
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+        if(classId == '')
+        {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+            $("#sectionIdSearch").append('<option value='+id+'>'+name+'</option>');
+        }
+        else if(classId == @(item.ClassId))
+            {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+        $("#sectionIdSearch").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+         }
+
+    }
+
+
+</script>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Student Report</label>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 17}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <select class="form-control input-sm" id="ddlStudentReports"></select>
+
+
+
+                    </div>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+
+                <div class=" row">
+
+                    <div class="col-md-6 filter1" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                            From Date
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <div>
+                                <input type="date" name="fromDate" class="form-control input-sm" id="fromDate" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 filter2" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-8 col-xs-12" style="font-size: 11px;">
+                            To Date
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <div>
+                                <input type="date" name="toDate" class="form-control input-sm" id="toDate" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 filter4" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                            Class
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control input-sm", onchange = "getSectionList()", id = "classIdSearch" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 filter5" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                            Section
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, "All", new { @class = "form-control input-sm", id = "sectionIdSearch" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 filter3" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                            Year
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                <select class="form-control input-sm" id="ddlYear"></select>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-md-6 filter9" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                            Month
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                @Html.DropDownList("MonthId", (IEnumerable<SelectListItem>)ViewBag.MonthId, "Please Select", new { @class = "form-control input-sm", id = "ddlMonths" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 filter7" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                            Name
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <div>
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch", })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 filter6" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                            Roll #
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <div>
+                                @Html.TextBoxFor(model => model.RollNumber, new { @class = "form-control input-sm", id = "rollNoSearch" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 filter200" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                            Gender
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                @Html.DropDownList("GenderId", (IEnumerable<SelectListItem>)ViewBag.GenderCode, "Please Select", new { @class = "form-control input-sm", id = "ddlGenders" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 filter201" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                            Attendance Status
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                @Html.DropDownList("AttendanceStatusId", (IEnumerable<SelectListItem>)ViewBag.AttendanceStatusCode, "Please Select", new { @class = "form-control input-sm", id = "ddlAttendanceStatus" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 filter2019" style="margin : 10px 0px">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                            Report View Option
+                        </label>
+                        <div class="col-md-8 col-sm-8 col-xs-12 ">
+                            <div>
+                                @Html.DropDownList("ViewOptionId", (IEnumerable<SelectListItem>)ViewBag.DirecotryOption, new { @class = "form-control input-sm", id = "ddlDirectoryOption" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                    <div class="nav navbar-right row" style="margin-right:-4%">
+                        <div>@*<a href="@Url.Action("Export")" class="btn btn-info" target="_blank" id="btnReport"> Report PDF </a>*@</div>
+                        <div class="col-md-4"><a href="@Url.Action("ExportExcel")" onclick="return ChechkIsReportSelected();" class="btn btn-squar" target="_blank" id="btnReportExcel"> Download As Excel </a></div>
+                        <div class="col-md-4"><a href="@Url.Action("ExportWord")" onclick="return ChechkIsReportSelected();" class="btn btn-squar" target="_blank" id="btnReportWord"> Download As Word </a></div>
+                        <div class="col-md-3"><a href="@Url.Action("ExportPdf")" onclick="return ChechkIsReportSelected();" class="btn btn-squar" target="_blank" id="btnReportPDF"> View As PDF </a></div>
+
+
+                    </div>
+                </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>

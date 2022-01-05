@@ -1,0 +1,105 @@
+﻿@model List<SMS_DAL.ViewModel.AttendanceModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 100)
+            {
+                <text> showNotification('Attendance is Proceeded succesfully.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to proceed today Attendance.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 300)
+            {
+                <text> showNotification(' Unable to proceed Attendance as selected day is Sunday.', 'Error', 'Error') </text>
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $('#dob').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        populateErrors();
+    });
+
+    
+</script>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Proceed Todays Attendance</label>
+               
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 8}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                      
+                        <div class="form-group row">
+                            
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="AttandanceDate" class="form-control input-sm" id="dob" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Status
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="Status">
+                                        <option value="1" selected>Present</option>
+                                        <option value="2">Absent</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-12" style="margin-top:-2px;">
+                                <div>
+                                    <div class="nav navbar-left">
+                                        <input type="submit" value="Proceed Attendance" name="ProceedAttendnace" onclick="return ConfirmAction('Are you sure, you want to proceed todays attendance?', 'submitBtn');" id="submitBtn" class="btn btn-squar" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

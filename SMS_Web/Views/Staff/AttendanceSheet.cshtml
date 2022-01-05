@@ -1,0 +1,253 @@
+﻿@model List<SMS_DAL.StaffAttandance>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+
+    window.onload = function (e) {
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        DisplaySheet();
+    }
+    
+</script>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <label class="nav navbar-left control-label" align="left">Attendance Detail</label>
+                @*<div class="col-md-6 col-sm-6 col-xs-12">
+                        <div>
+                            @Html.ValidationSummary()
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 0) ? "display:block;color:green;font-size:11px;" : "display:none")>
+                                Attendance is submitted succesfully.
+                            </label>
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Unable to submit Attendance.
+                            </label>
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 300) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Unable to mark Attendance as selected day is Sunday.
+                            </label>
+                        </div>
+                    </div>*@
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("CreateAttendanceSheet", "Attendance", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+                            
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                From Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="FromDate" class="form-control input-sm" id="fromDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                To Date
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="date" name="ToDate" class="form-control input-sm" id="toDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="StaffId" class="form-control input-sm" id="toDate" />
+                                    @*@Html.TextBoxFor(null, "AttandanceDate", new { @type = "date", @class = "form-control input-sm", id = "dob" })*@
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Search" name="CreateSheet" class="btn btn-sm btn-info" />
+                            </div>
+                            @*onclick="location.href='@Url.Action("CreateAttendanceSheet", "Attendance")'"*@
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <label class="nav navbar-left control-label" align="left">Attendance Sheet</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <div class="form-group">
+                    <div class="table-responsive">
+
+                        @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                            @*<fieldset>*@
+                        <div class="form-group row">
+                            <table class="table table-striped jambo_table bulk_action" id="classTable" width="500">
+                                <thead>
+                                    <tr class="headings" id="tableHead">
+                                        <th>
+                                        </th>
+                                        <th style="min-width:100px">
+                                            Roll No.
+                                        </th>
+                                        <th style="min-width:120px">
+                                            Name
+                                        </th>
+                                        <th style="min-width:140px">
+                                            Father Name
+                                        </th>
+                                    </tr>
+
+                                </thead>
+                                <tbody style="background-color:white;color:#2A3F54" id="tableData">
+                                    @*@if (ViewData["attandanceDetail"] != null)
+                                        {*@
+                                    @*@for (int i = 0; i < Model.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.CheckBoxFor(m => m[i].Status, new { @class = "form-control input-sm", @style = "width:20px;height:20px;" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m[i].Student.RollNumber, new { @class = "form-control input-sm", @readonly = "readonly" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m[i].Student.Name, new { @class = "form-control input-sm", @readonly = "readonly" })
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(m => m[i].Student.FatherName, new { @class = "form-control input-sm", @readonly = "readonly" })
+                                                </td>
+
+                                                <td>
+                                                    @if (Model[i].Status)
+                                                    {
+                                                        <label class="control-label" align="left" for="first-name" style="color:green;font-size:11px;">
+                                                            P
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="control-label" align="left" for="first-name" style="color:red;font-size:11px;">
+                                                            A
+                                                        </label>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(m => m[i].AttandanceDate, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(m => m[i].id, new { @class = "form-control input-sm", @hidden = "hidden" })
+                                                </td>
+
+                                            </tr>
+                                        }*@
+                                    @*}*@
+                                </tbody>
+
+                            </table>
+                        </div>
+                        @*<div class="form-group row">
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-11">
+                                        <input type="submit" value="Submit" name="Submit" class="btn btn-sm btn-info" />
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*</fieldset>*@
+
+                        @*</form>*@
+                        @*}*@
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@*<table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AttandanceDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student.RollNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AttandanceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.RollNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                </td>
+            </tr>
+        }
+
+    </table>*@

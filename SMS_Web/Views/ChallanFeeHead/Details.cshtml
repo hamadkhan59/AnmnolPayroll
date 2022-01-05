@@ -1,0 +1,36 @@
+﻿@model SMS_DAL.ChallanToFeeHead
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>ChallanToFeeHead</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FeeHead.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FeeHead.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Challan.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Challan.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Amount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Amount)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

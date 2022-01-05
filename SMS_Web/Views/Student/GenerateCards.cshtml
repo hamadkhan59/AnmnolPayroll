@@ -1,0 +1,398 @@
+﻿@model List<SMS_DAL.ViewModel.StudentModel>
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script>
+</script>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Student Cards</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        @Html.ValidationSummary()
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 0) ? "display:block;color:green;font-size:11px;" : "display:none" )>
+                            Student Cards generated succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Unable to generate Student Cards.
+                        </label>
+                        @*<label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Student Cards generated succesfully.
+                        </label>*@
+                    </div>
+                </div>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 15}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm(Html.BeginForm("SearchStudentCards", "Student", FormMethod.Post, new { enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="RollNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch" })*@
+                                    <input type="text" name="Name" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @*@Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm", id = "fatherNameSearch" })*@
+                                    <input type="text" name="FatherName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father CNIC
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @*@Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm", id = "fatherNameSearch" })*@
+                                    <input type="text" name="FatherCnic" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Father Contact
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherContact" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch" })*@
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Admission No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="AdmissionNo" class="form-control input-sm" />
+                                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm", id = "nameSearch" })*@
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("CardGenerationRequest", "Student", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Generate Cards</label>
+
+                        <ul class="nav navbar-right panel_toolbox">
+
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+
+                        </ul>
+                        <label class="nav navbar-right" style=" color:red" id="errorLabel"></label>
+                    </div>
+
+                    <div class="x_content">
+                        @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+
+                        <div class="form-group">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" id="classTable" name="model">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th>
+                                                <input type="checkbox" id="cbSelectAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                            </th>
+                                            <th>
+                                                Class
+                                            </th>
+                                            <th>
+                                                Section
+                                            </th>
+                                            <th style="max-width:80px;">
+                                                Roll No
+                                            </th>
+
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                FatherName
+                                            </th>
+
+                                            <th>
+                                                Admission Date
+                                            </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                        @*@if (ViewData["student"] != null)
+                            {*@
+                                        @for (int i = 0; i < Model.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @*@Html.CheckBoxFor(m => m[i].id, new { @class = "form-control input-sm", @style = "width:20px;height:20px;" })*@
+                                                    <input type="checkbox" name="studentIds" value="@Model[i].Id" style="width:20px;height:20px;" onclick="ChangeCheckCkount(@i);" id="@("tableId"+i)">
+                                                </td>
+                                                <td>
+                                                    @Model[i].ClassName
+                                                </td>
+                                                <td>
+                                                    @Model[i].SectionName
+                                                </td>
+                                                <td style="max-width:80px;">
+                                                    @Model[i].RollNumber
+                                                </td>
+                                                <td>
+                                                    @Model[i].Name
+                                                </td>
+                                                <td>
+                                                    @Model[i].FatherName
+                                                </td>
+                                                <td>
+                                                    @Model[i].AdmissionDate.ToString().Split(' ')[0]
+                                                </td>
+
+                                            </tr>
+                                        }
+                                        @*}*@
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Generate" name="SubmitLeaving" onclick="return CheckCountValue();" class="btn btn-squar" />
+                                </div>
+                            </div>
+
+                            @*</form>*@
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+</div>
+</div>
+
+
+<script>
+    var checkCount = 0;
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 0)
+           {
+               <text> showNotification('Student Cards generated succesfully.', 'Success', 'Success') </text>
+           }
+           else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to generate Student Cards.', 'Error', 'Error') </text>
+           }
+       }
+    }
+
+    $(document).ready(function() {
+        $('#classTable').DataTable( {
+            "lengthMenu": [[-1], ["All"]],
+            paging: false
+        } );
+    } );
+
+    window.onload = function (e) {
+        checkCount = 0;
+        populateErrors();
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        if(classId != 0)
+        {
+            $("#classId").val(classId);
+        }
+        getSectionList();
+    }
+
+    function setPrevSearchVals() {
+        var sectionId = '@(ViewData["GlobalSectionId"] == null ? 0 : (int)ViewData["GlobalSectionId"])';
+
+
+        if (sectionId != 0) {
+            $("#sectionId").val(sectionId);
+        }
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classId").val();
+        if (classId.length == 0) {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+   
+    function ChangeCheckCkount(index)
+    {
+        if($("#tableId"+index).is(':checked') == true)
+        {
+            checkCount++;
+        }
+        else
+        {
+            checkCount--;
+        }
+    }
+
+    function CheckCountValue()
+    {
+        if(checkCount > 0)
+        {
+            $("#errorLabel").text("");
+            return true;
+        }
+        else
+        {
+            $("#errorLabel").text("Can't proceed, No student is loaded or selected");
+            return false;
+        }
+    }
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbSelectAll").is(':checked') == true)
+        {
+            checkCount = rowCount;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, true);
+                //$("#tableId"+i).attr('checked', true);
+            }
+        }
+        else
+        {
+            checkCount = 0;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, false);
+
+                //$("#tableId"+i).attr('checked', false);
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+
+
+</script>
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@*@section Scripts {
+        @Scripts.Render("bundles/jqueryval")
+    }*@

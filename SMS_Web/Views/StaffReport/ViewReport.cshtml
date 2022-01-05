@@ -1,0 +1,318 @@
+﻿@model SMS_DAL.Student
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+
+    function ChechkIsReportSelected() {
+        var reportId = $('#ddlStaffReports').val();
+        if (Number(reportId) <= 0) {
+            showNotification('Please select a report to view the details.', 'Error', 'Error')
+            return false;
+        }
+        return true;
+    }
+
+    $(document).ready(function () {
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to fetch report data, please try again later.', 'Error', 'Error') </text>
+            }
+        }
+
+        //hide all filters
+        hideAll();
+        populateYears();
+        populateMonths();
+
+        //load reports for student module
+        $.ajax({
+            type: "GET",
+            url: AppDetail() + '/api/Common/getReports?moduleId=3',
+            contentType: 'application/json',
+            success: function (result) {
+                $("#ddlStaffReports").html(result);
+            },
+            error: function (res) {
+                alert('failure: ' + res);
+            }
+        });
+
+        //on changing report
+        $("#ddlStaffReports").change(function(){
+            //hide all initially
+            hideAll();
+            var rID = $("#ddlStaffReports").val();
+            if(rID == -1)
+                return;
+
+            $.ajax({
+                type: "GET",
+                url: AppDetail() + '/api/Common/getReportFilters?reportId='+ rID,
+                contentType: 'application/json',
+                success: function (result) {
+                    if(result.length ==0)
+                        return;
+
+                    debugger;
+                    for(var i=0;i<result.length;i++)
+                    {
+                        var classname="filter" + result[i].FILTER_ID;
+                        document.getElementsByClassName(classname)[0].style.display = 'block';
+                    }
+                },
+                error: function (res) {
+                    alert('failure: ' + res);
+                }
+            });
+
+        });
+
+        $("#btnReportExcel").hover(function () {
+            SetSession();
+        });
+
+        $("#btnReportWord").hover(function () {
+            SetSession();
+        });
+
+        $("#btnReportPDF").hover(function () {
+            SetSession();
+        });
+
+
+    });
+
+    function SetSession() {
+        debugger;
+        var reportModel = {
+            reportName: $("#ddlStaffReports :selected").text(),
+            reportId: $('#ddlStaffReports').val(),
+            fromDate: $('#fromDate').val(),
+            toDate: $('#toDate').val(),
+            categoryId: $('#ddlCats').val(),
+            designationId: $('#ddlDsg').val(),
+            staffId: $('#txtStaffId').val(),
+            year: $('#ddlYear').val(),
+            //name: $('#nameSearch').val()
+            //rollNo: $('#rollNoSearch').val(),
+            //paid: $('#ddlStatus').val(),
+            //fatherName: $('#fatherNameSearch').val(),
+            //inquiryNumber: $('#inquirySearch').val(),
+            //feeHeadId: $('#feeHeadId').val(),
+            month: $("#ddlMonths :selected").text()
+        }
+        debugger;
+        $.ajax({
+            type: "Post",
+            url: AppDetail() + '/api/Common/setFeeReportSession',
+            contentType: 'application/json',
+            data: JSON.stringify(reportModel),
+            success: function (result) {
+
+            },
+            error: function (res) {
+                alert('failure: ' + res);
+            }
+        });
+    }
+
+    function hideAll()
+    {
+        $('.filter1, .filter2, .filter3, .filter4, .filter5, .filter6, .filter7, .filter8, .filter9, .filter1004, .filter1005, .filter1006, .filter12').hide();
+    }
+    function populateYears()
+    {
+
+        $.ajax({
+            type: "GET",
+            url: AppDetail() + '/api/Common/getYears',
+            contentType: 'application/json',
+            success: function (result) {
+                $("#ddlYear").html(result);
+            },
+            error: function (res) {
+                alert('failure: ' + res);
+            }
+        });
+
+
+    }
+    function populateMonths()
+    {
+        var options = "";
+        options = options + '<option value="' + -1 + '"> All </option>';
+        options = options + '<option value="' + 1 + '"> January </option>';
+        options = options + '<option value="' + 2 + '"> February </option>';
+        options = options + '<option value="' + 3 + '"> March </option>';
+        options = options + '<option value="' + 4 + '"> April </option>';
+        options = options + '<option value="' + 5 + '"> May </option>';
+        options = options + '<option value="' + 6 + '"> June </option>';
+        options = options + '<option value="' + 7 + '"> July </option>';
+        options = options + '<option value="' + 8 + '"> August </option>';
+        options = options + '<option value="' + 9 + '"> September </option>';
+        options = options + '<option value="' + 10 + '"> October </option>';
+        options = options + '<option value="' + 11 + '"> November </option>';
+        options = options + '<option value="' + 12 + '"> December </option>';
+
+
+        $("#ddlMonths").html(options);
+    }
+
+
+</script>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Staff Report</label>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <select class="form-control input-sm " id="ddlStaffReports"></select>
+
+
+
+                    </div>
+                </div>
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+
+                    <div class=" row">
+
+                        <div class="col-md-6 filter1" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                                From Date
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div>
+                                    <input type="date" name="FromDate" class="form-control input-sm" id="fromDate" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 filter2" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-8 col-xs-12" style="font-size: 11px;">
+                                To Date
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div>
+                                    <input type="date" name="toDate" class="form-control input-sm" id="toDate" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 filter3" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                                Year
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12 ">
+                                <div>
+                                    <select class="form-control input-sm" id="ddlYear"></select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 filter9" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                                Month
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12 ">
+                                <div>
+                                    <select class="form-control input-sm" id="ddlMonths"></select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        
+
+                        <div class="col-md-6 filter1004" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                                Categories
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12 ">
+                                <div>
+                                    @Html.DropDownList("Designation.CatagoryId",  (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "ddlCats" })
+                                    @*<select class="form-control input-sm" id="ddlCats"></select>*@
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-6 filter1005" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12 ">
+                                <div>
+                                    @Html.DropDownList("Designation.Id", (IEnumerable<SelectListItem>)ViewBag.Designations, "All", new { @class = "form-control input-sm", id = "ddlDsg" })
+                                    @*<select class="form-control input-sm" id="ddlDsg"></select>*@
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6 filter1006" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div>
+                                    <input type="number" class="form-control input-sm" id="txtStaffId" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="nav navbar-right row" style="margin-right:-4%">
+                            <div>@*<a href="@Url.Action("Export")" class="btn btn-info" target="_blank" id="btnReport"> Report PDF </a>*@</div>
+                            <div class="col-md-4"><a href="@Url.Action("ExportExcel")" onclick="return ChechkIsReportSelected();" class="btn btn-squar" target="_blank" id="btnReportExcel"> Download As Excel </a></div>
+                            <div class="col-md-4"><a href="@Url.Action("ExportWord")" onclick="return ChechkIsReportSelected();" class="btn btn-squar" target=" _blank" id="btnReportWord"> Download As Word </a></div>
+                            <div class="col-md-3"><a href="@Url.Action("ExportPdf")" onclick="return ChechkIsReportSelected();" class="btn btn-squar" target=" _blank" id="btnReportPDF"> View As PDF </a></div>
+
+
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+ 

@@ -1,0 +1,57 @@
+﻿@model SMS_DAL.StaffAttandancePolicy
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>StaffAttandancePolicy</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LateInTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LateInTime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.HalfDayTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.HalfDayTime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Designation.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Designation.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AllowLeavesCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AllowLeavesCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LateInSattlementCount)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LateInSattlementCount)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SalaryDeduction)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SalaryDeduction)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

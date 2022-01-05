@@ -1,0 +1,300 @@
+﻿@model SMS_DAL.Staff
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    /*body {
+        padding: 10px;
+    }*/
+
+    #exTab1 .tab-content {
+        color: #73879c;
+        background-color: white;
+        padding: 5px 15px;
+    }
+
+    #exTab2 h3 {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+    /* remove border radius for the tab */
+
+    #exTab1 .nav-pills > li > a {
+        border-radius: 0;
+    }
+
+    /* change border radius for the tab , apply corners on top*/
+
+    #exTab3 .nav-pills > li > a {
+        border-radius: 4px 4px 0 0;
+    }
+
+    #exTab3 .tab-content {
+        color: white;
+        background-color: #428bca;
+        padding: 5px 15px;
+    }
+
+    .boxed {
+        border: 1px solid #DDDDDD;
+        margin-left: -15px;
+        margin-right: -15px;
+        height: 320px;
+    }
+
+    .nav-boxed {
+        border: 1px solid #DDDDDD;
+    }
+
+    .padded-ends {
+        padding-left: 20px;
+        padding-right: 20px;
+        /*margin-right:20px;*/
+    }
+</style>
+
+
+<script>
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           {
+               <text> showNotification('Staff is saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 11)
+           {
+               <text> showNotification('Staff is already added.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 1)
+           {
+               <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification(' Unable to Save Staff.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 1420)
+           {
+               <text> showNotification('Unable to Search Staff.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 3)
+           {
+               <text> showNotification('Unable to delete Staff.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           {
+               <text> showNotification(' Staff is deleted succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+
+    window.onload = function (e) {
+        ShowSearchPanel(@((ViewData["staff"] == null) ? 0 : 1));
+        populateErrors();
+        getDesignationList();
+        $('#classTable').DataTable({ paging : false, searching : false});
+    }
+
+    
+    function getDesignationList() {
+        var catagoryId = $("#catagoryId").val();
+        if(catagoryId.length == 0)
+        {
+            catagoryId = 0;
+        }
+        GetDesignation(catagoryId, 1, 'designationId');
+    }
+    </script>
+
+<div class="row" >
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Staff Advances</label>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId", @style = "height:30px;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="DesignationId" id="designationId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="StaffId" class="form-control input-sm" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Name" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Staff List</label>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" id="classTable">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Staff Id
+                                    </th>
+                                    <th>
+                                        Designation
+                                    </th>
+
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        FatherName
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </tr>
+
+                            </thead>
+                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                @if (ViewData["staff"] != null)
+                                {
+                                    foreach (var item in (IEnumerable<SMS_DAL.ViewModel.StaffModel>)ViewData["staff"])
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (item.StaffImage != null)
+                                                {
+                                                    var base64 = Convert.ToBase64String(item.StaffImage);
+                                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                                                    <img src="@imgSrc" style="width:50px;height:50px;" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="" style="width:50px;height:50px;" />
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.StaffId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DesignationName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FatherName)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink(" ", "NewAdvance", "StaffAdvances", new { id = item.StaffId }, new { style = "color: #31B0D5;font-size: 20px; margin-left: 10px", title = "Provide Advance", @class = "glyphicon glyphicon-gift" })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

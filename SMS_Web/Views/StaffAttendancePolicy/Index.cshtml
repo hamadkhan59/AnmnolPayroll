@@ -1,0 +1,310 @@
+﻿@model SMS_DAL.StaffAttandancePolicy
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>@*Exams*@</h3>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Staff Attendance Policy @((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "Edit" : "Create")</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <br>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @*@Html.ValidationSummary(true)*@
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @*@Html.ValidationSummary()*@
+
+                                    <label class="control-label" align="left" for="first-name"
+                                           style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                                        Exam is saved succesfully.
+                                    </label>
+                                    <label class="control-label" align="left" for="first-name"
+                                           style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                        Unable to delete Exam.
+                                    </label>
+                                    <label class="control-label" align="left" for="first-name"
+                                           style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                        Unable to Save Exam.
+                                    </label>
+                                    <label class="control-label" align="left" for="first-name"
+                                           style=@((Convert.ToInt32(ViewData["Error"]) == 100) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                        Toal Exams perecentage is exceding from 100.
+                                    </label>
+                                    <label class="control-label" align="left" for="first-name"
+                                           style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:12px;" : "display:none")>
+                                        Exam is deleted succesfully.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row col-md-offset-2">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="first-name">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control", onchange = "getSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="first-name">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control", onchange = "getSubjectList()", id = "sectionId" })
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group row col-md-offset-2">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="first-name">
+                                Late In
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control", onchange = "getSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="first-name">
+                                Half Day
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control", onchange = "getSubjectList()", id = "sectionId" })
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row col-md-offset-2">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="first-name">
+                                No of Late Ins for One Leave
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control", onchange = "getSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="right" for="first-name">
+                                No of Leaves allow per month
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control", onchange = "getSubjectList()", id = "sectionId" })
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <input type="submit" value="Save" name="Create" class="btn btn-success"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none" : "display:block") />
+                                <input type="submit" value="Edit" name="Update" class="btn btn-success"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none") />
+                            </div>
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    window.onload = function (e) {
+
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+
+        $("#yearIdSearch").get(0).selectedIndex = year - 2016;
+        $("#yearIdGrid").get(0).selectedIndex = year - 2016;
+        GetTermByYear();
+        GetSearchTermByYear();
+        GetExamsByTerm();
+    }
+
+    function GetTermByYear() {
+        var yearId = $('#yearIdSearch').val();
+        $("#termIdSearch").html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamTerm>)ViewData["examTerm"])
+        {
+             <text>
+
+        if(yearId == @(item.Year))
+        {
+            var id = @(item.Id);
+            var name = '@(item.TermName)';
+        $("#termIdSearch").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+    }
+
+    function GetSearchTermByYear() {
+        var yearId = $('#yearIdGrid').val();
+        $("#termIdGrid").html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamTerm>)ViewData["examTerm"])
+        {
+             <text>
+
+        if(yearId == @(item.Year))
+        {
+            var id = @(item.Id);
+            var name = '@(item.TermName)';
+        $("#termIdGrid").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+    GetExamsByTerm();
+    }
+
+    function GetExamsByTerm() {
+        var termId = $('#termIdGrid').val();
+        $('#classTable > tbody').html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamType>)ViewData["examType"])
+        {
+             <text>
+
+        if(termId == @(item.TermId))
+        {
+            var tableRow = '<tr>' +
+                '<td>' +
+                    '@(item.Name)' +
+                '</td>' +
+                '<td>' +
+                    '@(item.Percent_Of_Total)' +
+                        '</td>' +
+            '<td>' +
+                    '@(item.Description)' +
+                                '</td>' +
+                                '<td style="color:blue;">' +
+                                    '@Html.ActionLink("Edit", "Index", new { id = item.Id }, new { style = "color: blue;" }) |'+
+                                    '@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to delete this Exam?');", style = "color: blue;" })' +
+                        '</td>' +
+                    '</tr>';
+        $("#classTable").find('tbody').append(tableRow);
+    }
+    </text>
+            }
+    }
+
+</script>
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Exam List </h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+
+            <li>
+                <a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12" align="right">
+            <div>
+                @Html.DropDownList("TermId", (IEnumerable<SelectListItem>)ViewBag.TermId, new { @class = "form-control", @onchange = "GetExamsByTerm()", id = "termIdGrid" })
+            </div>
+        </div>
+        <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" align="right" for="last-name">
+            Term
+        </label>
+        <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12" align="right">
+            <div>
+                @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control", @onchange = "GetSearchTermByYear()", id = "yearIdGrid" })
+            </div>
+        </div>
+        <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" align="right" for="last-name">
+            Year
+        </label>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+
+        <div class="form-group">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table bulk_action" id="classTable">
+                    <thead>
+                        <tr class="headings">
+                            <th>
+                                <h2>Name</h2>
+                            </th>
+                            <th>
+                                <h2>Percentage</h2>
+                            </th>
+                            <th>
+                                <h2>Description</h2>
+                            </th>
+                            <th>
+                                <h2>Actions</h2>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                        @foreach (var item in (IEnumerable<SMS_DAL.ExamType>)ViewData["examType"])
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Percent_Of_Total)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Index", new { id = item.Id }, new { style = "color: blue;" }) |
+                                    @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to delete this Exam?');", style = "color: blue;" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

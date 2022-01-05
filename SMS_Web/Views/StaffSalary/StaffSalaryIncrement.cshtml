@@ -1,0 +1,469 @@
+﻿@model SMS_DAL.ViewModel.StaffModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script>
+
+
+</script>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Staff Detail</label>
+              
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        <a class="collapse-link">@*<i class="fa fa-chevron-up" id="clickUp"></i>*@</a>
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                        <div class="row">
+                            <div class="control-label col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Catagory
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div style="color:black">
+                                            : @Model.CategoryName
+                                            @*@Html.TextBoxFor(model => model.Designation.DesignationCatagory.CatagoryName, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Designation
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div style="color:black">
+                                            : @Model.DesignationName
+                                            @*@Html.TextBoxFor(model => model.Designation.Name, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        CNIC
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div style="color:black">
+                                            : @Model.CNIC
+                                            @*@Html.TextBoxFor(model => model.CNIC, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control-label col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group row">
+
+
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Name
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div style="color:black">
+                                            : @Model.Name
+                                            @*@Html.TextBoxFor(model => model.CNIC, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })*@
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Father Name
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div style="color:black">
+                                            : @Model.FatherName
+                                            @*@Html.TextBoxFor(model => model.CNIC, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Joining Date
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div style="color:black">
+                                            : @Model.JoinDate
+                                            @*@Html.TextBoxFor(model => model.CNIC, new { @class = "form-control", @placeholder = "xxxxx-xxxxxxx-x" })*@
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Add Salary Increment</label>
+
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        <a class="collapse-link">@*<i class="fa fa-chevron-up" id="clickUp"></i>*@</a>
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+
+                        <div class="col-md-3 col-sm-3 col-xs-12" hidden="hidden">
+                            <div>
+                                @Html.TextBoxFor(model => model.StaffId, new { @class = "form-control input-sm" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Basic Salary <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Salary, new { @class = "form-control", @type = "number", @placeholder = "xxxx-xxxxxxx", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.Salary)
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Increment <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="number" name="salaryIncrement" class="form-control" id="incBasicSalary">
+                                    @Html.ValidationMessageFor(model => model.Salary)
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Allownces
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @*@Html.TextBoxFor(model => model.Allownces, new { @class = "form-control", @type = "number", @placeholder = "xxxx-xxxxxxx" })*@
+                                    @Html.DropDownList("AllowncesList", (IEnumerable<SelectListItem>)ViewBag.StaffAllownces, new { @class = "form-control", id = "allowenceDD" })
+                                    @Html.ValidationMessageFor(model => model.Allownces)
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                <input type="button" onclick="AddRowInAllownces()" value="Add" class="btn btn-squar" style="width:50px;" />
+                            </label>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" id="allownceTable">
+                                    <thead>
+                                        <tr class="headings">
+
+                                            <th class="column-title">
+                                                Allownces
+                                            </th>
+                                            <th class="column-title" hidden>
+                                            </th>
+                                            <th class="column-title">
+                                                Amount
+                                            </th>
+                                         
+                                            <th class="column-title">
+                                                Increment
+                                            </th>
+                                           
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="allownceBody"></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+
+
+                        @*<div class="ln_solid"></div>*@
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <div class="nav navbar-right">
+                                    <input type="submit" id="saveSalaryBtn" value="Save Salary Increment" name="SaveSalaryIncrement" class="btn btn-squar navbar-right"
+                                           onclick="return ConfirmAction('Are you sure, you want to add increment to the staff salary?', 'saveSalaryBtn');"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none; " : "display:block;margin-right:10px") />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           { 
+               <text> showNotification('Salary Increment is saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 11)
+           { 
+               <text> showNotification('Salary Increment is already added.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 1)
+           { 
+               <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           { 
+               <text> showNotification(' Unable to Save Salary Increment .', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 1420)
+           { 
+               <text> showNotification('Unable to Search Staff.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 3)
+           { 
+               <text> showNotification('Unable to delete Staff Salary Increment.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           { 
+               <text> showNotification('Staff Salary Increment. is deleted succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+
+    window.onload = function (e) {
+        populateErrors();
+
+        @if(Model != null )
+        {
+            <text>
+        $('#dob').val('@(Model.DateOfBirth.Value.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+        $('#joiningDate').val('@(Model.JoinDate.Value.ToString("yyyy-MM-dd"))');
+        getStaffAllownces();
+        </text>
+        }
+        else
+        {
+            <text>
+        $('#dob').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');//.ToString(), "yyyy-MM-dd")Model.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+        $('#joiningDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        gotoSearch();
+        </text>
+        }
+    }
+    var degreeCount = 0, allownceCount = 0;
+
+
+    function getStaffAllownces()
+    {
+        var staffId = 0;
+        @if(Model != null )
+        {
+            <text>
+        staffId = @Model.StaffId;
+        </text>
+        }
+        allownceCount = 0;
+        $.post( AppDetail() +"/Staff/GetStaffAllownces",
+                    { staffId: staffId },
+                    function (response) {
+                        //alert(response[0][0]);
+                        for (var i = 0; i < response.length; i++) {
+                            var tableRow = '<tr class="even pointer" id="allRow' + allownceCount + '">' +
+                                '<td>' + response[i][0] + '</td>' +
+                                '<td hidden><input type="number" style="width:100px;" value="' + response[i][1] + '" id="valAllownce' + allownceCount + '"></td>' +
+                                '<td><input type="number" style="width:100px;" value="' + response[i][2] + '" id="txtAllownce' + allownceCount + '"></td>' +
+                                '<td><input type="number" style="width:100px;" id="incAllownce' + allownceCount + '" ></td>' +
+                                //'<td><input type="button" onclick=" onclick=RemoveItemAllownces(' + allownceCount + ')" value="x" class="btn btn-sm btn-dark btn-xs" /></td>' +
+                                '</tr>';
+                            $("#allownceTable").find('tbody').append(tableRow);
+                            allownceCount++;
+                        }
+                    }
+                 );
+    }
+
+
+    function AddRowInAllownces() {
+        var e = document.getElementById("allowenceDD");
+        var strAllownce = e.options[e.selectedIndex].text;
+        var allownceValue = e.options[e.selectedIndex].value;
+        //alert(strUser1);
+        var alreadyFlag = false;
+        var table = document.getElementById("allownceTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var allownceText = row.cells[0].firstChild.nodeValue;
+            if (allownceText == strAllownce)
+            {
+                alreadyFlag = true;
+            }
+        }
+
+        if (alreadyFlag == false) {
+            var tableRow = '<tr class="even pointer" id="allRow' + allownceCount + '">' +
+                            '<td>' + strAllownce + '</td>' +
+                            '<td hidden><input type="number" style="width:100px;" value="' + allownceValue + '" id="valAllownce' + allownceCount + '" hidden="hidden"></td>' +
+                            '<td><input type="number" style="width:100px;" id="txtAllownce' + allownceCount + '"></td>' +
+                            '<td><input type="number" style="width:100px;" id="incAllownce' + allownceCount + '" readonly="readonly" ></td>' +
+                            '<td><input type="button" onclick=" onclick=RemoveItemAllownces(' + allownceCount + ')" value="x" class="btn btn-sm btn-dark btn-squar btn-xs" /></td>' +
+                            '</tr>';
+            $("#allownceTable").find('tbody').append(tableRow);
+            allownceCount++;
+        }
+        else {
+            showNotification('Allownce is already added in table.', 'Error', 'Error')
+        }
+    }
+
+    function RemoveItem(removeIndex) {
+        //alert(removeIndex);
+        var currentrow = document.getElementById('eduRow' + removeIndex);
+        document.getElementById('classTable').deleteRow(currentrow.rowIndex);
+    }
+
+    function RemoveItemAllownces(removeIndex) {
+        //alert(removeIndex);
+        var currentrow = document.getElementById('allRow' + removeIndex);
+        document.getElementById('allownceTable').deleteRow(currentrow.rowIndex);
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function gotoSearch() {
+        $('#clickUp').click();
+
+    }
+
+    function resetSearch() {
+
+        $('#fatherNameSearch').val("");
+        $('#nameSearch').val("");
+        $('#staffIdSearch').val("");
+
+    }
+
+    function UploadImage() {
+        debugger;
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: AppDetail() + "/Student/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                //alert('Image Uploaded successfully')
+            });
+        }
+
+    }
+
+    function UploadStaffData()
+    {
+        var staffAllownces = [];
+        var table = document.getElementById("allownceTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var allownceText = row.cells[1].firstChild.nodeValue;
+            var allownceAmount = document.getElementById("txtAllownce" + (i - 1)).value;
+            var allownceId = document.getElementById("valAllownce" + (i - 1)).value;
+            var incAllownce = document.getElementById("incAllownce" + (i - 1)).value;
+            var staffAllownce = {
+                "AllownceId": allownceId,
+                "Amount": allownceAmount,
+                "Increment": incAllownce
+            }
+            staffAllownces[i - 1] = staffAllownce;
+        }
+        //alert(staffAllownces);
+        var staffAllowncesListJson = JSON.stringify(staffAllownces);
+        $.ajax({
+            url: AppDetail() + '/StaffSalary/SaveStaffAllownces',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: staffAllowncesListJson,// JSON.stringify(tagsList) },//JSON.stringify({ 'tagsList': tagsList }),
+            statusCode: {
+                200: function () { return true; },
+                500: function () {
+                    return false;
+                }
+            },
+
+            jsonp: 'jsonp'
+        });
+
+        $(document).ajaxStop(function() {
+                document.getElementById("saveSalaryBtn").onclick = true;
+                //$("#saveSalaryBtn").click()
+        });
+        return false;
+    }
+
+</script>
+

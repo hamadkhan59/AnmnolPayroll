@@ -1,0 +1,191 @@
+﻿@model List<SMS_DAL.ViewModel.PermissionModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div>
+
+@using (Html.BeginForm("SavePermissions", "Permissions", FormMethod.Post, new { enctype = "multipart/form-data", @id = "invoiceAllocationForm" }))
+{
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+            <div class="x_panel">
+                <div class="x_title sc_panel_header_sm1">
+
+                    <div class="rows">
+                        <div class="col-md-3 col-sm-3 col-xs-12" >
+
+                            <label class="nav navbar-left control-label sc_panel_label" align="left">Permissions </label>
+                        </div>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="margin-top:5px;font-size: 11px;" align="right" for="first-name">
+                                Group
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12" style="margin-top:2px;">
+                                <div>
+                                    @Html.DropDownList("UserGroup.Id", (IEnumerable<SelectListItem>)ViewBag.GroupId, "Select Group", new { @class = "form-control input-sm", onchange = "GetPermissions()", id = "groupId", @style = "height:30px;" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+@if (Model != null && Model.Count > 0)
+{
+    string ModeuleName = "";
+    //foreach (var item in (IList<DAL.EntityModel.InvoiceAllocation>)Model)
+    for (int i = 0; i < Model.Count; )
+    {
+        if (ModeuleName.Length == 0 || ModeuleName != Model[i].ModuleName)
+        {
+            ModeuleName = Model[i].ModuleName;
+
+            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-top:-5px;">
+
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header_sm1">
+                        <ul class="nav navbar-left panel_toolbox">
+                            <li>
+                                <a class="collapse-link" style="margin-top:-7px;"><i class="fa fa-chevron-up" id="@("clickUp1"+ModeuleName)"></i></a>
+                            </li>
+
+                            <li>
+                                <label class="nav navbar-left control-label" align="left"> @ModeuleName </label>
+                            </li>
+
+                        </ul>
+
+                    </div>
+                    <div class="x_content">
+                        <div class="">
+                            <ul class="to_do">
+                            <li>
+                                <p>
+                                    <input type="checkbox" style="width:20px;height:20px;" id="@("checkAll"+i)" onclick="SelectAllCheckBoxes(@i, @(Model.Where(x => x.ModuleName == ModeuleName).Count()), '@("checkAll"+i)');"> Select All
+                                </p>
+                            </li>
+                            @for (int k = 0; i < Model.Count && ModeuleName == Model[i].ModuleName; k++)
+                            {
+                                <li>
+                                    <p>
+                                        @Html.CheckBoxFor(m => Model[i].Granted, new { @id = "IsGranted" + i, @class = "cbAkms-classOthers" })
+                                        @Model[i].ModuleName > @Model[i].SubModuleName
+                                        @Html.HiddenFor(m => Model[i].Id)
+                                        @Html.HiddenFor(m => Model[i].GroupId)
+                                        @Html.HiddenFor(m => Model[i].PermissionId)
+                                    </p>
+                                </li>
+                                
+                                i++;
+                            }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+
+
+        @if (Model != null && Model.Count > 0)
+        {
+            <input type="submit" id="savePermissionBtn" onclick="return ConfirmAction('Are you sure, you want to save the permission(s)?', 'savePermissionBtn');"  value="Save Permission" name="Create" style="margin-right:10px;" class="btn btn-squar navbar-right" onclick="return SavePermissions()" />
+        }
+     </div>
+}
+</div>
+
+<script>
+    window.onload = function (e) {
+        gotoCreate();
+
+        populateErrors();
+    }
+
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 10)
+           {
+               <text> showNotification('Permissions are saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to save permissions.', 'Error', 'Error') </text>
+           }
+       }
+    }
+
+    function gotoCreate() {
+
+        $(".fa-chevron-up").click();
+        //$('#clickUp1').click();
+        //$('#clickUp2').click();
+        //$('#clickUp3').click();
+        //$('#clickUp4').click();
+        //$('#clickUp5').click();
+        //$('#clickUp6').click();
+        //$('#clickUp7').click();
+        //$('#clickUp8').click();
+
+    }
+
+    function SelectAllCheckBoxes(start, count, cbValue)
+    {
+        if($("#" + cbValue).is(':checked') == true)
+        {
+            for(var i = start; i <start + count; i++)
+            {
+                SelectElement("IsGranted" + i, true);
+            }
+        }
+        else
+        {
+            for(var i = start; i <start + count; i++)
+            {
+                SelectElement("IsGranted" + i, false);
+            }
+        }
+
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+
+    function GetPermissions()
+    {
+        $("#errorLabel").text("");
+
+        var id = $("#groupId").val();
+
+        window.location.href = '@Url.Action("GetGroupPermission", "Permissions")/' + id;
+    }
+
+
+    function VerifyInputs()
+    {
+        var id = $("#groupId").val();
+        if (id == null || id == 0)
+        {
+            showNotification('Unable to submit Attendance.', 'Error', 'Error')
+            return false;
+        }
+
+        ConfirmAction('Are you sure, you want to restore the staff(s) as Active?', 'restoreStaffStaus');
+        return false;
+    }
+</script>

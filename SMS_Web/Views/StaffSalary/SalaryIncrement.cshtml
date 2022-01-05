@@ -1,0 +1,351 @@
+﻿@model List<SMS_DAL.ViewModel.SalarySheetViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+
+    window.onload = function (e) {
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        DisplaySheet();
+    }
+
+</script>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Search Staff Salary</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div>
+                        @Html.ValidationSummary()
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("SalaryDetails", "StaffSalary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId", @style = "height:30px;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="DesignationId" id="designationId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="StaffId" class="form-control input-sm" style="height:30px;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size:11px;">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Name" class="form-control input-sm" style="height:30px;" />
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size:11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherName" class="form-control input-sm" style="height:30px;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Salary Details" name="SalaryDetails" class="btn btn-squar" />
+                            </div>
+                            @*onclick="location.href='@Url.Action("CreateAttendanceShtailseet", "Attendance")'"*@
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("GotoStaffSalaryIncrement", "StaffSalary", FormMethod.Post, new { target = "_blank" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+        <div class="row" id="searchPanelData" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Staff Salary List</label>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+                        </ul>
+
+                        <div class="form-group row">
+                            <label class="control-label" align="left" for="first-name" style="font-size: 11px;color:red;margin-left : 20px;" id="errorLabel">
+                            </label>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <div class="form-group">
+                            <div class="table-responsive">
+
+                                @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                                @*<fieldset>*@
+                                <table class="table table-striped table-bordered" id="classTable">
+                                    <thead>
+                                        <tr class="headings" id="tableHead">
+                                            
+                                            <th class="column-title">
+                                                Staff Id
+                                            </th>
+                                            <th class="column-title">
+                                                Name
+                                            </th>
+                                            <th class="column-title">
+                                                Father Name
+                                            </th>
+                                            <th class="column-title">
+                                                Basic Salary
+                                            </th>
+                                            <th class="column-title">
+                                                Allownces
+                                            </th>
+                                            <th class="column-title">
+                                                Total Salary
+                                            </th>
+
+                                            <th class="column-title">
+                                                Actions
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                        @if (Model != null)
+                                        {
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m[i].StaffId, new { Name = "StaffId", @style = "width:50px;height:20px;border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Name
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].FatherName
+                                                    </td>
+
+                                                    <td>
+                                                        @Model[i].BasicSalary
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Allownces
+                                                    </td>
+                                                    <td>
+                                                        @(Model[i].BasicSalary + Model[i].Allownces)
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("  ", "StaffSalaryIncrement", "StaffSalary", new { id = Model[i].StaffId }, new { style = "color: green;font-size: 20px; margin-left: 10px", title = "Add Salary Increment", @class = "glyphicon glyphicon-plus" })
+                                                        @Html.ActionLink("  ", "StaffSalaryIncrementHistory", "StaffSalary", new { id = Model[i].StaffId }, new { style = "color: #31B0D5;font-size: 20px; margin-left: 10px", title = "View Increment History", @class = "glyphicon glyphicon-th-list" })
+                                                    </td>
+
+
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+}
+
+<script>
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           {
+               <text> showNotification(' Staff Salary is saved succesfully.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 11)
+           {
+               <text> showNotification('Section is already added.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 1)
+           {
+               <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to save Staff Salary.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 3)
+           {
+               <text> showNotification('Staff Salary is marked unpaid against selected student(s) succesfuly.', 'Success', 'Success') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           {
+               <text> showNotification(' Section is deleted succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        populateErrors();
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        getDesignationList();
+        $('#classTable').DataTable({paging : false});
+    }
+
+    function getDesignationList() {
+        var catagoryId = $("#catagoryId").val();
+        if(catagoryId.length == 0)
+        {
+            catagoryId = 0;
+        }
+        GetDesignation(catagoryId, 1, 'designationId');
+    }
+
+    function CheckSelected()
+    {
+        var selectedCount = 0;
+        var table = document.getElementById("classTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            if(document.getElementById("checkbox" + (i-1)).checked)
+            {
+                selectedCount++;
+            }
+        }
+        if(selectedCount == 1)
+        {
+            document.getElementById('errorLabel').innerHTML = '';
+            return true;
+        }
+        else
+        {
+            showNotification('Please select staff to set an increment.', 'Error', 'Error')
+            return false;
+        }
+    }
+
+    function EnableAmountTextBox(index)
+    {
+        var table = document.getElementById("classTable");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            if(i -1 != index)
+            {
+                document.getElementById("checkbox" + (i-1)).checked = false;
+            }
+        }
+        if(document.getElementById("checkbox" + index).checked)
+        {
+            document.getElementById("cbSelect" + index).checked = true;
+        }
+        else
+        {
+            document.getElementById("cbSelect" + index).checked = false;
+        }
+    }
+
+    function setIncrementHistory()
+    {
+        if(CheckSelected() == true)
+        {
+            $.ajax({
+                url: AppDetail() + '/StaffSalary/setIncrementHistory',
+                type: 'Get',
+                contentType: 'application/json',
+                dataType: 'json',
+                statusCode: {
+                    200: function (data) {
+
+                    },
+                    500: function () {
+                    }
+                },
+            });
+            document.getElementById('errorLabel').innerHTML = '';
+            return true;
+        }
+        else
+        {
+            showNotification('Please select staff to view an increment history.', 'Error', 'Error')
+            return false;
+        }
+    }
+
+
+</script>

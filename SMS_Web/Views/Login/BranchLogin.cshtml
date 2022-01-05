@@ -1,0 +1,175 @@
+﻿@{
+    Layout = null;
+}
+
+@model List<SMS_DAL.Branch>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>School Care Login </title>
+    <!-- Bootstrap -->
+    <!-- Bootstrap -->
+    <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="../../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="../../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../../css/custom.min.css" rel="stylesheet">
+    <link href="~/css/toastr.min.css" rel="stylesheet">
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/vendors/Custom/AppDetail.js"></script>
+
+
+
+
+
+    </head>
+    <style>
+
+        .boxed {
+            border: 1px solid #808080 ;
+            padding-left: 15px;
+            padding-right: 15px;
+            height:530px;
+            width:450px;
+        }
+
+
+    </style>
+
+
+
+
+    <body class="login">
+        <div>
+            <a class="hiddenanchor" id="signup"></a>
+            <a class="hiddenanchor" id="signin"></a>
+            <div class="login_wrapper">
+                <div class="animate form login_form boxed" >
+                    <section class="login_content">
+                        <form action="AuthenticateBranch" method="post">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+
+                            <h1>Branch Login</h1>
+                            <fieldset>
+                                @*<label class="control-label" align="left" for="first-name"
+                                       style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                    Username or password is incorrect.
+                                </label>
+                                <label class="control-label" align="left" for="first-name"
+                                       style=@((Convert.ToInt32(ViewData["Error"]) == 421) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                    Username is already logged in.
+                                </label>*@
+                                <div class="form-group">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th>
+
+                                                    </th>
+                                                    
+                                                    <th>
+                                                        Branch
+                                                    </th>
+                                                    <th>
+                                                        Email / Phone No
+                                                    </th>
+                                                    
+                                                   
+                                                </tr>
+
+                                            </thead>
+                                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                                @if (Model != null)
+                                                {
+                                                    int i = 0;
+                                                    foreach (var item in Model)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="checkbox" onchange="EnableAmountTextBox(@i)" id="@("checkbox" + i)" name="BranchId" value="@Model[i].ID" style="width:20px;height:20px;">
+                                                            </td>
+                                                        
+                                                            <td>
+                                                                @(item.BRANCH_CODE +"-"+item.BRANCH_NAME)
+                                                            </td>
+                                                        
+                                                            <td>
+                                                                @((string.IsNullOrEmpty(item.EMAIL) ? "" : item.EMAIL + " / ") + (string.IsNullOrEmpty(item.PHONE_NUMBER) ? "" : item.PHONE_NUMBER))
+                                                            </td>
+                                                        </tr>
+                                                    
+                                                        i++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            <div style="margin-top:20px;">
+                                <input type="submit" value="Branch Login" class="btn btn-info btn-squar" style="width:100%;margin-left:0px;" />
+                            </div>
+                        </fieldset>
+                        @*<div class="clearfix"></div>*@
+                        
+                    </form>
+                </section>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+
+    var lastIndex = -1;
+    function populateErrors()
+    {
+      @if(ViewData["Error"] != null)
+      {
+          if ((int)@ViewData["Error"] == 420)
+          { 
+              <text> showNotification('Username or password is incorrect.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 421)
+          { 
+              <text> showNotification('Username is already logged in.', 'Error', 'Error') </text>
+          }
+      }
+    }
+
+    window.onload = function (e) {
+        populateErrors();
+    }
+
+    function EnableAmountTextBox(index)
+    {
+        if(lastIndex != -1)
+        {
+            document.getElementById("checkbox" + lastIndex).checked = false;
+        }
+        lastIndex = index;
+    }
+
+</script>

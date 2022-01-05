@@ -1,0 +1,264 @@
+﻿@model SMS_DAL.DateSheet
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Exam Attendance Sheet</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("CreateAwardSheet", "DateSheet", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*@Html.ValidationSummary(true)*@
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Class
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getSectionList()", id = "classId" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Section
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control input-sm", onchange = "getSubjectList()", id = "sectionId" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Year <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", @onchange = "GetTermByYear()", id = "yearIdSearch" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Term <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("TermId", (IEnumerable<SelectListItem>)ViewBag.TermId, new { @class = "form-control input-sm", @onchange = "GetExamsByTerm()", id = "termIdSearch" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Exams <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ExamId", (IEnumerable<SelectListItem>)ViewBag.ExamId, new { @class = "form-control input-sm", id = "examIdSearch" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Create Award Sheet" name="Create" class="btn btn-squar" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    window.onload = function (e) {
+
+        ShowSearchPanel(@((ViewData["ateendanceSheet"] == null) ? 0 : 1));
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+
+        //$("#yearIdSearch").get(0).selectedIndex = year - 2016;
+        GetTermByYear();
+        GetExamsByTerm();
+        getSectionList();
+        getSubjectList();
+        populateErrors();
+
+    }
+
+    function populateErrors()
+    {
+        @if (ViewData["SheetError"] != null)
+        {
+            if ((int)@ViewData["SheetError"] == 510)
+            { 
+                <text> showNotification('No subject is defined in that class so cant generate awards sheet.', 'Error', 'Error') </text>
+            }
+       
+        }
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        //alert(classId);
+        $("#sectionId").html("");
+        //$("#sectionId").append('<option value='+0+'>All</option>');
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+        if(classId == '')
+        {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+            $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+        }
+        else if(classId == @(item.ClassId))
+            {
+                var id = @(item.SectionId);
+                var name = '@(item.SectionName)';
+        $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+    }
+    getSubjectList();
+    }
+
+    function GetTermByYear() {
+        var yearId = $('#yearIdSearch').val();
+        $("#termIdSearch").html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamTerm>)ViewData["examTerm"])
+        {
+             <text>
+
+        if(yearId == @(item.Year))
+        {
+            var id = @(item.Id);
+            var name = '@(item.TermName)';
+        $("#termIdSearch").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+    GetExamsByTerm();
+    }
+
+    function getSubjectList() {
+        var classId = $("#classId").val();
+        var sectionId = $("#sectionId").val();
+        $("#subjectId").html("");
+        if(classId != '' && classId != '0' && sectionId == '' && sectionId == '0')
+        {
+            //getDetailSectionList();
+        }
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.RegisterCourseModel>)ViewData["classSubject"])
+        {
+
+            <text>
+                if(classId == '' || classId == '0' || classId == @(item.ClassId))
+                {
+                    if(sectionId == '' || sectionId == '0' || sectionId == @(item.SectionId))
+                    {
+                        var id = @(item.SubjectId);
+                        var name = '@(item.SubjectName)';
+                        $("#subjectId").append('<option value='+id+'>'+name+'</option>');
+                    }
+                }
+            </text>
+        }
+    }
+
+    function EnableGridRow(index)
+    {
+        var tableBody = document.getElementById("classBody");
+        var rows = tableBody.getElementsByTagName("tr");
+        var tdObj = rows[index].getElementsByTagName("td")[1];
+        if(document.getElementById("checkbox" + index).checked)
+        {
+            document.getElementById("datePicker" + index).readOnly = false;
+            document.getElementById("startTime" + index).readOnly = false;
+            document.getElementById("endTime" + index).readOnly = false;
+            document.getElementById("center" + index).readOnly = false;
+        }
+        else
+        {
+            document.getElementById("datePicker" + index).readOnly = true;
+            document.getElementById("startTime" + index).readOnly = true;
+            document.getElementById("endTime" + index).readOnly = true;
+            document.getElementById("center" + index).readOnly = true;
+        }
+        //alert(document.getElementById("checkbox" + index).checked);
+
+    }
+
+    function setPrint()
+    {
+        $.ajax({
+            url: AppDetail() + '/DateSheet/setPrint',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            statusCode: {
+                200: function (data) {
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+
+    function GetExamsByTerm() {
+        var termId = $('#termIdSearch').val();
+        $("#examIdSearch").html("");
+
+        @foreach (var item in (IEnumerable<SMS_DAL.ExamType>)ViewData["examType"])
+        {
+             <text>
+        if(termId == @(item.TermId))
+        {
+            var id = @(item.Id);
+            var name = '@(item.Name)';
+        $("#examIdSearch").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+    }
+
+</script>
+

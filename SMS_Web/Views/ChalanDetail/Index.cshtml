@@ -1,0 +1,276 @@
+﻿@model List<SMS_DAL.ViewModel.ChallanDetailViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-sm-10">
+    </div>
+    @*<div class="col-sm-2">
+        <p >
+            <button type="button" class="btn btn-sm btn-primary btn-sm" onclick="location.href = '@Url.Action("Create", "ClassSection")'" style="background-color:#2A3F54;width:115px;height:40px;font-size:120%;">
+                + Create New
+            </button>*@
+    @*@Html.ActionLink("Create New", "Create")*@
+    @*</p>
+        </div>*@
+</div>
+
+@using (Html.BeginForm("GetChallanDetail", "ChalanDetail", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Chalan Detail</label>
+                    <div class="nav navbar-right">
+                        <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 24}) + "'");"
+                                 class="btn sc_help_btn btn-xs" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+    
+
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" style="font-size: 11px;" for="first-name" style="font-size: 12px;">
+                                Class
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm",  @onchange = "GetClassChallan()", id = "classIdSearch"  })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Chalan
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="ChallanId" id="challanIdList"></select>
+                                    <input type="hidden" name="BranchId" class="form-control input-sm" id="BranchId" value="@ViewData["branchId"]">
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Detail" class="btn btn-squar" name="Create" />
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+
+
+    function populateErrors()
+    {
+       @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 2)
+           {
+               <text> showNotification('Challan detail is saved succesfully.', 'Success', 'Success') </text>
+           }
+           else if ((int)@ViewData["Error"] == 11)
+           {
+               <text> showNotification('Fee Head is already added to Chalaln.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to save Challan Detail.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 3)
+           {
+               <text> showNotification('Unable to delete Fee Head from Chalaln.', 'Error', 'Error') </text>
+           }
+           else if ((int)@ViewData["Error"] == 4)
+           {
+               <text> showNotification('Fee Head is deleted from Chalaln succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+    window.onload = function (e) {
+        //ChangeChalan();
+        populateErrors();
+        GetClassChallan();
+    }
+    var subTotal = 0;
+    function GetClassChallan() {
+        var classId = $('#classIdSearch').val();
+        var branchId = $('#BranchId').val();
+
+        $.ajax({
+            type: "GET",
+            url: AppDetail() + '/api/Common/getClassChallan?classId=' + classId + '&&branchId=' + branchId +'&&isLoadAll=0',
+            contentType: 'application/json',
+            success: function (result) {
+                $("#challanIdList").html(result);
+            },
+            error: function (res) {
+                showNotification('Unable to load challans', 'Error', 'Error')
+            }
+        });
+    }
+
+    
+    function UpdateTotal(index)
+    {
+        var total = document.getElementById("totalbox").value;
+        var updatedSubTotal = document.getElementById("textbox" + index).value;
+        total = parseInt(total,10) + parseInt(updatedSubTotal,10) - parseInt(subTotal,10);
+        document.getElementById("totalbox").value = total;
+        subTotal = updatedSubTotal;
+    }
+
+    function EnableAmountTextBox(index)
+    {
+        var tableBody = document.getElementById("classBody");
+        var rows = tableBody.getElementsByTagName("tr");
+        var tdObj = rows[index].getElementsByTagName("td")[0];
+        if(document.getElementById("checkbox" + index).checked)
+        {
+            document.getElementById("cbSelect" + index).checked = true;
+            document.getElementById("textbox" + index).readOnly = false;
+            subTotal = document.getElementById("textbox" + index).value;
+            //document.getElementById("feebox" + index).readOnly = false;
+        }
+        else
+        {
+            document.getElementById("cbSelect" + index).checked = false;
+            document.getElementById("textbox" + index).readOnly = true;
+            //document.getElementById("feebox" + index).readOnly = true;
+        }
+        //alert(document.getElementById("checkbox" + index).checked);
+
+    }
+
+
+</script>
+
+
+    <div class="x_panel">
+        <div class="x_title sc_panel_header" >
+            <label class="nav navbar-left control-label sc_panel_label" align="left">Chalan Detail List </label>
+
+
+
+            <ul class="nav navbar-right panel_toolbox">
+
+                <li>
+                    @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                </li>
+                <li>
+                    @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+            @using (Html.BeginForm(Html.BeginForm("SaveChallanDetail", "ChalanDetail", FormMethod.Post, new { enctype = "multipart/form-data" })))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <fieldset>
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" id="classTable">
+                                <thead>
+                                    <tr class="headings">
+                                        <th>
+                                        </th>
+                                        <th>
+                                            Fee Head
+                                        </th>
+                                        <th>
+                                            Standard Amount
+                                        </th>
+                                        <th>
+                                            Revised Amount
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+                                <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                    @if(Model != null)
+                                    {
+                                        var total = 0;
+                                        for (int i = 0; i < ((List<SMS_DAL.ViewModel.ChallanDetailViewModel>)Model).Count(); i++)
+                                        {
+                                            total += Model[i].Amount;
+                                            <tr style="height:25px;">
+                                                <td style="height:25px;">
+                                                    <input type="checkbox" name="ChalanIds" onchange="EnableAmountTextBox(@i)" id="@("checkbox" + i)" value="@Model[i].Id" style="width:20px;height:20px;">
+                                                    <input type="checkbox" name="Indexes" value="@i" id="@("cbSelect" + i)" style="width:20px;height:20px;" hidden="hidden">
+                                                </td>
+                                                
+                                                <td style="height:25px;">
+                                                    @Html.TextBoxFor(m => m[i].Name, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                    @*@Html.DisplayFor(modelItem => item.Name)*@
+                                                </td>
+                                                <td style="height:25px;">
+                                                    @Html.TextBoxFor(m => m[i].StandardAmount, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                    @*@Html.DisplayFor(modelItem => item.StandardAmount)*@
+                                                </td>
+                                                <td style="height:25px;">
+                                                    @Html.TextBoxFor(m => m[i].Amount, new { Name = "PaidAmount", @class = "form-control input-sm", @style = "background-color: transparent;", @onkeypress = "CheckEnterykey()", @onChange = "UpdateTotal(" + i + ")", @readonly = "readonly", @id = ("textbox" + i) })
+                                                    @*@Html.DisplayFor(modelItem => item.Amount)*@
+                                                </td>
+                                                
+                                            </tr>
+                                        }
+                                        <tr style="height:20px;background-color:yellow;color:red;font-size:14px;">
+                                            <td style="height:20px;">
+                                            </td>
+                                            <td style="height:20px;">
+                                                Total
+                                            </td>
+                                            <td style="height:20px;">
+                                            </td>
+                                            <td style="height:20px;">
+                                                <input type="text" value="@total" style="height:30px;border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;" id="totalbox">
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Save" onclick="return ConfirmAction('Are you sure, you want to save the challan detail?', 'saveChalanDetail');" id="saveChalanDetail" class="btn btn-squar" />
+                            </div>
+                        </div>
+                    </div>
+                    </fieldset>
+            }
+</div>
+    </div>
+
+

@@ -1,0 +1,178 @@
+﻿@model SMS_DAL.ChallanToFeeHead
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title">
+                <h2>Fee Head @((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "Edit" : "Create")</h2>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        @*@Html.ValidationSummary()*@
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Fee Head is Saved succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:12px;" : "display:none" )>
+                            Fee Head is Deleted succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Create Fee Head.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Unable to Delete Fee Head.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 11) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                            Fee Head is Already Created.
+                        </label>
+                        @*<label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:red;font-size:12px;" : "display:none")>
+                                Student Cards generated succesfully.
+                            </label>*@
+                    </div>
+                </div>
+                <ul class="nav navbar-right panel_toolbox">
+
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+
+                </ul>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <br>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                Name <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                    <p style="color:red;" />@Html.ValidationMessageFor(model => model.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                Amount <span class="required" style="color:red;">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control" })
+                                    <p style="color:red;" />@Html.ValidationMessageFor(model => model.Amount)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                Description
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
+                                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <input type="submit" value="Save" name="Create" class="btn btn-success"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none" : "display:block") />
+                                <input type="submit" value="Edit" name="Update" class="btn btn-success"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none") />
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="x_panel">
+    <div class="x_title">
+        <h2>Fee Heads List </h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+
+            <li>
+                <a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="x_content">
+
+        <div class="form-group">
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table bulk_action">
+                    <thead>
+                        <tr class="headings">
+                            <th>
+                                <h2>Name</h2>
+                            </th>
+                            <th>
+                                <h2>Amount</h2>
+                            </th>
+                            <th>
+                                <h2>Description</h2>
+                            </th>
+                            <th>
+                                <h2>Actions</h2>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                        @foreach (var item in (IEnumerable<SMS_DAL.FeeHead>)ViewData["feeHeads"])
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Index", new { id = item.Id }, new { style = "color: blue;" }) |
+                                    @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to delete this Fee Head?');", style = "color: blue;" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

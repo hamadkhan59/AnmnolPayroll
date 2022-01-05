@@ -1,0 +1,25 @@
+﻿.navbar_custom {
+    width: 230px;
+    float: left;
+    background: #ededed;
+    height: 57px;
+}
+
+.dropdown-submenu > .dropdown-menu{
+    position: relative;
+    left: 0;
+    top: 0;
+    margin: 0;
+}
+
+.dropdown-submenu:hover > .dropdown-menu{
+    display: none;
+}
+
+.shown{
+    display: block;
+}
+
+.dropdown-submenu:hover > .shown{
+    display: block;
+}

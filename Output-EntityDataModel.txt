@@ -1,0 +1,21 @@
+﻿An item with the same key has already been added.
+The model was generated with warnings or errors.ScDbModel.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:04.7635341.
+Generating the model took 00:00:19.6910086.
+The model was generated with warnings or errors.ScDbModel.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:01.3888905.
+Generating the model took 00:00:14.5239767.
+The model was generated with warnings or errors.ScDbModel.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:01.4586201.
+Generating the model took 00:00:15.4124933.
+The model was generated with warnings or errors.ScDbModel.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:01.3665934.
+Generating the model took 00:00:15.0067926.
+The model was generated with warnings or errors.ScDbModel.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:01.8170705.
+Generating the model took 00:00:13.9638589.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0060874.
+The model was generated with warnings or errors.ScDbModel.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:01.5948700.
+Generating the model took 00:00:14.6085487.

@@ -1,0 +1,479 @@
+﻿@model List<SMS_DAL.ViewModel.StudentChallanViewModel>
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Fee Increment Search</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        @Html.ValidationSummary()
+                        @*<label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:11px;" : "display:none" )>
+                                Challan Assign to Students succesfully.
+                            </label>
+                            <label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Unable to Assign Challan to Students.
+                            </label>*@
+                        @*<label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Student Cards generated succesfully.
+                            </label>*@
+                    </div>
+                </div>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 25}) + "'");"
+                          class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm(Html.BeginForm("SearchStudents", "FeeIncrement", FormMethod.Post, new { enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, "All", new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classId" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="RollNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Name" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Name
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherName" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Father Cnic
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherCnic" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Father Contact
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="FatherContact" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Admission No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="AdmissionNo" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Min Fee
+                            </label>
+                            <div class="col-md-1 col-sm-1 col-xs-12">
+                                <div>
+                                    <input type="number" name="MinFee" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px">
+                                Max Fee
+                            </label>
+                            <div class="col-md-1 col-sm-1 col-xs-12">
+                                <div>
+                                    <input type="number" name="MaxFee" class="form-control input-sm" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("SaveFeeIncrementHistory", "FeeIncrement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <ul class="nav navbar-right panel_toolbox">
+
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+
+                        </ul>
+
+                        <div class="nav navbar-right col-md-2 col-sm-2 col-xs-3" align="right" style="margin-top:2px;">
+                            <div>
+                                <input type="number" name="Percentage" id="txtPercentage" class="form-control input-sm" />
+                                <input type="hidden" class="custom-control-input" name="IsRevoke" value="0" style="width:20px;height:20px;" id="isRevoke">
+                            </div>
+                        </div>
+                        <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" align="right" style="margin-top:5px;font-size: 11px;" for="last-name">
+                            Percentage
+                        </label>
+
+                        <div class="nav navbar-right col-md-2 col-sm-2 col-xs-3" align="right" style="margin-top:2px;">
+                            <div>
+                                <input type="number" name="Amount" id="txtAmount" class="form-control input-sm" />
+                            </div>
+                        </div>
+                        <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" align="right" style="margin-top:5px;font-size: 11px;" for="last-name">
+                            Amount
+                        </label>
+
+                        <div class="nav navbar-right col-md-3 col-sm-3 col-xs-3" align="right" style="margin-top:2px;">
+                            <div>
+                                @Html.DropDownList("FeeHeadId", (IEnumerable<SelectListItem>)ViewBag.FeeHeadId, new { @class = "form-control input-sm" })
+                            </div>
+                        </div>
+                        <label class="nav navbar-right control-label col-md-2 col-sm-2 col-xs-12" align="right" style="margin-top:5px;font-size: 11px;" for="last-name">
+                            Fee Head
+                        </label>
+
+                    </div>
+
+                    <div class="x_content">
+
+                        @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+
+                        <div class="form-group">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" id="classTable" name="model">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th>
+                                                <input type="checkbox" id="cbSelectAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                @if (Model != null && Model.Count > 0)
+                                                {
+                                                    <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" value="0" id="statusIdAll" style="display: none;" />
+                                                }
+                                            </th>
+                                            <th>
+                                                Roll No
+                                            </th>
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                Father Name
+                                            </th>
+
+                                            <th>
+                                                Chalan
+                                            </th>
+                                            <th>
+                                                Amount
+                                            </th>
+                                            <th>
+                                                Increment Date
+                                            </th>
+                                            <th>
+                                                Increment Amount
+                                            </th>
+                                            <th>
+                                                Fee Head
+                                            </th>
+                                            <th>
+                                                Actions
+                                            </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                        @*@if (ViewData["student"] != null)
+                            {*@
+                                        @if (Model != null)
+                                        {
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @*@Html.CheckBoxFor(m => m[i].Id, new { @class = "form-control input-sm", @style = "width:20px;height:20px;" })*@
+                                                        <input type="checkbox" name="StudentIds" value="@Model[i].Id" style="width:20px;height:20px;" onclick="ChangeCheckCkount(@i);" id="@("tableId"+i)">
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].RollNumber
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Name
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].FatherName
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Chalan
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Amount
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].IncrmentDate
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].IncrementAmount
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].HeadName
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("  ", "FeeIncrementHistoryDetail", "FeeIncrement", new { id = Model[i].Id }, new { style = "color: #31B0D5;font-size: 20px; margin-left: 10px", title = "View History", @class = "glyphicon glyphicon-th-list" })
+                                                        @*@Html.ActionLink("View History", "FeeIncrementHistoryDetail", "FeeIncrement", new { id = Model[i].Id }, new { style = "color: green;", title = "View History" })*@
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        @*}*@
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Revoke Last Increment" onclick="return RevokeIncrement()" name="SubmitLeaving" id="revokeIncrement" class="btn btn-squar"  />
+                                    <input type="submit" value="Apply Increment" onclick="return VerifyInputs()" name="SubmitLeaving" id="applyIncrement" class="btn btn-squar" />
+                                </div>
+                            </div>
+
+                            @*</form>*@
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+</div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+       {
+          if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to Apply incrmenet, please try again later.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           {
+               <text> showNotification('Increment is applied succesfully.', 'Success', 'Success') </text>
+           }
+           else if ((int)@ViewData["Error"] == 421)
+           {
+               <text> showNotification('Unable to revoke last incrmenet, please try again later.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 41)
+           {
+               <text> showNotification('Last Increment is revoked succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+
+    var checkCount = 0;
+    window.onload = function (e) {
+        checkCount = 0;
+        $("#classTable").DataTable({ paging: false });
+        populateErrors();
+
+        ShowSearchPanel(@(Model == null || Model.Count == 0 ? 0 : 1));
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        if (classId != 0) {
+            $("#classId").val(classId);
+        }
+        getSectionList();
+    }
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classId").val();
+        if (classId.length == 0) {
+            classId = 0;
+        }
+        GetClassSection(classId, 1, 'sectionId', 0, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id 
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+
+    function RevokeIncrement()
+    {
+        $('#isRevoke').val(1);
+        if(checkCount == 0)
+        {
+            showNotification('Cant proceed, No record is selected', 'Error', 'Error')
+            return false;
+        }
+
+        ConfirmAction('Are you sure, you want to revoke the Increment?', 'applyIncrement');
+        return false;
+    }
+
+    function ChangeCheckCkount(index)
+    {
+        if($("#tableId"+index).is(':checked') == true)
+        {
+            checkCount++;
+        }
+        else
+        {
+            checkCount--;
+        }
+    }
+
+
+    function VerifyInputs()
+    {
+        if(checkCount == 0)
+        {
+            showNotification('Cant proceed, No record is selected', 'Error', 'Error')
+            return false;
+        }
+        $('#isRevoke').val(0);
+        var amount = $("#txtAmount").val();
+        var percentage = $("#txtPercentage").val();
+
+        if((amount == 0 || amount == '' ) && (percentage == 0 || percentage == '' ))
+        {
+            showNotification('Please add amount or percetnage to add increment.', 'Error', 'Error')
+            return false;
+        }
+
+        if((amount > 0 || amount.length > 0 ) && (percentage > 0 || percentage.length > 0 ))
+        {
+            showNotification('Please add only one of amount or percetnage to add increment.', 'Error', 'Error')
+            return false;
+        }
+
+        ConfirmAction('Are you sure, you want to apply the Increment?', 'applyIncrement');
+        return false;
+    }
+
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbSelectAll").is(':checked') == true)
+        {
+            checkCount = rowCount;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, true);
+                //$("#tableId"+i).attr('checked', true);
+            }
+        }
+        else
+        {
+            checkCount = 0;
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("tableId"+i, false);
+
+                //$("#tableId"+i).attr('checked', false);
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+</script>
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@*@section Scripts {
+        @Scripts.Render("bundles/jqueryval")
+    }*@

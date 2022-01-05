@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Inaequo Payrolls </title>
+
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+          rel="stylesheet" type='text/css'>
+   
+
+    <link rel="stylesheet" href="~/vendors/Custom/SCSite.css" />
+    @Scripts.Render("~/bundles/SMSvendorScript")
+
+    @Scripts.Render("~/bundles/SMSvendorScript")
+
+    @Styles.Render("~/bundles/SMSvendors")
+    @Styles.Render("~/bundles/SMScss")
+
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/vendors/Custom/date-range-picker.js"></script>
+    <script src="~/vendors/Custom/jquery.disable-autofill.js"></script>
+
+</head>
+
+
+<body class="nav-md" style="overflow-y: hidden;background:#f9f9f9">
+
+    <div class="container body" style="background:#2a3f54;">
+        <div class="main_container">
+
+            <div class="col-md-3 left_col" style="height:auto;">
+                <div class="scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="/Home/Index" class="site_title" style="height:56px;"> <span>Inaequo Payrolls!</span></a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    @*<div class="profile clearfix">
+                        <div class="profile_pic" style="border-radius:50%;border: 2px solid white;width:40px;height:40px;margin-left:12px;margin-top:30px;">
+                            <i class="fa fa-user" style="font-size:25px;color:white;margin-left:8px;margin-top:4px;"></i>
+                        </div>
+                        <div class="profile_info">
+                            <span>Welcome,</span>
+                            <h2>@SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_NAME</h2>
+                        </div>
+                    </div>*@
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            @*<h3 style="margin-top:20px;margin-left:-9px;">General Features</h3>*@
+                            <ul class="nav side-menu">
+
+
+
+                                <li>
+                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS != null
+                                    && SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS.ToString().Contains("|Staff Handling|") == true)
+                                    {
+                                        <a><i class="fa fa-tasks"></i> Staff Handling <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+
+                                            <li>
+                                                <a>Staff <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|New Staff|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/Staff/Index/0">New Staff</a></li>
+                                                    }
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Search Staff|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/Staff/Search/0">Search Staff</a></li>
+                                                    }
+
+                                                </ul>
+                                            </li>
+
+
+
+                                            <li>
+                                                <a>Staff Salaries <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+
+                                                    
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Pay Salaries|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/StaffSalary/SingleStaffSalary">Pay Staff Salary</a></li>
+                                                    }
+                                                    
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Pay Salaries|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/StaffSalary">Paid Salaries</a></li>
+                                                    }
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Allownces|") == true)
+                                                    {
+                                                        <li><a href="~/StaffAllownce/Index/0">Allownces</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Allownces|") == true)
+                                                    {
+                                                        <li><a href="~/StaffHoliday/Index/0">Staff Holidays</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                            <li>
+                                                <a>Misc Withdraws <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|New Advance|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/Staff/Search/1">New Withdraw</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Search Advance|") == true)
+                                                    {
+                                                        <li><a href="~/StaffMiscWithdraw/SearchMiscWithdraw">Search Withdraw</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Search Advance|") == true)
+                                                    {
+                                                        <li><a href="~/StaffMiscWithdraw/InstantWithdraws">Instant Withdraws</a></li>
+                                                    }
+
+                                                </ul>
+                                            </li>
+
+                                            <li>
+                                                <a>Staff Advances <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|New Advance|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/Staff/Search/2">New Advance</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Search Advance|") == true)
+                                                    {
+                                                        <li><a href="~/StaffAdvances/SearchAdvances">Search Advance</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                            <li>
+                                                <a>Staff Attendance <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Staff Attendance|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/StaffAttendance/Index/0">Staff Attendance</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Staff Attendance Sheet|") == true)
+                                                    {
+                                                        <li><a href="~/StaffAttendanceAdjustment/Index/0">Attendance Adjustment</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                            <li>
+                                                <a>Staff Designation <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Designation Catagory|") == true)
+                                                    {
+                                                        <li class="sub_menu"><a href="~/DesignationCatagory/Index/0">Catagory</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Designation|") == true)
+                                                    {
+                                                        <li><a href="~/Designation/Index/0">Designation</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Staff Leaving|") == true)
+                                            {
+                                                <li><a href="~/Staff/StaffLeaving/0">Staff Leaving</a></li>
+                                            }
+
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Staff Reports|") == true)
+                                            {
+                                                <li><a href="~/StaffReport/ViewReport">Reports</a></li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+
+                                @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS != null
+            && SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS.ToString().Contains("|Finance Supervision|") == true)
+                                {
+                                    <li>
+                                        <a><i class="fa fa-bar-chart-o"></i> Finance Supervision <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Finance Reports|") == true)
+                                            {
+                                                <li><a href="~/FinanceReport/ViewReport">Reports</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+
+
+                            </ul>
+                        </div>
+
+
+                    </div>
+                    <!-- /sidebar menu -->
+
+
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu" style="width:100%;height:125%;display:table-cell;display:table;">
+                    <nav>
+                       
+                        <ul class="nav navbar-nav navbar-right">
+                           
+                            <li class="">
+                                <a href="" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-user" style="font-size:20px;"></i>
+                                    @SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_NAME
+                                    <span class="fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu">
+                                    <li><a href="~/User/ChangePassword"> <i class="fa fa-shield pull-right"></i> Change Password</a></li>
+                                    <li><a href="~/Login?sessionId=-59"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    <li><input type="submit" value="Reset Server Logs" onclick="ConfirmAction('Are you sure, you want to reset logs on server?', 'resetLogs')" id="resetLogs" name="Create" class="btn btn-danger" style="width:100%" /></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="col-md-10 right_col" style="margin-right:-30px;margin-top:-10px; padding-right:-30px">
+                <div class="container body-content">
+                    @RenderBody()
+
+                </div>
+            </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+                <div class="modal-dialog modal-sm" style="width:450px;margin-top:18%;">
+                    <div class="modal-content" style="border-radius: 0 !important;">
+                        <div class="modal-header" style="background-color:#151F2A;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="color:white;">×</span>
+                            </button>
+                            <label class="modal-title" id="myModalLabel" style="font-size:20px;color:white;">Confirm</label>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <p id="deleteText" style="font-size:15px;color:black;">You want to delete it?</p>
+                                <input type="text" id="ControllerName" hidden="hidden" />
+                                <input type="text" id="buttonId" hidden="hidden" />
+                                <input type="text" id="deleteIndex" hidden="hidden" />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer" style="height:60px;border-radius: 0 !important;">
+                            <button type="button" class="btn btn-info btn-lg" id="modal-btn-yes" onclick="DoDelete()" style="margin-top:-11px;"> <span class="glyphicon glyphicon-ok"></span> Yes</button>
+                            <button type="button" class="btn btn-dark btn-lg" id="modal-btn-no" onclick="DoHide()" style="margin-top:-11px;" autofocus> <span class="glyphicon glyphicon-remove"></span> No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert" role="alert" id="result"></div>
+
+        </div>
+    </div>
+
+    <script>
+        //window.onload = function (e) {
+        //    alert(1);
+        //}
+    </script>
+    <!-- Custom Theme Scripts -->
+    <script src="~/scripts/custom.min.js"></script>
+
+    <script>
+        $('#mi-modal').on('shown.bs.modal', function (e) {
+            $('#modal-btn-yes').focus();
+        });
+        //window.onload = function (e) {
+        //    if ($(".nav-md").height() > 850) {
+        //        $(".scroll-view").css({ 'height': ($(".nav-md").height() + 'px') });
+        //    }
+        //}
+    </script>
+</body>
+</html>
+
+<style>
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+        /*overflow-y: hidden;*/
+        /*overflow: scroll;*/
+    }
+</style>

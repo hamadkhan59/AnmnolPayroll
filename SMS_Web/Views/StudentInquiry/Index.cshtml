@@ -1,0 +1,744 @@
+﻿@model SMS_DAL.StudentInquiry
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Student Inquiry @((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "Edit" : "Create")</label>
+
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 5}) + "'");"
+                           class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div hidden="hidden">@Html.ValidationSummary(false)</div>
+
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div>
+                                        @Html.ValidationSummary()
+
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 2) ? "display:block;color:green;font-size:11px;" : "display:none" )>
+                                            Student is saved succesfully.
+                                        </label>
+
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                            Unable to Save Student.
+                                        </label>
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 3) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                            Unable to delete Student.
+                                        </label>
+                                        <label class="control-label" align="left" for="first-name"
+                                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:11px;" : "display:none")>
+                                            Student is deleted succesfully.
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>*@
+
+
+
+
+
+                        <!-- Bootstrap core JavaScript
+                        ================================================== -->
+                        <!-- Placed at the end of the document so the pages load faster -->
+
+                        <style>
+                            /*body {
+                                padding: 10px;
+                            }*/
+
+                            #exTab1 .tab-content {
+                                color: #73879c;
+                                background-color: white;
+                                padding: 5px 15px;
+                            }
+
+                            #exTab2 h3 {
+                                color: white;
+                                background-color: #428bca;
+                                padding: 5px 15px;
+                            }
+
+                            /* remove border radius for the tab */
+
+                            #exTab1 .nav-pills > li > a {
+                                border-radius: 0;
+                            }
+
+                            /* change border radius for the tab , apply corners on top*/
+
+                            #exTab3 .nav-pills > li > a {
+                                border-radius: 4px 4px 0 0;
+                            }
+
+                            #exTab3 .tab-content {
+                                color: white;
+                                background-color: #428bca;
+                                padding: 5px 15px;
+                            }
+
+                            .boxed {
+                                border: 1px solid #DDDDDD;
+                                margin-left: -15px;
+                                margin-right: -15px;
+                                height: 320px;
+                            }
+
+                            .nav-boxed {
+                                border: 1px solid #DDDDDD;
+                            }
+
+                            .padded-ends {
+                                padding-left: 20px;
+                                padding-right: 20px;
+                                /*margin-right:20px;*/
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Name <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control input-sm" })
+
+                                        </div>
+                                    </div>
+                                    
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Inquiry No
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            <input class="form-control input-sm" value="@ViewData["inquiryNumber"]" name="InquiryNumber" readonly />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        @Html.ActionLink("Class", "Index", "Class", new { id = 0 }, new { title = "Click to add new Class" })
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getSectionList()", id = "classId" })
+                                            
+
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Gender
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("GenderCode", (IEnumerable<SelectListItem>)ViewBag.GenderCode, new { @class = "form-control input-sm" })
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Nationality
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Nationality, new { @class = "form-control input-sm" })
+                                            
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Relegion
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("ReligionCode", (IEnumerable<SelectListItem>)ViewBag.ReligionCode, new { @class = "form-control input-sm" })
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Cast
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.Cast, new { @class = "form-control input-sm", @id = "campus" })
+                                            
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        B.Form No.
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.BFormNo, new { @class = "form-control input-sm", @id = "campus" })
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Inquiry Date <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.AdmissionDate, new { @type = "date", @class = "form-control input-sm", id = "admissionDate" })
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Session
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.DropDownList("SessionId", (IEnumerable<SelectListItem>)ViewBag.SessionId, new { @class = "form-control input-sm" })
+                                            
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Prospectus Fee
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.ProspectusFee, new { @class = "form-control input-sm", @id = "campus" })
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        Registeration Fee
+
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.RegisterationFee, new { @class = "form-control input-sm", @id = "campus" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+
+                                    <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                        DOB <span class="required" style="color:red;">*</span>
+                                    </label>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <div>
+                                            @Html.TextBoxFor(model => model.DateOfBirth, new { @type = "date", @class = "form-control input-sm", id = "dob" })
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group row">
+
+                                    @*<label class="control-label col-md-2 col-sm-2 col-xs-2" align="left" for="first-name" style="font-size: 11px;">
+                                            Upload Image<span class="required" style="color:red;">*</span>
+                                        </label>*@
+                                    <div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+
+
+                                            @{
+                    var imgSrc = "";
+                    if (Model != null && Model.StdImage != null)
+                    {
+                        var base64 = Convert.ToBase64String(Model.StdImage);
+                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                    }
+
+                    <img id="stdImage" src="@(Model != null && Model.StdImage != null ? imgSrc : "/user.jpg")" style="width:200px;height:200px;align-items:center" />
+}
+                                            <input class="img-show" type='file' id="imgInp" style="margin-top:20px;" onchange="readURL(this);" />
+                                        </div>
+                                        <!-- col ends here -->
+                                        <br />
+                                        <br />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="height:400px;">
+                                <div id="exTab1" class="container">
+                                    <ul class="nav nav-pills nav-tabs-justified">
+                                       
+                                        <li class="active nav-boxed">
+                                            <a href="#2a" data-toggle="tab">Parents Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#3a" data-toggle="tab">Address Info</a>
+                                        </li>
+                                        <li class="nav-boxed">
+                                            <a href="#4a" data-toggle="tab">Test Information</a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content clearfix">
+                                       
+                                        <div class="tab-pane active boxed" id="2a">
+                                            @*<h3>Content's background color is the same for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px;">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Father Name <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherName, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Occupation
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherOccupation, new { @class = "form-control input-sm" })
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    CNIC <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.FatherCNIC, new { @class = "form-control input-sm", @placeholder = "xxxxx-xxxxxxx-x" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#1 
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Contact_1, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#2
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Contact_2, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Email
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-sm", @placeholder = "some@example.com" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Mother Name 
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherName, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Mother Occupation 
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherOccupation, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Mother CNIC
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherCnic, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#1
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherContact1, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Contact#2
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.MotherContact2, new { @class = "form-control input-sm", @placeholder = "xxxx-xxxxxxx" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Guardian Name 
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardianName, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Guardian CNIC
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardinCnic, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Guardian Contact 
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.GuardinContact, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane boxed" id="3a">
+                                            @*<h3>@*We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>*@
+                                            <div class="form-group row padded-ends" style="margin-top:30px">
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                    Current Address <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                </div>
+                                                <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                    Permanent Address
+                                                </label>
+                                                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row padded-ends">
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                        Current Address <span class="required" style="color:red;">*</span>
+                                                    </label>*@
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.CurrentAddress, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                                @*<label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="last-name" style="font-size: 11px;">
+                                                        Permanent Address
+                                                    </label>*@
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <div>
+                                                        @Html.TextAreaFor(model => model.PermanentAddress, 3, 25, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+                                        </div>
+                                        
+                                        <div class="tab-pane boxed" id="4a">
+                                            <div class="form-group row padded-ends" style="margin-top:30px;">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Test Date
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.TestDate, new { @type = "date", @class = "form-control input-sm", id = "testDate" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Taken By
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.DropDownList("TakenBy", (IEnumerable<SelectListItem>)ViewBag.TakenBy, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Checked By
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.DropDownList("CheckedBy", (IEnumerable<SelectListItem>)ViewBag.CheckedBy, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Pass Percentage <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.PassPercentage, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Total Marks <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.TotalMarks, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Obtained Marks <span class="required" style="color:red;">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.TextBoxFor(model => model.ObtainedMarks, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row padded-ends">
+
+                                                <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                                    Status
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                                    <div>
+                                                        @Html.DropDownList("TestStatusID", (IEnumerable<SelectListItem>)ViewBag.TestStatus, new { @class = "form-control input-sm" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Parents Info</legend>
+                            </div>*@
+
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Address Info</legend>
+                            </div>*@
+
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Admission Pre Reqs</legend>
+                            </div>*@
+
+                        @*<div class="row" style="margin-top:30px;">
+                                <legend>Student Photo</legend>
+                            </div>*@
+
+
+
+                        @*<div class="ln_solid"></div>*@
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <div class="nav navbar-right">
+                                    <input type="submit" id="createBtn" value="Save" name="Create" class="btn  btn-squar navbar-right"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:none; " : "display:block;") />
+                                    <input type="submit" id="updateBtn" value="Save" name="Update" class="btn  btn-squar navbar-right"
+                                           style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;" : "display:none") />
+                                </div>
+                                <input type="submit" value="Print" name="Print" class="btn  btn-squar navbar-right"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:10px" : "display:none") />
+
+                                
+
+                            </div>
+                            </div>
+                        </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+    function populateErrors()
+    {
+            @if (!Html.ViewData.ModelState.IsValid)
+            {
+                <text> populateValidationErrors()  </text>
+            }
+
+          @if(ViewData["Error"] != null)
+          {
+              if ((int)@ViewData["Error"] == 2)
+              {
+                  <text> showNotification('Student Inquiry is saved succesfully.', 'Success', 'Success') </text>
+              }
+              else  if ((int)@ViewData["Error"] == 230)
+              {
+                  <text> showNotification(' Student Admission Charges is saved succesfully.', 'Success', 'Success') </text>
+              }
+          else if ((int)@ViewData["Error"] == 11)
+              {
+                  <text> showNotification(' Student Inquiry is already exist', 'Error', 'Error') </text>
+              }
+          else if ((int)@ViewData["Error"] == 1)
+              {
+                  <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+              }
+          else if ((int)@ViewData["Error"] == 420)
+              {
+                  <text> showNotification('Unable to Save Student Inquiry.', 'Error', 'Error') </text>
+              }
+          else if ((int)@ViewData["Error"] == 520)
+          {
+              <text> showNotification('No session is created for school, so create a session and then start your proceedings', 'Error', 'Error') </text>
+          }
+          else if ((int)@ViewData["Error"] == 3)
+              {
+                  <text> showNotification('Unable to delete Student Inquiry.', 'Error', 'Error') </text>
+              }
+          else if ((int)@ViewData["Error"] == 4)
+              {
+                  <text> showNotification('Student Inquiry is deleted succesfully.', 'Success', 'Success') </text>
+              }
+          }
+    }
+
+    window.onload = function (e) {
+        populateErrors();
+        //resetSearch();
+
+        var dob = '@((Model == null || Model.DateOfBirth == null) ? DateTime.Now.ToString("yyyy-MM-dd") : Model.DateOfBirth.Value.ToString("yyyy-MM-dd"))'
+        var admissionDate = '@((Model == null || Model.AdmissionDate == null) ? DateTime.Now.ToString("yyyy-MM-dd") : Model.AdmissionDate.Value.ToString("yyyy-MM-dd"))'
+        $('#dob').val(dob);
+        $('#admissionDate').val(admissionDate);
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#testDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+
+    }
+
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function UploadImage() {
+        debugger;
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: AppDetail() + "/StudentInquiry/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                return true;
+            });
+
+            return true;
+        }
+        else {
+            return true;
+        }
+
+    }
+
+</script>

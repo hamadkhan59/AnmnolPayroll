@@ -1,0 +1,450 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<style>
+    .tile {
+        color: white;
+        margin-right: 5px;
+        border-radius: 3px;
+        height: 100px;
+        width: 22.5%;
+        background-color: #2A3F54;
+    }
+
+    .tile-div {
+        width: 110%;
+    }
+
+    .tileHeading {
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+<div role="main">
+    <div class="row top_tiles" style="margin: 0px 0 0 0;">
+
+        <div class="x_panel">
+            <div class="sc_panel_header x_title">
+
+
+                <div class="col-md-10">
+                    <h2 class="nav navbar-left control-label" align="left">Fee Detail Summary</h2>
+                </div>
+
+            </div>
+
+            <div class="x_content">
+                <div class="row tile-div">
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile">
+                        <h5 id="FeePaidToday" style="font-weight:bold;font-size:20px;margin-top:15px;">0 PKR</h5>
+                        <p style="color:#17a2b8;margin-top:25px;font-weight:bold"> <i class="fa fa-building-o" aria-hidden="true" style="font-size:25px;color:#17a2b8;"></i> Paid Today </p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile">
+                        <h5 id="TotalPaid" style="font-weight:bold;font-size:20px;margin-top:15px;">0 PKR</h5>
+                        <p style="color:#28a745;margin-top:25px;font-weight:bold"><i class="fa fa-sort-amount-desc" style="font-size:25px;color:#28a745"></i> Total Paid</p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile">
+                        <h5 id="TotalUnpaid" style="font-weight:bold;font-size:20px;margin-top:15px;">0 PKR</h5>
+                        <p style="color:#dc3545;margin-top:25px;font-weight:bold"> <i class="fa fa-pie-chart" style="font-size:25px;color:#dc3545"></i> Pending</p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile">
+                        <h5 id="Receivable" style="font-weight:bold;font-size:20px;margin-top:15px;">0 PKR</h5>
+                        <p style="color:orange;margin-top:25px;font-weight:bold"> <i class="fa fa-money" style="font-size:25px;color:orange"></i> Total Receivable</p>
+                    </div>
+
+                </div>
+                </div>
+        </div>
+            </div>
+
+    
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="dashboard_graph x_panel">
+                <div class="row x_title sc_panel_header_lg">
+                    <div class="col-md-5">
+                        <h2>Paid Fee Details Month/Day Wise</h2>
+                    </div>
+
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                        Search
+                    </label>
+
+                    <div class="col-md-4">
+                        
+                        <div id="feeStatsDatePicker" class="pull-right" style="color:black;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            <span style="color:black">December 30, 2018 - January 28, 2020</span> <b class="caret"></b>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <select onchange="onViewChanged()" id="view" style="color:black;background: #fff; cursor: pointer; padding: 6px 20px; border: 1px solid #ccc" class="pull-right">
+                            <option value="month">Month View</option>
+                            <option value="day">Day View</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="x_content">
+                    <div class="demo-container" style="height:250px">
+                        <div id="FeeDetails" class="demo-placeholder" style="width: 100%; height:250px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="dashboard_graph x_panel">
+                <div class="row x_title sc_panel_header_lg">
+                    <div class="col-md-7">
+                        <h2>Paid Fee Details Class Wise</h2>
+                    </div>
+
+                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:11px;" align="right" for="first-name">
+                        Search
+                    </label>
+
+                    <div class="col-md-4">
+                        <div id="feeDetailsDatePicker" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            <span style="color:black">December 30, 2018 - January 28, 2020</span> <b class="caret"></b>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="demo-container" style="height:350px;margin-top:10px;">
+                            <div class="demo-placeholder" style="width: 100%; height:350px;">
+                                <div class="row">
+                                    <div id="FeeDetailsByStatus" class="col-lg-4"></div>
+                                    <div id="FeeDetailsByClass" class="col-lg-4"></div>
+                                    <div id="FeeDetailsBySection" class="col-lg-4"></div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+        <!-- /page content -->
+
+    </div>
+
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+        <link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+        <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script>
+            $(document).ready(function () {
+                ShowFeeDetailsByStatus(null, null);
+                showFeeSubmissionDetails(null, null);
+                InitializeDatePicker('feeStatsDatePicker', showFeeSubmissionDetails);
+                InitializeDatePicker('feeDetailsDatePicker', ShowFeeDetailsByStatus);
+            });
+
+            var from = null; var to = null; var view = "month";
+            function onViewChanged() {
+                view = $("#view").val();
+                showFeeSubmissionDetails(from, to, view)
+            }
+
+            function ShowFeeDetailsByStatus(from, to) {
+
+                ShowFeeDetailsByClass(from, to, 3);
+                var options = {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        renderTo: 'FeeDetailsByStatus',
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Fee Details'
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} PKR<br> {point.percentage:.1f}%<br>total: {point.total} PKR</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+
+                    series: []
+                };
+
+                var series1 = {
+                    name: 'Staff',
+                    colorByPoint: true,
+                    data: [],
+                    point: {
+                        events: {
+                            click: function (event) {
+                                ShowFeeDetailsByClass(from, to, this.id);
+                            }
+                        }
+                    }
+                };
+
+                $.getJSON(AppDetail() + "/ChalanDetail/GetFeeDetailsByStatus?from=" + from + "&to=" + to, null, function (data) {
+                    var Pending = {};
+                    Pending.name = 'Pending';
+                    Pending.y = data.PendingFee;
+                    Pending.id = 1;
+                    series1.data.push(Pending);
+
+                    var UnpaidFee = {};
+                    UnpaidFee.name = 'Unpaid';
+                    UnpaidFee.y = data.UnpaidFee;
+                    UnpaidFee.id = 2;
+                    series1.data.push(UnpaidFee);
+
+                    var PaidFee = {};
+                    PaidFee.name = 'Paid';
+                    PaidFee.y = data.PaidFee;
+                    PaidFee.id = 3;
+                    series1.data.push(PaidFee);
+
+                    options.series = [];
+                    options.series.push(series1);
+                    chart = new Highcharts.Chart(options);
+
+                })//end json
+
+
+            }
+
+            function ShowFeeDetailsByClass(from, to, status) {
+                var options = {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        renderTo: 'FeeDetailsByClass',
+                        type: 'pie'
+                    },
+                    title: {
+                        text: (status == 1 ? 'Pending' : status == 2 ? 'Unpaid' : 'Paid') + ' Fee Details By Class'
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} PKR<br> {point.percentage:.1f}%<br>total: {point.total} PKR</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+
+                    series: []
+                };
+
+                var series1 = {
+                    name: 'Student',
+                    colorByPoint: true,
+                    data: [],
+                    point: {
+                        events: {
+                            click: function (event) {
+                                ShowFeeDetailsBySection(this.from, this.to, this.status, this.classId);
+                            }
+                        }
+                    }
+                };
+
+                $.getJSON(AppDetail() + "/ChalanDetail/GetFeeDetailsByClassSection?from=" + from + "&to=" + to + "&status=" + status, null, function (data) {
+                    if (data.length < 1) {
+                        ShowFeeDetailsBySection(from, to, status, 0);
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        var tempObj = {};
+                        tempObj.name = data[i].ClassName;
+                        tempObj.y = data[i].Fee;
+                        tempObj.status = data[i].Status;
+                        tempObj.from = data[i].From;
+                        tempObj.to = data[i].To;
+                        tempObj.sectionId = data[i].SectionId;
+                        tempObj.classId = data[i].ClassId;
+                        series1.data.push(tempObj);
+
+                        if (i == 0) {
+                            ShowFeeDetailsBySection(from, to, status, data[i].ClassId);
+                        }
+                    }
+
+                    options.series = [];
+                    options.series.push(series1);
+                    chart = new Highcharts.Chart(options);
+
+                })//end json
+
+            }
+
+            function ShowFeeDetailsBySection(from, to, status, classId) {
+                var options = {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        renderTo: 'FeeDetailsBySection',
+                        type: 'pie'
+                    },
+                    title: {
+                        text: (status == 1 ? 'Pending' : status == 2 ? 'Unpaid' : 'Paid') + ' Fee Details By Section'
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} PKR<br> {point.percentage:.1f}%<br>total: {point.total} PKR</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+
+                    series: []
+                };
+
+                var series1 = {
+                    name: 'Student',
+                    colorByPoint: true,
+                    data: [],
+                    point: {
+                        events: {
+                            click: function (event) {
+                                window.location.href = AppDetail() + '/ChalanDetail/CreateFilteredChalanSheet?classId=' + this.classId + "&sectionId=" + this.sectionId + "&feeStatus=" + status + "&from=" + from + "&to=" + to;
+                            }
+                        }
+                    }
+                };
+
+                $.getJSON(AppDetail() + "/ChalanDetail/GetFeeDetailsByClassSection?from=" + from + "&to=" + to + "&status=" + status + "&classId=" + classId, null, function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var tempObj = {};
+                        tempObj.name = data[i].ClassName + " " + data[i].SectionName;
+                        tempObj.y = data[i].Fee;
+                        tempObj.status = data[i].Status;
+                        tempObj.from = data[i].From;
+                        tempObj.to = data[i].To;
+                        tempObj.sectionId = data[i].SectionId;
+                        tempObj.classId = data[i].ClassId;
+                        series1.data.push(tempObj);
+                    }
+
+                    options.series = [];
+                    options.series.push(series1);
+                    chart = new Highcharts.Chart(options);
+
+                })//end json
+
+            }
+
+            function showFeeSubmissionDetails(_from, _to) {
+                from = _from;
+                to = _to;
+                var options = {
+                    chart: {
+                        renderTo: 'FeeDetails',
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Deposited Fee By ' + view
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} PKR {series.name} <br>Total: {point.total} PKR</b>'
+                    },
+                    xAxis: {
+                        title: {
+                            text: 'Date'
+                        },
+                        categories: []
+                    },
+                    yAxis: [{ //--- Primary yAxis
+                        title: {
+                            text: 'Fee'
+                        }
+                    }
+                    ],
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+
+                    series: [
+                    ],
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                            chartOptions: {
+                                legend: {
+                                    layout: 'horizontal',
+                                    align: 'center',
+                                    verticalAlign: 'bottom'
+                                }
+                            }
+                        }]
+                    },
+                };
+
+                var feeDetailChart = null;
+                $.getJSON(AppDetail() + "/Home/GetFeeDetails?from=" + from + "&to=" + to + "&view=" + view, null, function (response) {
+                    var paid = {
+                        name: 'Paid',
+                        data: []
+                    };
+
+                    var pending = {
+                        name: 'Pending',
+                        data: []
+                    };
+
+                    $("#FeePaidToday").html(response.PaidToday.toLocaleString() + " PKR");
+                    $("#TotalPaid").html(response.PaidFee.toLocaleString() + " PKR");
+                    $("#TotalUnpaid").html(response.UnpaidFee.toLocaleString() + " PKR");
+                    $("#Receivable").html(response.Receivable.toLocaleString() + " PKR");
+                    options.xAxis.categories = [];
+                    for (var i = 0; i < response.FeeByDate.length; i++) {
+                        if (view == "month") {
+                            options.xAxis.categories.push(response.FeeByDate[i].Month);
+                        } else {
+                            options.xAxis.categories.push(moment(response.FeeByDate[i].Date).format("DD/MM/YYYY"));
+                        }
+                        paid.data.push(response.FeeByDate[i].DepositedFeeAmount);
+                        pending.data.push(response.FeeByDate[i].PendingFeeAmount);
+                    }
+                    options.series.push(paid);
+                    options.series.push(pending);
+                    feeDetailChart = new Highcharts.Chart(options);
+                })//end json
+            }
+        </script>

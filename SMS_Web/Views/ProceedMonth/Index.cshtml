@@ -1,0 +1,168 @@
+﻿@model SMS_DAL.ViewModel.MonthDetailModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    .tile {
+        color: white;
+        margin-right: 5px;
+        border-radius: 3px;
+        height: 100px;
+        width: 22.5%;
+        background-color: #2A3F54;
+    }
+
+    .tile-div {
+        width: 110%;
+    }
+
+    .tileHeading {
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">@Model.Month Payment Detail</label>
+                
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 18}) + "'");"
+                            class="btn sc_help_btn btn-xs" />
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <div class="form-group row tile-div">
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" >
+                        <h5 id="TotalPaid" class="tileHeading">
+                        @Model.TotalReceived.ToString("N0") PKR
+                        </h5>
+                        <p style="color:#28a745;margin-top:25px;font-weight:bold"><i class="fa fa-sort-amount-desc" style="font-size:25px;color:#28a745"></i> Total Paid</p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" >
+                        <h5 id="TotalUnpaid" class="tileHeading">
+
+                            @Model.TotalPending.ToString("N0") PKR
+                        </h5>
+                        <p style="color:#dc3545;margin-top:25px;font-weight:bold"> <i class="fa fa-pie-chart" style="font-size:25px;color:#dc3545"></i> Pending</p>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 tile" >
+                        <h5 id="Receivable" class="tileHeading">
+                            @Model.TotalAmount.ToString("N0") PKR
+                        </h5>
+                        <p style="color:orange;margin-top:25px;font-weight:bold"> <i class="fa fa-money" style="font-size:25px;color:orange"></i> Total Receivable</p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Proceed Current Month</label>
+                
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm(Html.BeginForm("ProceedMonth", "ProceedMonth", FormMethod.Post, new { enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Year
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("YearId", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", id = "yearIdSearch" })
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Month
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("MonthId", (IEnumerable<SelectListItem>)ViewBag.MonthId, new { @class = "form-control input-sm", id = "monthIdSearch" })
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-12" style="margin-top:-2px;">
+                                <div class="form-group">
+                                    <div class="nav navbar-left">
+                                        <input type="submit" value="Proceed Month" id="submitBtn" onclick="return ConfirmAction('Are you sure, you want to proceed selected month challan?', 'submitBtn');" name="Search" class="btn btn-squar" />
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 2)
+            {
+                <text> showNotification('Month is proceeded successfully.', 'Success', 'Success') </text>
+            }
+            else if ((int)@ViewData["Error"] == 10)
+            {
+                <text> showNotification('Selected month is already proceeded.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 420)
+            {
+                <text> showNotification('Unable to proceed seelected month.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 515)
+            {
+                <text> showNotification('No Fine configuration is defined, please defince configuration to Proceed Month.', 'Error', 'Error') </text>
+            }
+        }
+    }
+
+    window.onload = function (e) {
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        $("#monthIdSearch").get(0).selectedIndex = month;
+        populateErrors();
+    }
+</script>

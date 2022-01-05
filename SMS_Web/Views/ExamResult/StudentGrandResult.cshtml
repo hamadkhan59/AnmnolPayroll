@@ -1,0 +1,293 @@
+﻿@model List<string>
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("CreatePdfStudentGrandResult", "ExamResult", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @*@Html.ValidationSummary(true)*@
+    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Student Detail</label>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+        
+
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Roll No <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Remarks" class="form-control input-sm" readonly="readonly" value="@(((SMS_DAL.Student)ViewData["student"]).RollNumber)" />
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Remarks" class="form-control input-sm" readonly="readonly" value="@(((SMS_DAL.Student)ViewData["student"]).Name)" />
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Father Name <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Remarks" class="form-control input-sm" readonly="readonly" value="@(((SMS_DAL.Student)ViewData["student"]).FatherName)" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Remarks" class="form-control input-sm" readonly="readonly" value="@(((SMS_DAL.ViewModel.ClassSectionModel)ViewData["classModel"]).ClassName)" />
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="Remarks" class="form-control input-sm" readonly="readonly" value="@(((SMS_DAL.ViewModel.ClassSectionModel)ViewData["classModel"]).SectionName)" />
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Remarks
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" name="teacherRemarks" class="form-control input-sm" id="teacherRemarks" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                </label>
+                                <div>
+                                    <input type="hidden" class="custom-control-input" name="AutoRemarks" value="0" style="width:20px;height:20px;" id="txtAutoRemarks">
+                                    <input type="checkbox" style="width:20px;height:20px;" onclick="SetRemarksValue()" id="autoRemakrs" name="vehicle1" value="Bike">
+                                    <label for="vehicle1"> Include Auto Remarks</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Create Pdf" name="Create" class="btn btn-squar" onclick="return validateTeacherRemarks()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Send Sms" name="CreatePdf" class="btn btn-squar"
+                                       onclick="location.href=AppDetail() + '/ExamResult/SendSmsStudentDetailTranscript?teacherRemarks='+$('#teacherRemarks').val()+'&AutoRemarks=' + $('#txtAutoRemarks').val() +'&IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Detailed Transcript" name="CreatePdf" class="btn btn-squar"
+                                       onclick="location.href=AppDetail() + '/ExamResult/CreatePdfStudentDetailTranscript?teacherRemarks='+$('#teacherRemarks').val()+'&AutoRemarks=' + $('#txtAutoRemarks').val() +'&IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Summarize Transcript" name="CreatePdf" class="btn btn-squar"
+                                       onclick="location.href=AppDetail() + '/ExamResult/CreatePdfStudentTranscript?teacherRemarks='+$('#teacherRemarks').val()+'&AutoRemarks=' + $('#txtAutoRemarks').val() +'&IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right" style="margin-right:10px;">
+                                <div>
+                                    <input type="date" name="IssuedDate" class="form-control input-sm" id="issuedDate" />
+                                </div>
+                            </div>
+
+                            <div class="nav navbar-right" style="margin-right:10px;">
+                                <label class="control-label" style="font-size: 11px;" align="right" for="first-name">
+                                    Issued Date
+                                </label>
+                            </div>
+                        </div>
+                        @*</fieldset>*@
+                        @*</form>*@
+                        @*}*@
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+
+    function populateErrors()
+    {
+@if(ViewData["Error"] != null)
+{
+    if ((int)@ViewData["Error"] == 2)
+    { 
+        <text> showNotification('Marks Sheet is saved succesfully.', 'Success', 'Success') </text>
+    }
+else if ((int)@ViewData["Error"] == 11)
+    { 
+        <text> showNotification('Fee Head is already added to Chalaln.', 'Error', 'Error') </text>
+    }
+else if ((int)@ViewData["Error"] == 420)
+    { 
+        <text> showNotification('Unable to Create Class Sheet.', 'Error', 'Error') </text>
+    }
+else if ((int)@ViewData["Error"] == 100)
+    { 
+        <text> showNotification('Total Exams perecentage is exceding from 100.', 'Error', 'Error') </text>
+    }
+else if ((int)@ViewData["Error"] == 3)
+    { 
+        <text> showNotification('Unable to delete Exam.', 'Error', 'Error') </text>
+    }
+else if ((int)@ViewData["Error"] == 4)
+    { 
+        <text> showNotification('Exam is deleted succesfully.', 'Success', 'Success') </text>
+    }
+}
+    }
+
+            window.onload = function (e) {
+                populateErrors();
+
+                var d = new Date();
+                var month = d.getMonth();
+                var year = d.getFullYear();
+                DisplayGrandResult();
+                PopulateGridConfigData();
+                $('#issuedDate').val('@DateTime.Now.ToString("yyyy-MM-dd")');
+            }
+
+            function DisplayGrandResult() {
+                $("#ClassTable").html('');
+                @if(Model != null)
+                {
+
+                    foreach (var item in (List<string>)Model)
+                    {
+                        <text>
+                        //IHtmlString str = new HtmlString(@item);
+                        $("#ClassTable").append('@Html.Raw(item)');
+                        </text>
+                    }
+                }
+            }
+
+
+            function PopulateGridConfigData()
+            {
+                var tables = document.getElementsByTagName("table");
+                for (var j = 0; j < tables.length; j++)
+                {
+                    var table = tables[j];
+                    var rows = table.getElementsByTagName('tr');
+                    var count = rows.length - 1;
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        if((string)ViewData[SMS_Web.Helpers.SysConfig.EC_GRADE_FLAG] == "No")
+                        {
+                            <text>
+                    show_hide_Cell(3, count - 1, false, table);
+                            </text>
+                        }
+
+                        if((string)ViewData[SMS_Web.Helpers.SysConfig.EC_POSITION_FLAG] == "No")
+                        {
+                            <text>
+                    show_hide_Cell(2, count, false, table);
+                    show_hide_Cell(3, count, false, table);
+                            </text>
+                        }
+
+                        if((string)ViewData[SMS_Web.Helpers.SysConfig.EC_PERCENTAGE_FLAG] == "No")
+                        {
+                            <text>
+                    show_hide_Cell(0, count, false, table);
+                    show_hide_Cell(1, count, false, table);
+                            </text>
+                        }
+                    }
+                }
+            }
+
+            function show_hide_Cell(col_no, row_no, do_show, tbl) {
+                var rows = tbl.getElementsByTagName('tr');
+                var cols = rows[row_no].children;
+                var cell = cols[col_no];
+                if (cell.tagName == 'TD') cell.style.display = do_show ? 'block' : 'none';
+            }
+
+            function validateTeacherRemarks() {
+                var teacherRemarks = $("#teacherRemarks").val();
+                var autoRemakrs = $("#txtAutoRemarks").val();
+                if(autoRemakrs == 0)
+                {
+                    if (teacherRemarks.length > 0)
+                        return true;
+                    else {
+                        //$("#inputLabel").text("Please enter teacher remarks");
+                        showNotification('Please enter teacher remarks.', 'Error', 'Error')
+                        return false;
+                    }
+                }
+            }
+
+            function SetRemarksValue()
+            {
+                if($("#autoRemakrs").is(':checked') == true)
+                {
+                    $("#txtAutoRemarks").val(1);
+                }
+                else
+                {
+                    $("#txtAutoRemarks").val(0);
+                }
+            }
+
+        </script>
+
+
+
+        @*<div class="row">*@
+        @*<div class="col-md-12 col-sm-12 col-xs-12">*@
+        @*@using (Html.BeginForm("SaveMarksSheet", "ExamResult", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <fieldset>*@
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" id="ClassTable">
+            </div>
+        </div>
+        
+    </fieldset>
+
+}

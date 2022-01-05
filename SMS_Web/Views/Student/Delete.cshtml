@@ -1,0 +1,242 @@
+﻿@model SMS_DAL.Student
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<fieldset>
+    <legend>Student</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RollNumber)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RollNumber)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FatherName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FatherName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DateOfBirth)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateOfBirth)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AdmissionDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AdmissionDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Contact_1)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Contact_1)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CurrentAddress)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CurrentAddress)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Relegion.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Relegion.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Gender.Gender1)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Gender.Gender1)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ImageLocation)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ImageLocation)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SrNo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SrNo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FatherOccupation)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FatherOccupation)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Nationality)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Nationality)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Cast)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Cast)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FatherCNIC)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FatherCNIC)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Contact_2)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Contact_2)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PermanentAddress)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PermanentAddress)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LeavingDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LeavingDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SessionYear)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SessionYear)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.MotherName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MotherName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.MotherContact1)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MotherContact1)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.MotherContact2)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MotherContact2)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ChildPictures)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ChildPictures)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CNIC)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CNIC)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.BirthCertificate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.BirthCertificate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SchoolLeaving)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SchoolLeaving)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Email)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Email)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AdmissionType1.AdmissionType1)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AdmissionType1.AdmissionType1)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PreviousCampus)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PreviousCampus)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LeavingReason)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LeavingReason)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ClearDues)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClearDues)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ClassSection.ClassSectionId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClassSection.ClassSectionId)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

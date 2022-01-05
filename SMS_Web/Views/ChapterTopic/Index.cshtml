@@ -1,0 +1,254 @@
+﻿@model SMS_DAL.ViewModel.ChapterTopicViewModel
+@{
+    ViewBag.Title = "Subject Chapters";
+}
+
+
+<div>
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+
+            <div class="x_panel">
+                <div class="x_title sc_panel_header">
+                    <label class="nav navbar-left control-label sc_panel_label" align="left">Subject Chapters</label>
+
+                </div>
+
+                <div class="x_content">
+
+                    <label class="nav navbar-left control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                        Class
+                    </label>
+                    <div class="nav navbar-left col-md-2 col-sm-2 col-xs-12">
+                        <div>
+                            @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "SearchSectionList()", id = "classIdList" })
+
+                        </div>
+                    </div>
+
+                    <label class="nav navbar-left control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                        Section
+                    </label>
+                    <div class="nav navbar-left col-md-2 col-sm-2 col-xs-12">
+                        <div>
+                            @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control input-sm", onchange = "getSubjectList()", id = "sectionIdList" })
+
+                        </div>
+                    </div>
+
+                    <label class="nav navbar-left control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                        Class Subject
+                    </label>
+                    <div class="nav navbar-left col-md-2 col-sm-2 col-xs-12">
+                        <div>
+                            @Html.DropDownList("ClassSubjectId", (IEnumerable<SelectListItem>)ViewBag.SubjectId, new { @class = "form-control input-sm", id = "classSubjectList" })
+
+                        </div>
+                    </div>
+
+                    <input type="submit" id="search" value="Search" onclick="searchChapters()" style="margin-right:10px;" class="btn btn-sm btn-info btn-squar navbar-left" />
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="x_panel">
+    <div class="x_title sc_panel_header">
+        <label class="nav navbar-left control-label sc_panel_label" align="left">Chapters Detail </label>
+    </div>
+
+    <div class="x_content">
+
+@using (Html.BeginForm("UpdateChapters", "ChapterTopic", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+        <div class="form-group">
+            <div hidden="hidden">
+                @Html.TextBox("viewModel.RegisterCourseId", Model.RegisterCourseId)
+                @Html.TextBox("viewModel.ClassId", Model.ClassId)
+                @Html.TextBox("viewModel.SectionId", Model.SectionId)
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="classTable">
+                    <thead>
+                        <tr class="headings">
+                            <th>
+                                <label>Name</label>
+                            </th>
+                            <th>
+                                <label>Description</label>
+                            </th>
+                            <th>
+                                <label>Is Covered?</label>
+
+                                @*<input type="checkbox" id="cbAttendanceAll" class="form-control input-sm" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />*@
+                            </th>
+                            <th>
+                                <label>Actions</label>
+                            </th>
+                        </tr>
+                    </thead>
+                   
+                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                        @for (int k = 0; k < Model.SubjectChapters.Count; k++)
+                        {
+                            <div hidden="hidden">
+                                @Html.TextBox("viewModel.SubjectChapters[" + @k + "].Id", Model.SubjectChapters[k].Id)
+                                @Html.TextBox("viewModel.SubjectChapters[" + @k + "].RegisterCourseId", Model.SubjectChapters[k].RegisterCourseId)
+                                @Html.TextBox("viewModel.SubjectChapters[" + @k + "].RegisterCourse", Model.SubjectChapters[k].RegisterCourse)
+                            </div>
+                                                            <tr>
+                                                                <td>
+                                                                    @Html.TextBox("viewModel.SubjectChapters[" + @k + "].Name", Model.SubjectChapters[k].Name.Trim(), new { @type = "text", @class = "form-control input-sm" })
+
+                                                                </td>
+                                                                <td>
+                                                                    @Html.TextArea("viewModel.SubjectChapters[" + @k + "].Description", Model.SubjectChapters[k].Description, 1, 25, new { @type = "text", @class = "form-control input-sm" })
+                                                                </td>
+                                                                <td>
+                                                                    @Html.CheckBox("viewModel.SubjectChapters[" + @k + "].IsCovered", Model.SubjectChapters[k].IsCovered, new { @id = "isCovered_" + Model.SubjectChapters[k].Id, style = "margin:0 0 0 0; height: 25px", @class = "form-control input-sm" })
+                                                                </td>
+                                                                <td>
+                                                                    @Html.ActionLink("  ", "Topics", "ChapterTopic", new { chapterId = Model.SubjectChapters[k].Id, registerCourseId = Model.RegisterCourseId, classId = Model.ClassId, sectionId = Model.SectionId }, new { style = "color: black;font-size: 15px; margin-left: 10px", title = "View Topics", @class = "glyphicon glyphicon-eye-open" })
+                                                                    @Html.ActionLink("  ", "Delete", new { id = Model.SubjectChapters[k].Id }, new
+                                                               {
+                                                                   onclick = "return GenericConfirmDelete('Topics of " + Model.SubjectChapters[k].Name.Trim() +
+            " will also be deleted. Are you sure to delete this Chapter?',  '/ChapterTopic/Delete?id=" + Model.SubjectChapters[k].Id + "&registerCourseId=" + Model.SubjectChapters[k].RegisterCourseId
+            + "&classId=" + Model.ClassId
+            + "&sectionId=" + Model.SectionId + "');",
+                                                                   style = "color: darkred;font-size: 15px; margin-left:10px",
+                                                                   title = "Delete",
+                                                                   @class = "glyphicon glyphicon-trash"
+                                                               })
+                                                                </td>
+                                                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <input type="number" id="IncreaseBy" value="1" min="1" style="margin-right:10px; height: 30px; width: 50px" />
+        <input type="button" value="Increase By" onclick="increaseBy()" style="margin-right:10px;" class="btn btn-sm btn-info btn-squar navbar-left" />
+
+        <input type="submit" id="UpdateChapters" value="Save" name="UpdateChapters" style="margin-right:10px;" class="btn btn-sm btn-info btn-squar navbar-right" />
+}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        populateErrors();
+        SearchSectionList();
+        getSubjectList();
+    });$('#classTable').DataTable({searching : false, paging : false});
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+            {
+                if ((int)@ViewData["Error"] == 0)
+                {
+                    <text> showNotification('Record(s) saved succesfully.', '', 'Success') </text>
+                }
+                if ((int)@ViewData["Error"] == 1)
+                {
+                    <text> showNotification('Record deleted succesfully.', '', 'Success') </text>
+                }
+                else if ((int)@ViewData["Error"] == 400)
+                {
+                    <text> showNotification('Unable to Submit Changes.', '', 'Error') </text>
+                }
+                else if ((int)@ViewData["Error"] == 401)
+                {
+                    <text> showNotification('Increase by should be greater than zero.', '', 'Error') </text>
+                }
+                else if ((int)@ViewData["Error"] == 402)
+                {
+                    <text> showNotification('Cannot delete the chapter, please try to contact the administrator.', '', 'Error') </text>
+                }
+            }
+    }
+
+
+    function increaseBy(){
+        var IncreaseBy = $("#IncreaseBy").val();
+        var classId = $("#classIdList").val();
+        var sectionId = $("#sectionIdList").val();
+        var classSubjectListId = $("#classSubjectList").val();
+        if (classSubjectListId == null) {
+            showNotification('Please select the class subject to increase the chapters.', '', 'Error');
+        } else {
+            if (IncreaseBy < 1) {
+                showNotification('Please enter increase by value greater than zero.', '', 'Error');
+            } else {
+                window.location.href = AppDetail() + "/ChapterTopic/IncreaseChapters?registerCourseId=" + classSubjectListId + "&increaseBy=" + IncreaseBy + "&classId=" + classId + "&sectionId=" + sectionId;
+            }
+        }
+    }
+
+    function searchChapters(){
+        var classId = $("#classIdList").val();
+        var sectionId = $("#sectionIdList").val();
+        var classSubjectListId = $("#classSubjectList").val();
+        if (classSubjectListId == null) {
+            showNotification('Please select the class subject to view the chapters.', '', 'Error');
+        } else {
+            window.location.href = AppDetail() + "/ChapterTopic/Index?registerCourseId="+classSubjectListId+"&classId="+ classId +"&sectionId="+ sectionId;
+        }
+    }
+
+    function SearchSectionList() {
+        var classId = $("#classIdList").val();
+        //alert(classId);
+        $("#sectionIdList").html("");
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+        if(classId == '')
+        {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+            $("#sectionIdList").append('<option value='+id+'>'+name+'</option>');
+        }
+        else if(classId == @(item.ClassId))
+            {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+        $("#sectionIdList").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+        }
+
+    getSubjectList();
+    }
+
+    function getSubjectList() {
+        var classId = $("#classIdList").val();
+        var sectionId = $("#sectionIdList").val();
+        $('#classSubjectList').html("");
+        debugger;
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.RegisterCourseModel>)ViewData["allCourses"])
+        {
+            <text>
+            if(classId == '' || classId == '0' || classId == @(item.ClassId))
+            {
+                if(sectionId == '' || sectionId == '0' || sectionId == @(item.SectionId))
+                {
+                    $("#classSubjectList").append('<option value=@(item.RegisterCourseId)>@(item.SubjectName)</option>');
+                }
+                else{
+                    $("#classSubjectList").append('<option value=@(item.RegisterCourseId)>@(item.SubjectName)</option>');
+                }
+            }
+            </text>
+        }
+    }
+</script>

@@ -1,0 +1,500 @@
+﻿@model List<List<string>>
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Grand Result</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+           
+            <div class="x_content">
+
+                @using (Html.BeginForm("SearchGrandResult", "ExamResult", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*@Html.ValidationSummary(true)*@
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Year <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("Year", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", @onchange = "GetTermByYear(1)", id = "yearId" })
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Term <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="TermId" onchange="GetExamByTerm(1)" id="termId"></select>
+                                    <input type="hidden" id="branchId" value="@ViewData["branchId"]" />
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Exams <span class="required">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="ExamTypeId" id="examId"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Class
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getChangeSectionList()", id = "classId" })
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Section
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="SectionId" id="sectionId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name" style="font-size: 12px;">
+                                Roll No
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="text" class="form-control input-sm" name="RollNo" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                Result Type
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ResultTypeId", (IEnumerable<SelectListItem>)ViewBag.ResultTypeId, new { @class = "form-control input-sm", id = "resultTypeId" })
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                                </label>
+                                <div>
+                                    <input type="hidden" class="custom-control-input" name="AutoRemarks" value="0" style="width:20px;height:20px;" id="txtAutoRemarks">
+                                    <input type="checkbox" style="width:20px;height:20px;" onclick="SetRemarksValue()" id="autoRemakrs" name="vehicle1" value="Bike">
+                                    <label for="vehicle1"> Include Auto Remarks</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Create Result" name="Create" class="btn  btn-squar" />
+                            </div>
+                            <div class="nav navbar-right">
+                                <input type="button" value="All Students Pdf" name="CreatePdfAll" class="btn  btn-squar"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none")
+                                       onclick="location.href=AppDetail() + '/ExamResult/CreatePdfOfAllStudents?AutoRemarks=' + $('#txtAutoRemarks').val() +'&IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Detailed Transcript" name="CreatePdf" class="btn  btn-squar"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none")
+                                       onclick="location.href=AppDetail() + '/ExamResult/CreateDetailTranscriptOfAllStudents?AutoRemarks=' + $('#txtAutoRemarks').val() +'&IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Summarize Transcript" name="CreatePdf" class="btn  btn-squar"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none")
+                                       onclick="location.href=AppDetail() + '/ExamResult/CreateTranscriptOfAllStudents?IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Send SMS" name="CreatePdf" class="btn btn-squar"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none")
+                                       onclick="location.href=AppDetail() + '/ExamResult/SendSmsToAllStudents?AutoRemarks=' + $('#txtAutoRemarks').val() +'&IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right">
+                                <input type="button" value="Create Sheet" name="CreatePdf" class="btn btn-squar"
+                                       style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block" : "display:none")
+                                       onclick="location.href=AppDetail() + '/ExamResult/CreatePdfOfGrandResult?IssuedDate=' + $('#issuedDate').val()" />
+                            </div>
+
+                            <div class="nav navbar-right"  style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:20px;" : "display:none;margin-right:20px;")>
+                                <div>
+                                    <input type="date" name="ToDate" class="form-control input-sm" id="issuedDate" />
+                                </div>
+                            </div>
+
+                            <div class="nav navbar-right" style=@((ViewData["Operation"] != null && Convert.ToInt32(ViewData["Operation"]) > 0) ? "display:block;margin-right:20px;" : "display:none;margin-right:20px;")>
+                                <label class="control-label" style="font-size: 11px;" align="right" for="first-name">
+                                    Issued Date
+                                </label>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    var gradeList = [];
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+      {
+          if ((int)@ViewData["Error"] == 2)
+          {
+              <text> showNotification('Marks Sheet is saved succesfully.', 'Success', 'Success') </text>
+          }
+          else if ((int)@ViewData["Error"] == 20)
+          {
+              <text> showNotification('Sms is sent succesfully to student(s).', 'Success', 'Success') </text>
+          }
+      else if ((int)@ViewData["Error"] == 11)
+          {
+              <text> showNotification('Fee Head is already added to Chalaln.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 420)
+          {
+              <text> showNotification('Unable to Create Grand Result Sheet.', 'Error', 'Error') </text>
+          }
+        else if ((int)@ViewData["Error"] == 1420)
+           {
+               <text> showNotification('Unable to send sms to Student(s).', 'Error', 'Error') </text>
+           }
+      else if ((int)@ViewData["Error"] == 100)
+          {
+              <text> showNotification('Total Exams perecentage is exceding from 100.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 3)
+          {
+              <text> showNotification('Unable to delete Exam.', 'Error', 'Error') </text>
+          }
+      else if ((int)@ViewData["Error"] == 4)
+          {
+              <text> showNotification('Exam is deleted succesfully.', 'Success', 'Success') </text>
+          }
+      }
+    }
+
+    window.onload = function (e) {
+
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        populateErrors();
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        debugger;
+        GetGradeList();
+
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        var yearId = '@(ViewData["GlobalYearId"] == null ? 0 : (int)ViewData["GlobalYearId"])';
+        if(classId != 0)
+        {
+            $("#classId").val(classId);
+        }
+        if(yearId != 0)
+        {
+            $("#yearId").val(yearId);
+        }
+        getSectionList();
+        GetTermByYear(1);
+
+        DisplayGrandResult();
+        PopulateGridConfigData();
+
+        $('#issuedDate').val('@DateTime.Now.ToString("yyyy-MM-dd")');
+
+    }
+
+    function DisplayGrandResult()
+    {
+        $("#ClassTable").html('');
+        @if(Model != null)
+        {
+            foreach (var item in (List<List<string>>)Model)
+            {
+                foreach (var subItem in item)
+                {
+                    <text>
+        $("#ClassTable").append('@Html.Raw(subItem)');
+        </text>
+                }
+            }
+        }
+    }
+
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        if(classId.length == 0)
+        {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function getChangeSectionList() {
+        var classId = $("#classId").val();
+        if (classId.length == 0) {
+            classId = 0;
+        }
+        GetClassSection(classId, 0, 'sectionId', 2, 0);
+        //first : classId, seccond : load all option or not, third : section dd html id
+        //fourth : any call function to call, fifth : sectionId to set in DD
+    }
+
+    function setPrevSearchVals()
+    {
+        var sectionId = '@(ViewData["GlobalSectionId"] == null ? 0 : (int)ViewData["GlobalSectionId"])';
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        var tempClass = $("#classId").val();
+        if(classId == tempClass)
+        {
+            if(sectionId != 0)
+            {
+                $("#sectionId").val(sectionId);
+            }
+        }
+    }
+
+    function GetTermByYear(payload) {
+        var yearId = $('#yearId').val();
+        var branchId = $('#branchId').val();
+        var termId = '@(ViewData["GlobalTermId"] == null ? 0 : (int)ViewData["GlobalTermId"])';
+        var tempYearId = '@(ViewData["GlobalYearId"] == null ? 0 : (int)ViewData["GlobalYearId"])';
+        if(yearId == tempYearId)
+        {
+            if(termId != 0)
+            {
+                $("#termId").val(termId);
+            }
+        }
+        else
+        {
+            termId = 0;
+        }
+
+        GetTermsByYear(yearId, 0, 'termId', branchId, payload, termId);
+    }
+
+
+    function GetExamByTerm(payload) {
+        var termId = $('#termId').val();
+        var branchId = $('#branchId').val();
+        var examTypeId = '@(ViewData["GLobalExamId"] == null ? 0 : (int)ViewData["GLobalExamId"])';
+        var tempTermId = '@(ViewData["GlobalTermId"] == null ? 0 : (int)ViewData["GlobalTermId"])';
+        if(termId == tempTermId)
+        {
+            if(examTypeId != 0)
+            {
+                $("#examId").val(examTypeId);
+            }
+        }
+        else
+        {
+            examTypeId = 0;
+        }
+
+        GetExamsByTerm(termId, 0, 'examId', branchId, payload, examTypeId);
+    }
+
+    function PopulateGridConfigData()
+    {
+        var tables = document.getElementsByTagName("table");
+        for (var j = 0; j < tables.length; j++)
+        {
+            var gradeConfig = 0;
+            var posConfig = 0;
+            var perConfig = 0;
+
+
+            var table = tables[j];
+            var x = table.getElementsByTagName("th");
+            for (var i = 0; i < x.length; i++) {
+                if(x[i].innerHTML.trim().indexOf("Grade") >= 0)
+                {
+                    gradeConfig = i;
+                }
+                if(x[i].innerHTML.trim().indexOf("Percentage") >= 0)
+                {
+                    perConfig = i;
+                }
+                if(x[i].innerHTML.trim().indexOf("Position") >= 0)
+                {
+                    posConfig = i;
+                }
+            }
+
+
+            @if (Model != null && Model.Count > 0)
+            {
+                if((string)ViewData[SMS_Web.Helpers.SysConfig.EC_GRADE_FLAG] == "No")
+                {
+                    <text>
+            show_hide_column(gradeConfig, false, table);
+            </text>
+                }
+
+                if((string)ViewData[SMS_Web.Helpers.SysConfig.EC_POSITION_FLAG] == "No")
+                {
+                    <text>
+            show_hide_column(posConfig, false, table);
+            </text>
+                }
+
+                if((string)ViewData[SMS_Web.Helpers.SysConfig.EC_PERCENTAGE_FLAG] == "No")
+                {
+                    <text>
+            show_hide_column(perConfig, false, table);
+            </text>
+                }
+            }
+        }
+    }
+
+    function show_hide_column(col_no, do_show, tbl) {
+        var rows = tbl.getElementsByTagName('tr');
+        var x = tbl.getElementsByTagName("th");
+        x[col_no].style.display = do_show ? 'block' : 'none';
+        for (var row = 0; row < rows.length; row++) {
+            var cols = rows[row].children;
+            if (col_no >= 0 && col_no < cols.length) {
+                var cell = cols[col_no];
+                if (cell.tagName == 'TD') cell.style.display = do_show ? 'block' : 'none';
+            }
+        }
+    }
+
+    function GetGradeList()
+    {
+        if(gradeList == null || gradeList.length == 0)
+        {
+            debugger
+            $.post("/GradesConfig/GetGradeList",
+                           function (response) {
+                               if (response.length > 0) {
+                                   gradeList = response;
+                               }
+                           }
+                );
+        }
+    }
+
+    function GetGrade(obtainedMarks, totalMarks)
+    {
+        var obtPercentage = Math.floor(((obtainedMarks * 100) / totalMarks));
+        var grade = '';
+        if(gradeList != null && gradeList.length > 0)
+        {
+            for(var i = 0; i < gradeList.length; i++)
+            {
+                var minRange = Number(gradeList[i][1]);
+                var maxRange = Number(gradeList[i][2]);
+
+                if(Number(obtPercentage) >= minRange && Number(obtPercentage) <= maxRange)
+                {
+                    grade = gradeList[i][0];
+                }
+            }
+        }
+        return grade;
+    }
+
+    function SetRemarksValue()
+    {
+        if($("#autoRemakrs").is(':checked') == true)
+        {
+            $("#txtAutoRemarks").val(1);
+        }
+        else
+        {
+            $("#txtAutoRemarks").val(0);
+        }
+    }
+
+</script>
+
+@using (Html.BeginForm("CreateClassResultPdf", "ExamResult", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <div class="row" id="searchPanelData" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12" id="ClassTable">
+
+
+                @*<div class="x_panel">
+                    <div class="x_title">
+                        <h2>Grand Result Detail</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <div class="form-group">
+                            <div class="table-responsive" id="ClassTable">
+
+
+
+                            </div>
+                            <div class="form-group row" style="margin-top:20px;">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Create Pdf" class="btn  btn-squar" style=" margin-left:20px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            </div>
+        </div>
+    </fieldset>
+
+}

@@ -1,0 +1,479 @@
+﻿@model List<SMS_DAL.StaffSalary>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script>
+
+    window.onload = function (e) {
+        $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+        DisplaySheet();
+    }
+
+</script>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Pay Staff Salary</label>
+            
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                @*<input type="button" value="Salary Sheet" name="SalarySheet" class="btn btn-squar navbar-right" onclick="location.href='@Url.Action("SalarySheet", "StaffSalary")'" />*@
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                @using (Html.BeginForm("SearchStaffSalary", "StaffSalary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+                    <fieldset>
+                        @*<div class="form-group row">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" align="right" for="first-name">
+                                </label>
+
+                            </div>*@
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Catagory
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("CatagoryId", (IEnumerable<SelectListItem>)ViewBag.Catagories, "All", new { @class = "form-control input-sm", onchange = "getDesignationList()", id = "catagoryId", @style = "height:30px;" })
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Designation
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <select class="form-control input-sm" name="DesignationId" id="designationId"></select>
+                                </div>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Staff Id
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    <input type="number" name="StaffId" class="form-control input-sm" id="toDate" style="height:30px;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Year
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("YearId", (IEnumerable<SelectListItem>)ViewBag.YearId, new { @class = "form-control input-sm", id = "yearIdSearch", @style = "height:30px;" })
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Month
+                            </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("MonthId", (IEnumerable<SelectListItem>)ViewBag.MonthId, new { @class = "form-control input-sm", id = "monthIdSearch", @style = "height:30px;" })
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+                        </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="nav navbar-right">
+                                    <input type="submit" value="Search" name="CreateSheet" class="btn btn-squar" />
+                                </div>
+                                @*onclick="location.href='@Url.Action("CreateAttendanceSheet", "Attendance")'"*@
+                            </div>
+</fieldset>
+                    @*</form>*@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@using (Html.BeginForm("SaveStaffSalary", "StaffSalary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
+    <fieldset>
+        <div class="row" id="searchPanelData" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        @*<label class="nav navbar-left control-label" align="left">Staff Salary List</label>*@
+                        <ul class="nav panel_toolbox">
+                            <li>
+                                @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                            </li>
+                            <li>
+                                @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                            </li>
+                        </ul>
+
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Staff(s) Salary Detail</label>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        <div class="form-group">
+                            <div class="table-responsive">
+
+                                @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                                @*<fieldset>*@
+                                <input type="hidden" class="custom-control-input" name="IsPrint" value="0" style="width:20px;height:20px;" id="isPrint">
+                                <input type="hidden" class="custom-control-input" name="IsUnpaid" value="0" style="width:20px;height:20px;" id="isUnPaid">
+                                <table class="table table-striped table-bordered" id="classTable">
+                                    <thead>
+                                        <tr class="headings" id="tableHead">
+                                           
+                                            <th class="column-title">
+                                                Staff Id
+                                            </th>
+                                            <th class="column-title">
+                                                Name
+                                            </th>
+                                            <th class="column-title">
+                                                Father Name
+                                            </th>
+                                            <th class="column-title">
+                                                Total Hours
+                                            </th>
+                                            <th class="column-title">
+                                                Working Hours
+                                            </th>
+                                            <th class="column-title">
+                                                Short Hours
+                                            </th>
+                                            <th class="column-title">
+                                                Bonus Days
+                                            </th>
+                                            <th class="column-title">
+                                                Gross Salary
+                                            </th>
+                                            <th class="column-title">
+                                                Misc Withdraw
+                                            </th>
+                                            <th class="column-title">
+                                                Clubbed Sundays
+                                            </th>
+                                            <th class="column-title">
+                                                Sundays Deduction
+                                            </th>
+                                            <th class="column-title">
+                                                Bonus
+                                            </th>
+                                            <th class="column-title">
+                                                Advance Adjustment
+                                            </th>
+                                            <th class="column-title">
+                                                Deduction
+                                            </th>
+                                            <th class="column-title">
+                                                Paid Salary
+                                            </th>
+                                            <th class="column-title">
+                                                Paid Date
+                                            </th>
+                                            <th class="column-title">
+                                                Paid Account
+                                            </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                        @if (Model != null)
+                                        {
+                                            for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Model[i].Staff.StaffId
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Staff.Name
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Staff.FatherName
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].TotalHours
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].WorkingHours
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].ShortHours
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].BonusDays
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].SalaryAmount
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].MiscWithdraw
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].ClubbedSundays
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].SundaysDeduction
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Bonus
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].AdvanceAdjustment
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].Deduction
+                                                    </td>
+                                                    <td>
+                                                        @Model[i].PaidAmount
+                                                    </td>
+                                                    <td>
+                                                        @(Model[i].PaidDate == null ? "" : Model[i].PaidDate.ToString().Split(' ')[0])
+                                                    </td>
+
+                                                    <td>
+                                                        @(Model[i].PaidDate == null ? "" : Model[i].FinanceFifthLvlAccount.AccountName)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+
+                                </table>
+
+                               
+
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Create Staff Payslip" onclick="return setPrint()" class="btn btn-squar" style=" margin-left:20px;" />
+                                <input type="submit" value="Save UnPaid" onclick="return setUnpaid()" id="saveUnPaid" class="btn btn-squar" />
+                                <input type="submit" value="Save Paid" name="Submit" onclick="return setPaid();" id="savePaid" class="btn btn-squar" />
+                            </div>
+                        </div>*@
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+}
+
+        <script>
+
+            function setPrint()
+            {
+                $("#isPrint").val("1");
+                return true;
+            }
+
+            function populateErrors()
+            {
+               @if(ViewData["Error"] != null)
+               {
+                   if ((int)@ViewData["Error"] == 2)
+                   {
+                       <text> showNotification('Staff Salary is saved succesfully.', 'Success', 'Success') </text>
+                   }
+               else if ((int)@ViewData["Error"] == 11)
+                   {
+                       <text> showNotification('Section is already added.', 'Error', 'Error') </text>
+                   }
+                   else if ((int)@ViewData["Error"] == 310)
+                   {
+                       <text> showNotification('Staff Attendance policies are not defined, please define first to pay salaries.', 'Error', 'Error') </text>
+                   }
+               else if ((int)@ViewData["Error"] == 1)
+                   {
+                       <text> showNotification('The Name Field is Required.', 'Error', 'Error') </text>
+                   }
+               else if ((int)@ViewData["Error"] == 420)
+                   {
+                       <text> showNotification('Unable to save Staff Salary.', 'Error', 'Error') </text>
+                   }
+                   else if ((int)@ViewData["Error"] == 1340)
+                   {
+                       <text> showNotification('No record found, As no Attendance is been marked for the spicified month.', 'Error', 'Error') </text>
+                   }
+               else if ((int)@ViewData["Error"] == 3)
+                   {
+                       <text> showNotification('Staff Salary is marked unpaid against selected student(s) succesfuly.', 'Success', 'Success') </text>
+                   }
+               else if ((int)@ViewData["Error"] == 4)
+                   {
+                       <text> showNotification(' Section is deleted succesfully.', 'Success', 'Success') </text>
+                   }
+               }
+            }
+
+
+            var checkCount = 0;
+            window.onload = function (e) {
+                ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+                populateErrors();
+                getDesignationList();
+                $('#paidDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+                var d = new Date();
+                var month = d.getMonth();
+                $("#monthIdSearch").get(0).selectedIndex = month;
+                checkCount = 0;
+            }
+
+            function getDesignationList() {
+        var catagoryId = $("#catagoryId").val();
+        if(catagoryId.length == 0)
+        {
+            catagoryId = 0;
+        }
+        GetDesignation(catagoryId, 1, 'designationId');
+    }
+
+            function EnableAmountTextBox(index)
+            {
+                var tableBody = document.getElementById("classBody");
+                var rows = tableBody.getElementsByTagName("tr");
+                var tdObj = rows[index].getElementsByTagName("td")[0];
+                if(document.getElementById("checkbox" + index).checked)
+                {
+                    document.getElementById("cbSelect" + index).checked = true;
+                    //document.getElementById("textbox" + index).readOnly = false;
+                    document.getElementById("textboxAdvAdj" + index).readOnly = false;
+                    document.getElementById("textboxDed" + index).readOnly = false;
+                    document.getElementById("tbBonus" + index).readOnly = false;
+                    var salaryAmount = $("#tbSalaryAmount" + index).val();
+                    var paidAmount = $("#textbox" + index).val();
+                    if(paidAmount == '' || paidAmount == '0')
+                        $("#textbox" + index).val(salaryAmount);
+                    //document.getElementById("feebox" + index).readOnly = false;
+                }
+                else
+                {
+                    document.getElementById("cbSelect" + index).checked = false;
+                    //document.getElementById("textbox" + index).readOnly = true;
+                    document.getElementById("textboxAdvAdj" + index).readOnly = true;
+                    document.getElementById("textboxDed" + index).readOnly = true;
+                    //document.getElementById("feebox" + index).readOnly = true;
+                }
+                //alert(document.getElementById("checkbox" + index).checked);
+                ChangeCheckCkount(index)
+            }
+
+            function setUnpaid()
+            {
+                if(CheckCountValue() == false)
+                {
+                    return false;
+                }
+
+                $("#isUnPaid").val("1");
+                ConfirmAction('Are you sure, you want to unpaid the staff(s) salaries?', 'saveUnPaid');
+                return false;
+            }
+
+            function setPaid()
+            {
+                if(CheckCountValue() == false)
+                {
+                    return false;
+                }
+                $("#isUnPaid").val("0");
+                ConfirmAction('Are you sure, you want to pay salaries to the staff(s)?', 'savePaid');
+                return false;
+            }
+
+
+
+            function ChangeCheckCkount(index)
+            {
+                if($("#checkbox"+index).is(':checked') == true)
+                {
+                    checkCount++;
+                }
+                else
+                {
+                    checkCount--;
+                }
+            }
+
+            function CheckCountValue()
+            {
+                if(checkCount == 0)
+                {
+                    showNotification('Can\t proceed, No student is loaded or selected.', 'Error', 'Error')
+                    return false;
+                }
+            }
+
+            function GetPaidSalary(index)
+            {
+                var salary = $("#tbSalaryAmount" + index).val();
+                var bonus = $("#tbBonus" + index).val();
+                var advanceAdj = $("#textboxAdvAdj" + index).val();
+                var deduction = $("#textboxDed" + index).val();
+
+                var paidSalary = Number(salary) + Number(bonus) - Number(advanceAdj) - Number(deduction);
+                $("#textbox" + index).val(paidSalary);
+            }
+
+            
+            function ChangeAccountType()
+            {
+                var accountTypeId = $("#accountTypeId").val();
+                var branchId = $("#BranchId").val();
+                if(accountTypeId == 1)
+                {
+                    accountTypeId = 13;
+                }
+                else
+                {
+                    accountTypeId = 14;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: AppDetail() + '/api/Common/getFinanceAccount?typeId=' + accountTypeId + '&&branchId=' + branchId + '&&isLoadAll=1',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $("#financeAccountId").html(result);
+                    },
+                    error: function (res) {
+                        showNotification('Unable to load account', 'Error', 'Error')
+                    }
+                });
+            }
+
+
+        </script>

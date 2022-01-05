@@ -1,0 +1,569 @@
+﻿@model List<SMS_DAL.ViewModel.SACPaidCatalogViewModel>
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script>
+
+    function getSectionList() {
+        var classId = $("#classId").val();
+        //alert(classId);
+        $("#sectionId").html("");
+        //$("#sectionId").append('<option value='+0+'>All</option>');
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+        if(classId == '')
+        {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+            $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+        }
+        else if(classId == @(item.ClassId))
+            {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+        $("#sectionId").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+         }
+    getRollNumber();
+
+    }
+
+</script>
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Admission Charges Search</label>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div>
+                        @Html.ValidationSummary()
+                        @*<label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 4) ? "display:block;color:green;font-size:11px;" : "display:none" )>
+                            Student Admission Charges is saved succesfully.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 420) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Unable to Save Student Admission Charges.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 5) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Issue Chalan for all selected student(s) to Create Pdf.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 6) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Select Student(s) to Issue Chalan.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 7) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Select Student(s) to Create Pdf of Issued Chalan(s).
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 8) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Due Date must be greater than Issued date.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Search Student(s) to Create Pdf of Issue Chalan.
+                        </label>
+                        <label class="control-label" align="left" for="first-name"
+                               style=@((Convert.ToInt32(ViewData["Error"]) == 11) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                            Search Student(s) to save Issue Chalan.
+                        </label>*@
+                        @*<label class="control-label" align="left" for="first-name"
+                                   style=@((Convert.ToInt32(ViewData["Error"]) == 10) ? "display:block;color:red;font-size:11px;" : "display:none")>
+                                Student Cards generated succesfully.
+                            </label>*@
+                    </div>
+                </div>
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 21}) + "'");"
+                            class="btn sc_help_btn btn-xs" />
+                </div>
+
+            </div>
+
+            <div class="x_content">
+
+
+                @using (Html.BeginForm(Html.BeginForm("SearchStudentAdmissionCharges", "SACPaidCatalog", FormMethod.Post, new { enctype = "multipart/form-data" })))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <fieldset>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                From Date
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="date" name="FromDate" class="form-control input-sm" id="fromDate" />
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                To Date
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    <input type="date" name="ToDate" class="form-control input-sm" id="toDate" />
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Class
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("ClassId", (IEnumerable<SelectListItem>)ViewBag.ClassId, new { @class = "form-control input-sm", onchange = "getSearchSectionList()", id = "classIdSearch" })
+                                    @*@Html.ValidationMessageFor(model => model.ClassId)*@
+
+                                </div>
+                            </div>
+
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Section
+                            </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("SectionId", (IEnumerable<SelectListItem>)ViewBag.SectionId, new { @class = "form-control input-sm", id = "sectionIdSearch" })
+                                    @*@Html.ValidationMessageFor(model => model.SectionId)*@
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="nav navbar-right">
+                                <input type="submit" value="Find" name="Search" class="btn btn-squar" />
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row" id="searchPanelData" style="display:none;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @using (Html.BeginForm("SaveStudentAdmissionCharges", "SACPaidCatalog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <div class="x_panel">
+                    <div class="x_title sc_panel_header">
+                        <label class="nav navbar-left control-label sc_panel_label" align="left">Admission Charges Details</label>
+
+
+
+                    </div>
+
+                    <div class="x_content">
+
+                        <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-striped jambo_table bulk_action" id="classTable" name="model">
+                                        <thead>
+                                            <tr class="headings">
+                                                <th>
+
+                                                </th>
+                                                <th>
+                                                    <input type="checkbox" id="cbSelectAll" style="width:20px;height:20px;" onclick="CheckAllCheckBoxes();" />
+                                                    @if (Model != null && Model.Count > 0)
+                                                    {
+                                                        <input type="text" value="@Model.Count" id="statusIdAll" style="display: none;" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" value="0" id="statusIdAll" style="display: none;" />
+                                                    }
+                                                </th>
+                                                <th style="min-width:30px;">
+                                                    <label>Paid</label>
+                                                </th>
+                                                <th style="min-width:100px;">
+                                                    <label>Roll No.</label>
+                                                </th>
+                                                <th style="min-width:200px;">
+                                                    <label>Name</label>
+                                                </th>
+                                                <th style="min-width:150px;">
+                                                    <label>Admission Charges</label>
+                                                </th>
+                                                <th style="min-width:150px;">
+                                                    <label>Charges Paid</label>
+                                                </th>
+                                                <th style="min-width:180px;">
+                                                    <label>Paid Date</label>
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+                                        <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                            @if (Model != null)
+                                            {
+                                                for (int i = 0; i < Model.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>
+                                                            @*@Html.CheckBoxFor(m => m[i].Id, new { @class = "form-control input-sm", @style = "width:20px;height:20px;" })*@
+                                                            <input type="checkbox" name="StudentIds" onchange="EnableAmountTextBox(@i)" id="@("checkbox" + i)" value="@Model[i].Id" style="width:20px;height:20px;">
+                                                            <input type="checkbox" name="Indexes" value="@i" id="@("cbSelect" + i)" style="width:15px;height:15px;" hidden="hidden">
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].Paid, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].RollNo, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td style="width:200px;">
+                                                            @Html.TextBoxFor(m => m[i].Name, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+
+                                                        <td style="width:200px;">
+                                                            @Html.TextBoxFor(m => m[i].AdmissionCharges, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                        </td>
+                                                        <td style="width:150px;">
+                                                            @Html.TextBoxFor(m => m[i].ChargesPaid, new { Name = "PaidCharges", @class = "form-control input-sm", @style = "height:30px;background-color: transparent;", @onkeypress = "CheckEnterykey()", @readonly = "readonly", @id = ("textbox" + i) })
+                                                        </td>
+                                                        <td>
+                                                            @Html.TextBoxFor(m => m[i].PaidDate, new { @class = "form-control input-sm", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @name = "Amount", @readonly = "readonly" })
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group">
+                                    <div class="nav navbar-right">
+                                        @*<input type="submit" value="Create Pdf" onclick="setPrint()" class="btn btn-sm btn-info btn-squar" style="margin-top:40px;" />*@
+                                        <input type="submit" value="Save" class="btn btn-squar" style="margin-top:40px;" />
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+
+            </fieldset>
+
+        }
+    </div>
+</div>
+
+
+<script>
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+       {
+           if ((int)@ViewData["Error"] == 420)
+           {
+               <text> showNotification('Unable to Save Student Admission Charges.', 'Error', 'Error') </text>
+           }
+       else if ((int)@ViewData["Error"] == 4)
+           {
+               <text> showNotification('Student Admission Charges is saved succesfully.', 'Success', 'Success') </text>
+           }
+       }
+    }
+
+    window.onload = function (e) {
+        ShowSearchPanel(@((Model == null || Model.Count == 0) ? 0 : Model.Count));
+        resetSearch();
+        getFine();
+        //ChangeDuesStatus();
+        populateErrors();
+        //$("#yearIdSearch").val("2017");
+        //$("#monthIdSearch").val("November");
+
+        $('#fromDate').val('@(ViewData["GlobalFromDate"] == null ? DateTime.Now.ToString("yyyy-MM-dd")
+        : ((DateTime)ViewData["GlobalFromDate"]).ToString("yyyy-MM-dd"))');
+        $('#toDate').val('@(ViewData["GlobalToDate"] == null ? DateTime.Now.ToString("yyyy-MM-dd")
+          : ((DateTime)ViewData["GlobalToDate"]).ToString("yyyy-MM-dd"))');
+
+        var classId = '@(ViewData["GlobalClassId"] == null ? 0 : (int)ViewData["GlobalClassId"])';
+        var sectionId = '@(ViewData["GlobalSectionId"] == null ? 0 : (int)ViewData["GlobalSectionId"])';
+
+        if(classId != 0)
+        {
+            $("#classIdSearch").val(classId);
+        }
+        else
+        {
+            getSectionList();
+        }
+
+        if(sectionId != 0)
+        {
+            $("#sectionIdSearch").val(sectionId);
+        }
+
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+
+
+        $("#yearIdSearch").get(0).selectedIndex = year - 2016;
+        $("#monthIdSearch").get(0).selectedIndex = month;
+    }
+
+    function setPrint()
+    {
+        $.ajax({
+            url: AppDetail() + '/IssueChalan/setPrint',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            statusCode: {
+                200: function (data) {
+
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+    function CheckEnterykey()
+    {
+        if (window.event.keyCode == '13') {
+            event.preventDefault();
+        }
+    }
+    function EnableAmountTextBox(index)
+    {
+        var tableBody = document.getElementById("classBody");
+        var rows = tableBody.getElementsByTagName("tr");
+        var tdObj = rows[index].getElementsByTagName("td")[0];
+        if(document.getElementById("checkbox" + index).checked)
+        {
+            document.getElementById("cbSelect" + index).checked = true;
+            document.getElementById("textbox" + index).readOnly = false;
+            //document.getElementById("feebox" + index).readOnly = false;
+        }
+        else
+        {
+            document.getElementById("cbSelect" + index).checked = false;
+            document.getElementById("textbox" + index).readOnly = true;
+            //document.getElementById("feebox" + index).readOnly = true;
+        }
+        //alert(document.getElementById("checkbox" + index).checked);
+
+    }
+
+    function SetFine()
+    {
+        var fine = $("#fineValue").val();
+        $.ajax({
+            url: AppDetail() + '/IssueChalan/SetFine',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { 'Fine': fine},
+            statusCode: {
+                200: function (data) {
+
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+
+    function getFine() {
+        //alert(classId);
+        $.ajax({
+            url: AppDetail() + '/IssueChalan/GetFine',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            statusCode: {
+                200: function (data) {
+                    var json2 = JSON.parse(data);
+                    $('#fineValue').val(json2);
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+
+    function CheckAllCheckBoxes()
+    {
+        var rowCount = $('#statusIdAll').val();
+        if($("#cbSelectAll").is(':checked') == true)
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("checkbox"+i, true);
+                document.getElementById("cbSelect" + i).checked = true;
+                document.getElementById("textbox" + i).readOnly = false;
+            }
+        }
+        else
+        {
+            for( var i = 0 ; i < rowCount; i++)
+            {
+                SelectElement("checkbox"+i, false);
+                document.getElementById("cbSelect" + i).checked = false;
+                document.getElementById("textbox" + i).readOnly = true;
+            }
+        }
+    }
+
+    function SelectElement(id, valueToSelect)
+    {
+        var element = document.getElementById(id);
+        element.checked  = valueToSelect;
+    }
+
+    function EnableCampus() {
+        var admType = $("#admType").val();
+        if (admType == '3')
+            document.getElementById("campus").readOnly = false;
+        else
+            document.getElementById("campus").readOnly = true;
+    }
+
+    function ChangeLeavingDate()
+    {
+        document.getElementById("leavingDate").value = "";
+    }
+    function ChangeDuesStatus() {
+        if(document.getElementById("dues").value == true)
+            document.getElementById("dues").value = false;
+        else
+            document.getElementById("dues").value = true;
+    }
+    function getRollNumber() {
+        var classId = $("#classId").val();
+        var sectionId = $("#sectionId").val();
+        //alert(classId);
+        $.ajax({
+            url: AppDetail() + '/Student/GetRollNumber',
+            type: 'Get',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { 'classId': classId, 'sectionId': sectionId },
+            statusCode: {
+                200: function (data) {
+                    var json2 = JSON.parse(data);
+                    $('#rollNumber').val(json2);
+                },
+                500: function () {
+                }
+            },
+        });
+    }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#stdImage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function UploadImage() {
+        debugger;
+        var data = new FormData();
+        var files = $("#imgInp").get(0).files;
+        if (files.length > 0) {
+            data.append("UploadedImage", files[0]);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: AppDetail() + "/Student/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+            ajaxRequest.done(function (xhr, textStatus) {
+                //alert('Image Uploaded successfully')
+            });
+        }
+    }
+
+    function gotoSearch() {
+        $('#clickUp').click();
+
+    }
+
+    function resetSearch() {
+
+        $('#fatherNameSearch').val("");
+        $('#nameSearch').val("");
+        $('#rollNoSearch').val("");
+
+    }
+
+    function getSearchSectionList() {
+        var classId = $("#classIdSearch").val();
+        //alert(classId);
+        $("#sectionIdSearch").html("");
+        //$("#sectionIdSearch").append('<option value='+0+'>All</option>');
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ClassSectionModel>)ViewData["classSection"])
+        {
+
+            <text>
+        if(classId == '')
+        {
+            var id = @(item.SectionId);
+            var name = '@(item.SectionName)';
+            $("#sectionIdSearch").append('<option value='+id+'>'+name+'</option>');
+        }
+        else if(classId == @(item.ClassId))
+            {
+                var id = @(item.SectionId);
+                var name = '@(item.SectionName)';
+        $("#sectionIdSearch").append('<option value='+id+'>'+name+'</option>');
+    }
+    </text>
+    }
+
+    }
+</script>
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@*@section Scripts {
+        @Scripts.Render("bundles/jqueryval")
+    }*@

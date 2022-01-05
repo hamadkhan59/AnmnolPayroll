@@ -1,0 +1,78 @@
+﻿@model SMS_DAL.StaffAttandancePolicy
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>StaffAttandancePolicy</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LateInTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LateInTime)
+            @Html.ValidationMessageFor(model => model.LateInTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HalfDayTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.HalfDayTime)
+            @Html.ValidationMessageFor(model => model.HalfDayTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DesignationId, "Designation")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("DesignationId", String.Empty)
+            @Html.ValidationMessageFor(model => model.DesignationId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AllowLeavesCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AllowLeavesCount)
+            @Html.ValidationMessageFor(model => model.AllowLeavesCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LateInSattlementCount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LateInSattlementCount)
+            @Html.ValidationMessageFor(model => model.LateInSattlementCount)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SalaryDeduction)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SalaryDeduction)
+            @Html.ValidationMessageFor(model => model.SalaryDeduction)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

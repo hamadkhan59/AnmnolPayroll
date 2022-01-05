@@ -1,0 +1,482 @@
+﻿@model List<SMS_DAL.ViewModel.ChallanDetailViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+
+    .txt-squar {
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /*body {
+         /*font: 16px Arial; */
+    }
+
+    */ .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        display: inline-block;
+    }
+
+    input {
+        border: 1px solid gray;
+        background-color: white;
+        /*padding: 10px;*/
+        font-size: 13px;
+    }
+
+        input[type=text] {
+            background-color: white;
+            width: 100%;
+        }
+
+    /*input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+        }*/
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+            .autocomplete-items div:hover {
+                /*when hovering an item:*/
+                background-color: #e9e9e9;
+            }
+
+    .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+</style>
+
+
+<script>
+    var stopNames = [];
+    window.onload = function (e) {
+        //ChangeChalan();
+        //GetClassChallan();
+        GetChallanDetail();
+        GetStopNames();
+        populateErrors();
+        autocomplete(document.getElementById("currentAddress"), stopNames);
+        $("input").attr("autocomplete", "off");
+    }
+
+    function populateErrors()
+    {
+        @if(ViewData["Error"] != null)
+        {
+            if ((int)@ViewData["Error"] == 10)
+            {
+                <text> showNotification('PLan is saved succesfully.', 'Success', 'Success') </text>
+            }
+        else if ((int)@ViewData["Error"] == 200)
+            {
+                <text> showNotification('No defualt Challan is created for this class, Please first create a default challan from Challan Option.', 'Error', 'Error') </text>
+            }
+        }
+    }
+
+    function GetAmountSum() {
+        var amount = 0;
+        var sum = 0;
+        var i = 0;
+        var rows = document.getElementById("classTable").rows.length;
+        $("#classTable > tbody > tr").each(function () {
+            var amount = $(this)
+              .find("td:nth-child(3)")
+              .text();
+            if(i < rows - 2)
+            {
+                sum = sum + Number(amount);
+            }
+            i++;
+        });
+        $("#totalSum").text(sum);
+    }
+
+    $('#custorder2 tr td').on("DOMSubtreeModified", function(){
+        alert('changed');
+    });
+
+    function PostChallanDetail()
+    {
+        var listName = "ChallanDetail";
+        var qtd = 0;
+        $("#classTable > tbody > tr").each(function () {
+
+            var feeHead = $(this).find("td:nth-child(1)").text();
+            var revisedAmount = $(this).find("td:nth-child(3)").text();
+
+            $("#challanFOrm").prepend("<input type='hidden' name='" + listName + "[" + qtd + "].FeeHead' value='" + feeHead + "'>");
+            $("#challanFOrm").prepend("<input type='hidden' name='" + listName + "[" + qtd + "].Amount' value='" + revisedAmount + "'>");
+
+            qtd += 1;
+        });
+
+        ConfirmAction('Are you sure, you want to save the fee plan?', 'btnRegularPlan');
+        return false;
+    }
+
+    
+
+    function GetChallanDetail() {
+        var challanId = $('#challanIdList').val();
+
+        $('#classTable > tbody').html("");
+        var total = 0;
+        @foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ChallanDetailViewModel>)ViewData["challan"])
+        {
+            <text>
+
+        if(challanId == '')
+        {
+            var tableRow = '<tr>' +
+                '<td>' +
+                    '@(item.Name)' +
+                '</td>' +
+                '<td>' +
+                    '@(item.StandardAmount)' +
+                        '</td>' +
+                        '<td>' +
+                    '@(item.Name.ToLower().Replace(" ", "") == "vanfee" ?  ViewData["vanFee"] : item.Amount)' +
+                        '</td>' +
+
+                        '</tr>';
+            $("#classTable").find('tbody').append(tableRow);
+        }
+        else if(challanId == @(item.ChallanId))
+            {
+            total += @(item.Amount);
+            var tableRow = '<tr>' +
+            '<td>' +
+                '@(item.Name)' +
+            '</td>' +
+            '<td>' +
+                '@(item.StandardAmount)' +
+                    '</td>' +
+                    "<td contenteditable='true' onkeyup='GetAmountSum()'>" +
+                '@(item.Name.ToLower().Replace(" ", "") == "vanfee" ?  ViewData["vanFee"] : item.Amount)' +
+                    '</td>' +
+
+                    '</tr>';
+        $("#classTable").find('tbody').append(tableRow);
+    }
+    </text>
+        }
+    var tableRow = '<tr style="height:25px;background-color:yellow;color:red;font-size:14px;">' +
+            '<td>' +'Total' +'</td>' +
+            '<td>' +'</td>' +'<td id="totalSum">' + total +'</td>' +'</tr>';
+    $("#classTable").find('tbody').append(tableRow);
+    }
+
+    function EnableAmountTextBox(index)
+    {
+        var tableBody = document.getElementById("classBody");
+        var rows = tableBody.getElementsByTagName("tr");
+        var tdObj = rows[index].getElementsByTagName("td")[0];
+        if(document.getElementById("checkbox" + index).checked)
+        {
+            document.getElementById("cbSelect" + index).checked = true;
+            document.getElementById("textbox" + index).readOnly = false;
+            //document.getElementById("feebox" + index).readOnly = false;
+        }
+        else
+        {
+            document.getElementById("cbSelect" + index).checked = false;
+            document.getElementById("textbox" + index).readOnly = true;
+            //document.getElementById("feebox" + index).readOnly = true;
+        }
+        //alert(document.getElementById("checkbox" + index).checked);
+
+    }
+
+    function GetStopCharges() {
+        var i = 0;
+        debugger;
+        var stop = $("#currentAddress").val();
+       @foreach (var item in (IEnumerable<SMS_DAL.TransportStop>)ViewData["TransportStops"])
+        {
+            <text>
+                if('@item.Name' == stop)
+                {
+                    $("#inpVanFee").val('@item.Rent');
+                }
+        </text>
+        }
+
+        $("#classTable > tbody > tr").each(function () {
+            SetVanFee($(this));
+        });
+    }
+
+    function GetStopNames() {
+        var i = 0;
+       @foreach (var item in (IEnumerable<SMS_DAL.TransportStop>)ViewData["TransportStops"])
+        {
+            <text>
+                stopNames[i++] = '@item.Name';
+        </text>
+    }
+    }
+    
+    function SetVanFee(row) {
+        var columnName = $(row).children("td:first").html();
+        if(columnName.toUpperCase() == "VAN FEE")
+        {
+            $(row).children("td:nth-child(3)").html($("#inpVanFee").val());
+        }
+
+        GetAmountSum();
+    }
+
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function(e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false;}
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                //if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                /*create a DIV element for each matching element:*/
+                if (arr[i].toUpperCase().indexOf(val.toUpperCase()) !== -1) {
+                    b = document.createElement("DIV");
+                    b.style.fontSize = "12px";
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function(e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+
+                    GetStopCharges();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+            GetStopCharges();
+        });
+    }
+
+    function GotoChallan()
+    {
+        var DefaultClass = '@ViewData["DefaultClass"]';
+        window.location.href = AppDetail() + "/Chalan/SetClassValue?id=" + DefaultClass;
+    }
+
+</script>
+
+
+<div class="x_panel">
+    @using (Html.BeginForm(Html.BeginForm("SaveRegularFeePlan", "Student", FormMethod.Post, new { enctype = "multipart/form-data", @id = "challanFOrm" })))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <div class="x_title sc_panel_header">
+                <label class="nav navbar-left control-label sc_panel_label" align="left">Regula Fee Plan </label>
+
+                <div class="nav navbar-right">
+                    <input type="button" value="Help" name="Help" onclick="@("window.location.href='" + @Url.Action("Index", "Video", new { id = 3}) + "'");"
+                             class="btn sc_help_btn btn-xs" />
+
+                </div>
+
+                <div class="nav navbar-right col-md-2 col-sm-2" style=@((ViewData["DefaultClass"] != null) ? "display:block;" : "display:none")>
+                    <input type="button" value="Create Default Challan" onclick="return GotoChallan()" class="btn btn-squar" />
+                </div>
+
+                <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12 form-group" align="right" style="margin-top:2px;">
+                    @Html.DropDownList("ChallanId", (SelectList)(ViewBag.Challans), new { @class = "form-control input-sm", @onchange = "GetChallanDetail()", id = "challanIdList" })
+                    @*@Html.ValidationMessageFor(model => model.ClassId)*@
+                    @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-7 col-xs-12" })
+                        @Html.ValidationMessageFor(model => model.Name)*@
+                </div>
+                <label class="nav navbar-right control-label col-md-1 col-sm-1 col-xs-12" style="margin-top:5spx;font-size: 11px;" align="right" for="first-name">
+                    Chalan
+                </label>
+
+                <div class="nav navbar-right col-md-3 col-sm-3 col-xs-12" style="margin-top:2px;">
+                    <div class="autocomplete" style="width:100%;">
+                        <input type="text" id="inpVanFee" hidden="hidden" />
+                        <input type="text" class="form-control input-sm" name="StopName" id="currentAddress" onfocusout="GetStopCharges();" onchange="GetStopCharges();" placeholder="Search Van Fee"/>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action" id="classTable" border="1">
+                            <thead>
+                                <tr class="headings">
+
+                                    <th>
+                                        Fee Head
+                                    </th>
+                                    <th>
+                                        Standard Amount
+                                    </th>
+                                    <th>
+                                        Revised Amount
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                @if (Model != null)
+                                {
+                                    var total = 0;
+                                    for (int i = 0; i < ((List<SMS_DAL.ViewModel.ChallanDetailViewModel>)Model).Count(); i++)
+                                    {
+                                        total += Model[i].Amount;
+                                        <tr style="height:25px;">
+                                            <td height="80%"></td>
+                                            <td height="80%"></td>
+
+
+                                            <td height="80%">
+                                                @Html.TextBoxFor(m => m[i].Name, new { @class = "form-control", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                @*@Html.DisplayFor(modelItem => item.Name)*@
+                                            </td>
+                                            <td height="80%">
+                                                @Html.TextBoxFor(m => m[i].StandardAmount, new { @class = "form-control", @style = "border: 0; -webkit-box-shadow: none; box-shadow: none; border-color: inherit; background-color: transparent;", @readonly = "readonly" })
+                                                @*@Html.DisplayFor(modelItem => item.StandardAmount)*@
+                                            </td>
+                                            <td height="80%">
+                                                @Html.TextBoxFor(m => m[i].Amount, new { Name = "PaidAmount", @class = "form-control input-sm", @style = "background-color: transparent;", @readonly = "readonly", @id = ("textbox" + i) })
+                                                @*@Html.DisplayFor(modelItem => item.Amount)*@
+                                            </td>
+
+                                        </tr>
+                                    }
+                                    <tr style="height:25px;background-color:yellow;color:red;font-size:14px;">
+                                        <td style="height:25px;"></td>
+                                        <td style="height:25px;"></td>
+                                        <td style="height:25px;">
+                                            Total
+                                        </td>
+                                        <td style="height:25px;"></td>
+                                        <td style="height:25px;" id="totalSum">
+                                            @total
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="form-group row" style="margin-top:20px;">
+                        <div class="nav navbar-right">
+                            <input type="submit" value="Save"  onclick="return PostChallanDetail();" id="btnRegularPlan" class="btn btn-squar" />
+                        </div>
+                    </div>
+                </div>
+        </fieldset>
+    }
+</div>
+</div>
+
+

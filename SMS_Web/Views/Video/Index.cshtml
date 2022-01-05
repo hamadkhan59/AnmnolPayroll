@@ -1,0 +1,41 @@
+﻿@model SMS_DAL.YoutubeVideo
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <label class="nav navbar-left control-label">School Care Help</label>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        @*<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>*@
+                    </li>
+                    <li>
+                        @*<a class="close-link"><i class="fa fa-close"></i></a>*@
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+                <div class="form-group row">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size: 11px;" align="right" for="first-name">
+                        
+                    </label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <div>
+                            <iframe width="740" height="435" src="@Model.VideoLink"
+                                    frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            @*<video id="SomeID" src="https://www.youtube.com/watch?v=RxF3_jOHwQk?start=125&end=168;" />*@
+                           @* @Microsoft.Web.Helpers.Video.Flash("https://www.youtube.com/watch?v=RxF3_jOHwQk")*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
