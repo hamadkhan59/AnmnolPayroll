@@ -93,7 +93,7 @@ namespace SMS_Web.Controllers.Reports
                     ds = fiananceDS.GetFinanaceDetailSummary(model.isActiveAccounts, branchId);
                     return showReport(ds, model, exportType);
                 }
-                else if (model.reportId == 57)
+                else if (model.reportId == 57 || model.reportId == 50)
                 {
                     ds = fiananceDS.GetPettyCashEntryReportData(model.firstLevel, model.secondLevel, model.thirdLevel, model.fourthLevel, model.fifthLevel, model.mode, model.fromDate, model.toDate.AddDays(1), model.entryId, branchId);
                     return showReport(ds, model, exportType);
@@ -113,7 +113,7 @@ namespace SMS_Web.Controllers.Reports
                     ds = fiananceDS.GetFeeCollectionReportData(model.fromDate, model.toDate, branchId);
                     return showReport(ds, model, exportType);
                 }
-                else if (model.reportId == 58)
+                else if (model.reportId == 58 || model.reportId == 51) 
                 {
                     ds = fiananceDS.GetPettyCashLedgerBookData(model.fromDate, model.toDate, branchId, model.ledgerAccount);
                     return showReport(ds, model, exportType);
@@ -128,16 +128,16 @@ namespace SMS_Web.Controllers.Reports
                     ds = fiananceDS.GetCashBookData(model.fromDate, model.toDate, model.cashFifthLevel, model.CashName, branchId);
                     return showReport(ds, model, exportType);
                 }
-                else if (model.reportId == 50)
-                {
-                    ds = fiananceDS.GetAccountQuantityBookData(branchId);
-                    return showReport(ds, model, exportType);
-                }
-                else if (model.reportId == 51)
-                {
-                    ds = fiananceDS.GetFeeCollectionJournalReport(model.fromDate, model.toDate, branchId);
-                    return showReport(ds, model, exportType);
-                }
+                //else if (model.reportId == 50)
+                //{
+                //    ds = fiananceDS.GetAccountQuantityBookData(branchId);
+                //    return showReport(ds, model, exportType);
+                //}
+                //else if (model.reportId == 51)
+                //{
+                //    ds = fiananceDS.GetFeeCollectionJournalReport(model.fromDate, model.toDate, branchId);
+                //    return showReport(ds, model, exportType);
+                //}
                 else if (model.reportId == 52 || model.reportId == 56)
                 {
                     ds = fiananceDS.GetIncomeStatement(model.fromDate, model.toDate, model.financeLevelId, branchId);
@@ -365,7 +365,7 @@ namespace SMS_Web.Controllers.Reports
 
                 return rd;
             }
-            else if (model.reportId == 57)
+            else if (model.reportId == 57 || model.reportId == 50)
             {
                 rd.Load(Path.Combine(Server.MapPath("~/Reports/Finance"), "PettyCashEntriesReport.rpt"));
                 rd.Database.Tables["DataTableF"].SetDataSource(ds.Tables[0]);
@@ -427,7 +427,7 @@ namespace SMS_Web.Controllers.Reports
 
                 return rd;
             }
-            else if (model.reportId == 58)
+            else if (model.reportId == 58 || model.reportId == 51)
             {
                 rd.Load(Path.Combine(Server.MapPath("~/Reports/Finance"), "PettyCashLedgerReport.rpt"));
                 rd.Database.Tables["DataTableF"].SetDataSource(ds.Tables[0]);
@@ -466,30 +466,30 @@ namespace SMS_Web.Controllers.Reports
 
                 return rd;
             }
-            else if (model.reportId == 50)
-            {
-                rd.Load(Path.Combine(Server.MapPath("~/Reports/Finance"), "Account Count Book.rpt"));
-                rd.Database.Tables["DataTableF"].SetDataSource(ds.Tables[0]);
-                rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
+            //else if (model.reportId == 50)
+            //{
+            //    rd.Load(Path.Combine(Server.MapPath("~/Reports/Finance"), "Account Count Book.rpt"));
+            //    rd.Database.Tables["DataTableF"].SetDataSource(ds.Tables[0]);
+            //    rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
 
-                rd.SetParameterValue("CampusName", config.CampusName);
-                rd.SetParameterValue("SchoolName", config.SchoolName);
+            //    rd.SetParameterValue("CampusName", config.CampusName);
+            //    rd.SetParameterValue("SchoolName", config.SchoolName);
 
-                return rd;
-            }
-            else if (model.reportId == 51)
-            {
-                rd.Load(Path.Combine(Server.MapPath("~/Reports/Finance"), "FeeCollectionLedger.rpt"));
-                rd.Database.Tables["DataTableF"].SetDataSource(ds.Tables[0]);
-                rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
+            //    return rd;
+            //}
+            //else if (model.reportId == 51)
+            //{
+            //    rd.Load(Path.Combine(Server.MapPath("~/Reports/Finance"), "FeeCollectionLedger.rpt"));
+            //    rd.Database.Tables["DataTableF"].SetDataSource(ds.Tables[0]);
+            //    rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
 
-                rd.SetParameterValue("FromDate", model.fromDate.ToString());
-                rd.SetParameterValue("ToDate", model.toDate.ToString());
-                rd.SetParameterValue("CampusName", config.CampusName);
-                rd.SetParameterValue("SchoolName", config.SchoolName);
+            //    rd.SetParameterValue("FromDate", model.fromDate.ToString());
+            //    rd.SetParameterValue("ToDate", model.toDate.ToString());
+            //    rd.SetParameterValue("CampusName", config.CampusName);
+            //    rd.SetParameterValue("SchoolName", config.SchoolName);
 
-                return rd;
-            }
+            //    return rd;
+            //}
             else if (model.reportId == 52)
             {
                 string reportName = GetTrailBalanceReportName(model.financeLevelId);

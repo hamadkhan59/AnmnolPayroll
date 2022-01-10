@@ -27,7 +27,8 @@ namespace SMS_DAL.Reports
         {
             //var sql = @"select * from StaffAttendanceLogs where staffid = 122 order by datetime";
             //var sql = @"select * from StaffAttendanceLogs";
-            var sql = @"select * from StaffAttendanceLogs where id >= 10738";
+            //var sql = @"select * from StaffAttendanceLogs where id >= 10738";
+            var sql = @"select * from StaffAttendanceLogs where DateTimeString like '1/6/2022%'";
             return ExecuteDataSet(sql);
         }
 
