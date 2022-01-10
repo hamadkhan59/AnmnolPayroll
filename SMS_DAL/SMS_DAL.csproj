@@ -447,6 +447,7 @@
     <Compile Include="SmsRepository\IRepository\IAdmissionChargesRepository.cs" />
     <Compile Include="SmsRepository\IRepository\IAttendanceRepository.cs" />
     <Compile Include="SmsRepository\IRepository\IBehaviourRepository.cs" />
+    <Compile Include="SmsRepository\IRepository\IStoreRepository.cs" />
     <Compile Include="SmsRepository\IRepository\IStaffBehaviourRepository.cs" />
     <Compile Include="SmsRepository\IRepository\ITimeTableRepository.cs" />
     <Compile Include="SmsRepository\IRepository\ITransportRepository.cs" />
@@ -467,6 +468,7 @@
     <Compile Include="SmsRepository\RepositoryImp\AdmissionChargesRepositoryImp.cs" />
     <Compile Include="SmsRepository\RepositoryImp\AttendanceRepositoryImp.cs" />
     <Compile Include="SmsRepository\RepositoryImp\BehaviourRepositoryImp.cs" />
+    <Compile Include="SmsRepository\RepositoryImp\StoreRepositoryImp.cs" />
     <Compile Include="SmsRepository\RepositoryImp\StaffBehaviourRepositoryImp.cs" />
     <Compile Include="SmsRepository\RepositoryImp\TimeTableRepositoryImp.cs" />
     <Compile Include="SmsRepository\RepositoryImp\TransportRepositoryImp.cs" />

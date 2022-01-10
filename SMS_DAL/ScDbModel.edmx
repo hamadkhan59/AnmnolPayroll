@@ -1767,20 +1767,18 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
           <Property Name="BranchId" Type="int" />
           <Property Name="StaffId" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ANMOL_PAYROLL.dbo.Vendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Vendor">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PhoneNo" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="CNIC" Type="varchar" MaxLength="50" />
-          <Property Name="Address" Type="varchar" MaxLength="50" />
-          <Property Name="Amount" Type="int" />
-          <Property Name="PaymentMethod" Type="nchar" MaxLength="10" />
-          <Property Name="AccountNo" Type="varchar" MaxLength="50" />
-          <Property Name="IsDeleted" Type="nchar" MaxLength="10" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="CompanyName" Type="varchar" MaxLength="100" />
+          <Property Name="Address" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="WeeklyType">
           <Key>
@@ -3909,6 +3907,7 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.Vendor' does not have a primary 
           <EntitySet Name="TransportStop" EntityType="Self.TransportStop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserGroup" EntityType="Self.UserGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WeeklyType" EntityType="Self.WeeklyType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Years" EntityType="Self.Years" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YoutubeVideos" EntityType="Self.YoutubeVideos" Schema="dbo" store:Type="Tables" />
@@ -3994,18 +3993,6 @@ FROM [dbo].[JournalEntrySummary] AS [JournalEntrySummary]</DefiningQuery>
 [PreviousGrade].[Year] AS [Year], 
 [PreviousGrade].[Id] AS [Id]
 FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Vendor" EntityType="Self.Vendor" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[Vendor].[Id] AS [Id], 
-[Vendor].[Name] AS [Name], 
-[Vendor].[CNIC] AS [CNIC], 
-[Vendor].[Address] AS [Address], 
-[Vendor].[Amount] AS [Amount], 
-[Vendor].[PaymentMethod] AS [PaymentMethod], 
-[Vendor].[AccountNo] AS [AccountNo], 
-[Vendor].[IsDeleted] AS [IsDeleted]
-FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Activities_Branch" Association="Self.FK_Activities_Branch">
             <End Role="Branch" EntitySet="Branch" />
@@ -4979,7 +4966,6 @@ FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
           <EntitySet Name="ItemVendors" EntityType="SC_WEBModel.ItemVendor" />
           <EntitySet Name="JournalEntrySummaries" EntityType="SC_WEBModel.JournalEntrySummary" />
           <EntitySet Name="PreviousGrades" EntityType="SC_WEBModel.PreviousGrade" />
-          <EntitySet Name="Vendors" EntityType="SC_WEBModel.Vendor" />
           <AssociationSet Name="FK_Activities_Branch" Association="SC_WEBModel.FK_Activities_Branch">
             <End Role="Branch" EntitySet="Branches" />
             <End Role="Activity" EntitySet="Activities" />
@@ -5597,6 +5583,7 @@ FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
             <End Role="JournalEntry1" EntitySet="JournalEntries" />
             <End Role="JournalVoucher" EntitySet="JournalVouchers" />
           </AssociationSet>
+          <EntitySet Name="Vendors" EntityType="SC_WEBModel.Vendor" />
           </EntityContainer>
         <ComplexType Name="sp_Get_Student_Result_Result">
           <Property Type="Int32" Name="TermId" Nullable="true" />
@@ -7689,19 +7676,6 @@ FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
           <Property Name="Year" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="Vendor">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CNIC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Amount" Type="Int32" />
-          <Property Name="PaymentMethod" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="AccountNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsDeleted" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-        </EntityType>
         <Association Name="FK_Activities_Branch">
           <End Type="SC_WEBModel.Branch" Role="Branch" Multiplicity="0..1" />
           <End Type="SC_WEBModel.Activity" Role="Activity" Multiplicity="*" />
@@ -9590,6 +9564,19 @@ FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CNIC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11541,20 +11528,6 @@ FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Vendors">
-            <EntityTypeMapping TypeName="SC_WEBModel.Vendor">
-              <MappingFragment StoreEntitySet="Vendor">
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
-                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="JournalEntries">
             <EntityTypeMapping TypeName="SC_WEBModel.JournalEntry">
               <MappingFragment StoreEntitySet="JournalEntry">
@@ -11580,6 +11553,20 @@ FROM [dbo].[Vendor] AS [Vendor]</DefiningQuery>
                 <ScalarProperty Name="DebitSeccondLvlId" ColumnName="DebitSeccondLvlId" />
                 <ScalarProperty Name="DebitFirstLvlId" ColumnName="DebitFirstLvlId" />
                 <ScalarProperty Name="EntryId" ColumnName="EntryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="SC_WEBModel.Vendor">
+              <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

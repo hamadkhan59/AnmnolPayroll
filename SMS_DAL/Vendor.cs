@@ -16,11 +16,11 @@ namespace SMS_DAL
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string PhoneNo { get; set; }
         public string CNIC { get; set; }
+        public string Email { get; set; }
+        public string CompanyName { get; set; }
         public string Address { get; set; }
-        public Nullable<int> Amount { get; set; }
-        public string PaymentMethod { get; set; }
-        public string AccountNo { get; set; }
-        public string IsDeleted { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
     }
 }

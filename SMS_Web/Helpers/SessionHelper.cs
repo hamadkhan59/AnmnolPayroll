@@ -42,6 +42,7 @@ namespace SMS_Web.Helpers
         public static IAdmissionChargesRepository acRepo = new AdmissionChargesRepositoryImp(new SC_WEBEntities2());
         public static ISecurityRepository securityRepo = new SecurityRepositoryImp(new SC_WEBEntities2());
         public static ITransportRepository treansRepo = new TransportRepositoryImp(new SC_WEBEntities2());
+        public static IStoreRepository storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
 
 
         //public static bool IsCacheLoaded = false;
@@ -110,6 +111,7 @@ namespace SMS_Web.Helpers
         public static bool InvalidateTransportCache = false;
         public static bool InvalidateTransportDriverCache = false;
         public static bool InvalidateStaffHolidayCache = false;
+        public static bool InvalidateVendorCache = false;
 
         private static List<Class> _classList;
         private static List<Branch> _branchList;
@@ -171,6 +173,7 @@ namespace SMS_Web.Helpers
         private static List<DirectoryViewOption> _direcotryViewOption;
         private static List<SystemConfig> _systemConfig;
         private static List<StaffHoliday> _staffHolidayList;
+        private static List<Vendor> _vendorList;
 
         public static void BuildCache()
         {
@@ -245,6 +248,18 @@ namespace SMS_Web.Helpers
             //}
 
                 return tempList; 
+        }
+
+        public static List<Vendor> VendorList()
+        {
+            if (_vendorList == null || _vendorList.Count == 0 || InvalidateVendorCache == false)
+            {
+                storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
+                _vendorList = storeRepo.GetAllVendors();
+                InvalidateVendorCache = true;
+            }
+
+            return _vendorList;
         }
 
         public static List<GradesConfig> GradesConfigList()
