@@ -274,7 +274,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             return dbContext.ItemPurchaseDetails.Where(x => x.ItemPurchaseId == itemPurchaseId).ToList();
         }
         
-        public List<ItemPurchaseDetailModel> GetAllItemPurchaseDetailModel(int itemPurchaseId)
+        public List<ItemPurchaseDetailModel> GetAllItemPurchaseDetailModelByItemPurchaseId(int itemPurchaseId)
         {
             dbContext.Configuration.LazyLoadingEnabled = false;
             var query = from purchaseDetail in dbContext.ItemPurchaseDetails

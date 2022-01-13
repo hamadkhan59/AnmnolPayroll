@@ -13,6 +13,7 @@ using SMS_Web.Controllers.SecurityAssurance;
 using SMS_Web.Helpers;
 using Logger;
 using System.Reflection;
+using SMS_DAL.ViewModel;
 
 namespace SMS_Web.Controllers.StoreManagement
 {
@@ -49,7 +50,6 @@ namespace SMS_Web.Controllers.StoreManagement
                 ViewBag.UnitId = new SelectList(SessionHelper.UnitList(), "Id", "Name");
                 ViewData["Error"] = errorCode;
                 errorCode = 0;
-
             }
             catch (Exception exc)
             {
@@ -59,5 +59,111 @@ namespace SMS_Web.Controllers.StoreManagement
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId)
+        {
+            if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            try
+            {
+                var itemPurchase = storeRepo.GetItemPurchaseByOrderId(OrderId);
+                if (itemPurchase == null)
+                {
+                    AddNewItemPurchase(itemPurchaseList, PurchaseDate, OrderId);
+                }
+                else
+                {
+                    UpdateItemPurchase(itemPurchaseList, PurchaseDate, itemPurchase);
+                }
+            }
+            catch (Exception exc)
+            {
+                errorCode = 420;
+                LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                LogWriter.WriteExceptionLog(exc);
+            }
+            return RedirectToAction("Index", new { id = 0 });
+        }
+
+        public void AddNewItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId)
+        {
+            try
+            {
+                ItemPurchase purchase = new ItemPurchase();
+                purchase.OrderId = OrderId;
+                purchase.PurchaseDate = PurchaseDate;
+                purchase.CreatedOn = DateTime.Now;
+                storeRepo.AddItemPurchase(purchase);
+
+                foreach (var model in itemPurchaseList)
+                {
+                    var itemName = model.ItemName;
+                    var item = SessionHelper.ItemList().Where(x => x.ItemName == itemName).FirstOrDefault();
+                    ItemPurchaseDetail detail = new ItemPurchaseDetail();
+                    detail.ItemPurchaseId = purchase.Id;
+                    detail.Quantity = model.Quantity;
+                    detail.Rate = model.Rate;
+                    detail.Total = model.Total;
+                    detail.ItemId = item.Id;
+                    detail.CreatedOn = DateTime.Now;
+
+                    storeRepo.AddItemPurchaseDetail(detail);
+                }
+
+                purchase.Amount = (int) itemPurchaseList.Sum(x => x.Total);
+                storeRepo.UpdateItemPurchase(purchase);
+                errorCode = 2;
+            }
+            catch (Exception exc)
+            {
+                errorCode = 420;
+                LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                LogWriter.WriteExceptionLog(exc);
+            }
+        }
+
+        public void UpdateItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, ItemPurchase purchase)
+        {
+            try
+            {
+                List<ItemPurchaseDetail> exisitngPurchaseDetail = storeRepo.GetAllItemPurchaseDetailByItemPurchaseId(purchase.Id);
+
+                foreach (var model in exisitngPurchaseDetail)
+                {
+                    storeRepo.DeleteItemPurchaseDetail(model);
+                }
+
+                foreach (var model in itemPurchaseList)
+                {
+                    var itemName = model.ItemName;
+                    var item = SessionHelper.ItemList().Where(x => x.ItemName == itemName).FirstOrDefault();
+                    ItemPurchaseDetail detail = new ItemPurchaseDetail();
+                    detail.ItemPurchaseId = purchase.Id;
+                    detail.Quantity = model.Quantity;
+                    detail.Rate = model.Rate;
+                    detail.Total = model.Total;
+                    detail.ItemId = item.Id;
+                    detail.CreatedOn = DateTime.Now;
+
+                    storeRepo.AddItemPurchaseDetail(detail);
+                }
+
+                purchase.UpdatedOn = DateTime.Now;
+                purchase.PurchaseDate = PurchaseDate;
+                purchase.Amount = (int)itemPurchaseList.Sum(x => x.Total);
+                storeRepo.UpdateItemPurchase(purchase);
+                errorCode = 2;
+            }
+            catch (Exception exc)
+            {
+                errorCode = 420;
+                LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                LogWriter.WriteExceptionLog(exc);
+            }
+        }
     }
 }

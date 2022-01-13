@@ -276,7 +276,7 @@
                                 <li class="nav-boxed">
                                     <a href="#2a" data-toggle="tab">Address Info</a>
                                 </li>
-                                @if(SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Fee Edit|") == true)
+                                @if(SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Salary View OR Edit|") == true)
                                 { 
                                     <li class="nav-boxed">
                                         <a href="#3a" data-toggle="tab">Salary Info</a>

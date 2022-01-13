@@ -38,7 +38,7 @@ namespace SMS_DAL.SmsRepository.IRepository
         void UpdateItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail);
         void DeleteItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail);
         List<ItemPurchaseDetail> GetAllItemPurchaseDetailByItemPurchaseId(int itemPurchaseId);
-        List<ItemPurchaseDetailModel> GetAllItemPurchaseDetailModel(int itemPurchaseId);
+        List<ItemPurchaseDetailModel> GetAllItemPurchaseDetailModelByItemPurchaseId(int itemPurchaseId);
         int GetPurchaseOrderId();
     }
 }
