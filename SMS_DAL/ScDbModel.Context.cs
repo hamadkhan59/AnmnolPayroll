@@ -90,7 +90,6 @@ namespace SMS_DAL
         public DbSet<IssueChalanDetail> IssueChalanDetails { get; set; }
         public DbSet<IssueChallanConfig> IssueChallanConfigs { get; set; }
         public DbSet<IssuedChallan> IssuedChallans { get; set; }
-        public DbSet<Item> Items { get; set; }
         public DbSet<JournalEntryCreditDetail> JournalEntryCreditDetails { get; set; }
         public DbSet<JournalEntryDebitDetail> JournalEntryDebitDetails { get; set; }
         public DbSet<JournalVoucher> JournalVouchers { get; set; }
@@ -172,7 +171,6 @@ namespace SMS_DAL
         public DbSet<ClassResult> ClassResults { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<FinanceAccountLevel> FinanceAccountLevels { get; set; }
-        public DbSet<ItemPurchase> ItemPurchases { get; set; }
         public DbSet<ItemSale> ItemSales { get; set; }
         public DbSet<ItemStock> ItemStocks { get; set; }
         public DbSet<ItemVendor> ItemVendors { get; set; }
@@ -180,6 +178,10 @@ namespace SMS_DAL
         public DbSet<PreviousGrade> PreviousGrades { get; set; }
         public DbSet<JournalEntry> JournalEntries { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<ItemUnit> ItemUnits { get; set; }
+        public DbSet<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
+        public DbSet<ItemPurchase> ItemPurchases { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

@@ -712,33 +712,38 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.FinanceAccountLevel' does not ha
           <Property Name="BranchId" Type="int" />
           <Property Name="IsLcm" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ANMOL_PAYROLL.dbo.ItemPurchase' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ItemPurchase">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="ItemId" />
-            <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemId" Type="int" Nullable="false" />
           <Property Name="OrderId" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="int" />
           <Property Name="Amount" Type="int" />
           <Property Name="PurchaseDate" Type="datetime" />
-          <Property Name="IsDeleted" Type="nchar" MaxLength="10" />
-          <Property Name="PayMethod" Type="nchar" MaxLength="10" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="UpdatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ItemPurchaseDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemPurchaseId" Type="int" />
+          <Property Name="ItemId" Type="int" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="Items">
           <Key>
-            <PropertyRef Name="ItemId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Headid" Type="int" Nullable="false" />
-          <Property Name="ItemName" Type="varchar" MaxLength="50" />
-          <Property Name="ItemQuantity" Type="int" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="100" />
+          <Property Name="UnitId" Type="int" />
           <Property Name="ItemDescription" Type="varchar(max)" />
-          <Property Name="IsDeleted" Type="nchar" MaxLength="10" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ANMOL_PAYROLL.dbo.ItemSale' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -766,6 +771,13 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.ItemStock' does not have a prima
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="ItemUnit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ANMOL_PAYROLL.dbo.ItemVendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2572,6 +2584,42 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ItemPurchaseDetail_ItemPurchase">
+          <End Role="ItemPurchase" Type="Self.ItemPurchase" Multiplicity="0..1" />
+          <End Role="ItemPurchaseDetail" Type="Self.ItemPurchaseDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemPurchase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemPurchaseDetail">
+              <PropertyRef Name="ItemPurchaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemPurchaseDetail_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1" />
+          <End Role="ItemPurchaseDetail" Type="Self.ItemPurchaseDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemPurchaseDetail">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_ItemUnit">
+          <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="UnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_JournalEntry_FinanceFirstLvlAccounts">
           <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
           <End Role="JournalEntry" Type="Self.JournalEntry" Multiplicity="*" />
@@ -3830,7 +3878,10 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
           <EntitySet Name="IssueChalanDetail" EntityType="Self.IssueChalanDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssueChallanConfig" EntityType="Self.IssueChallanConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssuedChallan" EntityType="Self.IssuedChallan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemPurchase" EntityType="Self.ItemPurchase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemPurchaseDetail" EntityType="Self.ItemPurchaseDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemUnit" EntityType="Self.ItemUnit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntry" EntityType="Self.JournalEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntryCreditDetail" EntityType="Self.JournalEntryCreditDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntryDebitDetail" EntityType="Self.JournalEntryDebitDetail" Schema="dbo" store:Type="Tables" />
@@ -3932,18 +3983,6 @@ FROM [dbo].[DocumentType] AS [DocumentType]</DefiningQuery>
 [FinanceAccountLevel].[Id] AS [Id], 
 [FinanceAccountLevel].[LevelDescription] AS [LevelDescription]
 FROM [dbo].[FinanceAccountLevel] AS [FinanceAccountLevel]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ItemPurchase" EntityType="Self.ItemPurchase" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[ItemPurchase].[Id] AS [Id], 
-[ItemPurchase].[ItemId] AS [ItemId], 
-[ItemPurchase].[OrderId] AS [OrderId], 
-[ItemPurchase].[Quantity] AS [Quantity], 
-[ItemPurchase].[Amount] AS [Amount], 
-[ItemPurchase].[PurchaseDate] AS [PurchaseDate], 
-[ItemPurchase].[IsDeleted] AS [IsDeleted], 
-[ItemPurchase].[PayMethod] AS [PayMethod]
-FROM [dbo].[ItemPurchase] AS [ItemPurchase]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ItemSale" EntityType="Self.ItemSale" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -4249,6 +4288,18 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <AssociationSet Name="FK_IssuedChallan_ChallanToStudent" Association="Self.FK_IssuedChallan_ChallanToStudent">
             <End Role="ChallanStudentDetail" EntitySet="ChallanStudentDetail" />
             <End Role="IssuedChallan" EntitySet="IssuedChallan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemPurchaseDetail_ItemPurchase" Association="Self.FK_ItemPurchaseDetail_ItemPurchase">
+            <End Role="ItemPurchase" EntitySet="ItemPurchase" />
+            <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemPurchaseDetail_Items" Association="Self.FK_ItemPurchaseDetail_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_ItemUnit" Association="Self.FK_Items_ItemUnit">
+            <End Role="ItemUnit" EntitySet="ItemUnit" />
+            <End Role="Items" EntitySet="Items" />
           </AssociationSet>
           <AssociationSet Name="FK_JournalEntry_FinanceFirstLvlAccounts" Association="Self.FK_JournalEntry_FinanceFirstLvlAccounts">
             <End Role="Branch" EntitySet="Branch" />
@@ -4878,7 +4929,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <EntitySet Name="IssueChalanDetails" EntityType="SC_WEBModel.IssueChalanDetail" />
           <EntitySet Name="IssueChallanConfigs" EntityType="SC_WEBModel.IssueChallanConfig" />
           <EntitySet Name="IssuedChallans" EntityType="SC_WEBModel.IssuedChallan" />
-          <EntitySet Name="Items" EntityType="SC_WEBModel.Item" />
           <EntitySet Name="JournalEntryCreditDetails" EntityType="SC_WEBModel.JournalEntryCreditDetail" />
           <EntitySet Name="JournalEntryDebitDetails" EntityType="SC_WEBModel.JournalEntryDebitDetail" />
           <EntitySet Name="JournalVouchers" EntityType="SC_WEBModel.JournalVoucher" />
@@ -4960,7 +5010,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <EntitySet Name="ClassResults" EntityType="SC_WEBModel.ClassResult" />
           <EntitySet Name="DocumentTypes" EntityType="SC_WEBModel.DocumentType" />
           <EntitySet Name="FinanceAccountLevels" EntityType="SC_WEBModel.FinanceAccountLevel" />
-          <EntitySet Name="ItemPurchases" EntityType="SC_WEBModel.ItemPurchase" />
           <EntitySet Name="ItemSales" EntityType="SC_WEBModel.ItemSale" />
           <EntitySet Name="ItemStocks" EntityType="SC_WEBModel.ItemStock" />
           <EntitySet Name="ItemVendors" EntityType="SC_WEBModel.ItemVendor" />
@@ -5584,6 +5633,22 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             <End Role="JournalVoucher" EntitySet="JournalVouchers" />
           </AssociationSet>
           <EntitySet Name="Vendors" EntityType="SC_WEBModel.Vendor" />
+          <EntitySet Name="Items" EntityType="SC_WEBModel.Item" />
+          <EntitySet Name="ItemUnits" EntityType="SC_WEBModel.ItemUnit" />
+          <AssociationSet Name="FK_Items_ItemUnit" Association="SC_WEBModel.FK_Items_ItemUnit">
+            <End Role="ItemUnit" EntitySet="ItemUnits" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <EntitySet Name="ItemPurchaseDetails" EntityType="SC_WEBModel.ItemPurchaseDetail" />
+          <AssociationSet Name="FK_ItemPurchaseDetail_Items" Association="SC_WEBModel.FK_ItemPurchaseDetail_Items">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetails" />
+          </AssociationSet>
+          <EntitySet Name="ItemPurchases" EntityType="SC_WEBModel.ItemPurchase" />
+          <AssociationSet Name="FK_ItemPurchaseDetail_ItemPurchase" Association="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase">
+            <End Role="ItemPurchase" EntitySet="ItemPurchases" />
+            <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetails" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_Get_Student_Result_Result">
           <Property Type="Int32" Name="TermId" Nullable="true" />
@@ -6457,17 +6522,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <Property Name="IsLcm" Type="Boolean" />
           <NavigationProperty Name="ChallanStudentDetail" Relationship="SC_WEBModel.FK_IssuedChallan_ChallanToStudent" FromRole="IssuedChallan" ToRole="ChallanStudentDetail" />
           <NavigationProperty Name="IssueChalanDetails" Relationship="SC_WEBModel.FK_IssueChalanDetail_IssuedChallan" FromRole="IssuedChallan" ToRole="IssueChalanDetail" />
-        </EntityType>
-        <EntityType Name="Item">
-          <Key>
-            <PropertyRef Name="ItemId" />
-          </Key>
-          <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Headid" Type="Int32" Nullable="false" />
-          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ItemQuantity" Type="Int32" />
-          <Property Name="ItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="IsDeleted" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="JournalEntryCreditDetail">
           <Key>
@@ -7597,21 +7651,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="LevelDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="ItemPurchase">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="ItemId" />
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemId" Type="Int32" Nullable="false" />
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="Amount" Type="Int32" />
-          <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
-          <Property Name="IsDeleted" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="PayMethod" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="ItemSale">
           <Key>
@@ -9577,6 +9616,88 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UnitId" Type="Int32" />
+          <Property Name="ItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ItemUnit" Relationship="SC_WEBModel.FK_Items_ItemUnit" FromRole="Item" ToRole="ItemUnit" />
+          <NavigationProperty Name="ItemPurchaseDetails" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_Items" FromRole="Item" ToRole="ItemPurchaseDetail" />
+        </EntityType>
+        <EntityType Name="ItemUnit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Items" Relationship="SC_WEBModel.FK_Items_ItemUnit" FromRole="ItemUnit" ToRole="Item" />
+        </EntityType>
+        <Association Name="FK_Items_ItemUnit">
+          <End Type="SC_WEBModel.ItemUnit" Role="ItemUnit" Multiplicity="0..1" />
+          <End Type="SC_WEBModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="UnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ItemPurchaseDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemPurchaseId" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Item" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_Items" FromRole="ItemPurchaseDetail" ToRole="Item" />
+          <NavigationProperty Name="ItemPurchase" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" FromRole="ItemPurchaseDetail" ToRole="ItemPurchase" />
+        </EntityType>
+        <Association Name="FK_ItemPurchaseDetail_Items">
+          <End Type="SC_WEBModel.Item" Role="Item" Multiplicity="0..1" />
+          <End Type="SC_WEBModel.ItemPurchaseDetail" Role="ItemPurchaseDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemPurchaseDetail">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ItemPurchase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ItemPurchaseDetails" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" FromRole="ItemPurchase" ToRole="ItemPurchaseDetail" />
+        </EntityType>
+        <Association Name="FK_ItemPurchaseDetail_ItemPurchase">
+          <End Type="SC_WEBModel.ItemPurchase" Role="ItemPurchase" Multiplicity="0..1" />
+          <End Type="SC_WEBModel.ItemPurchaseDetail" Role="ItemPurchaseDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemPurchase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemPurchaseDetail">
+              <PropertyRef Name="ItemPurchaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -10383,18 +10504,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
                 <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
                 <ScalarProperty Name="ChallanToStdId" ColumnName="ChallanToStdId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Items">
-            <EntityTypeMapping TypeName="SC_WEBModel.Item">
-              <MappingFragment StoreEntitySet="Items">
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
-                <ScalarProperty Name="ItemQuantity" ColumnName="ItemQuantity" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="Headid" ColumnName="Headid" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -11455,20 +11564,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ItemPurchases">
-            <EntityTypeMapping TypeName="SC_WEBModel.ItemPurchase">
-              <MappingFragment StoreEntitySet="ItemPurchase">
-                <ScalarProperty Name="PayMethod" ColumnName="PayMethod" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ItemSales">
             <EntityTypeMapping TypeName="SC_WEBModel.ItemSale">
               <MappingFragment StoreEntitySet="ItemSale">
@@ -11566,6 +11661,50 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
                 <ScalarProperty Name="CNIC" ColumnName="CNIC" />
                 <ScalarProperty Name="PhoneNo" ColumnName="PhoneNo" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="SC_WEBModel.Item">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
+                <ScalarProperty Name="UnitId" ColumnName="UnitId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemUnits">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemUnit">
+              <MappingFragment StoreEntitySet="ItemUnit">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemPurchaseDetails">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemPurchaseDetail">
+              <MappingFragment StoreEntitySet="ItemPurchaseDetail">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemPurchaseId" ColumnName="ItemPurchaseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemPurchases">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemPurchase">
+              <MappingFragment StoreEntitySet="ItemPurchase">
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

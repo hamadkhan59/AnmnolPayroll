@@ -239,6 +239,29 @@
 
                                 <li>
                                     @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS != null
+                                    && SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS.ToString().Contains("|Security Assurance|") == true)
+                                    {
+                                        <a style="font-size:13px;height:38px;"><i class="fa fa-user-secret" style="font-size:13px;"></i> Store Managment <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|User Group|") == true)
+                                            {
+                                                <li><a href="~/Vendor/Index/0">Vendors</a></li>
+                                            }
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Users|") == true)
+                                            {
+                                                <li><a href="~/Item/Index/0">Items</a></li>
+                                            }
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Users|") == true)
+                                            {
+                                                <li><a href="~/ItemPurchase/Index/0">Purchase</a></li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+
+                                <li>
+                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS != null
                   && SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS.ToString().Contains("|Security Assurance|") == true)
                                     {
                                         <a style="font-size:13px;height:38px;"><i class="fa fa-user-secret" style="font-size:13px;"></i> Security Assurance <span class="fa fa-chevron-down"></span></a>

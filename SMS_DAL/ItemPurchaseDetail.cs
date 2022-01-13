@@ -12,20 +12,17 @@ namespace SMS_DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemPurchase
+    public partial class ItemPurchaseDetail
     {
-        public ItemPurchase()
-        {
-            this.ItemPurchaseDetails = new HashSet<ItemPurchaseDetail>();
-        }
-    
         public int Id { get; set; }
-        public int OrderId { get; set; }
-        public Nullable<int> Amount { get; set; }
-        public Nullable<System.DateTime> PurchaseDate { get; set; }
+        public Nullable<int> ItemPurchaseId { get; set; }
+        public Nullable<int> ItemId { get; set; }
+        public Nullable<decimal> Quantity { get; set; }
+        public Nullable<decimal> Rate { get; set; }
+        public Nullable<decimal> Total { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<System.DateTime> UpdatedOn { get; set; }
     
-        public virtual ICollection<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
+        public virtual Item Item { get; set; }
+        public virtual ItemPurchase ItemPurchase { get; set; }
     }
 }

@@ -112,6 +112,7 @@ namespace SMS_Web.Helpers
         public static bool InvalidateTransportDriverCache = false;
         public static bool InvalidateStaffHolidayCache = false;
         public static bool InvalidateVendorCache = false;
+        public static bool InvalidateItemCache = false;
 
         private static List<Class> _classList;
         private static List<Branch> _branchList;
@@ -174,6 +175,8 @@ namespace SMS_Web.Helpers
         private static List<SystemConfig> _systemConfig;
         private static List<StaffHoliday> _staffHolidayList;
         private static List<Vendor> _vendorList;
+        private static List<ItemUnit> _unitList;
+        private static List<ItemModel> _itemList;
 
         public static void BuildCache()
         {
@@ -261,6 +264,43 @@ namespace SMS_Web.Helpers
 
             return _vendorList;
         }
+
+        public static List<ItemModel> ItemList()
+        {
+            if (_itemList == null || _itemList.Count == 0 || InvalidateItemCache == false)
+            {
+                storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
+                _itemList = storeRepo.GetAllItemsModel();
+                InvalidateItemCache = true;
+            }
+
+            return _itemList;
+        }
+
+        public static List<string> ItemNamesList()
+        {
+            ItemList();
+            List<string> names = new List<string>();
+
+            foreach (var item in _itemList)
+            {
+                names.Add(item.Id.ToString().PadLeft(4, '0') +" | "+ item.ItemName + " | " + item.UnitName);
+            }
+
+            return names;
+        }
+
+        public static List<ItemUnit> UnitList()
+        {
+            if (_unitList == null || _unitList.Count == 0)
+            {
+                storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
+                _unitList = storeRepo.GetAllItemUnits();
+            }
+
+            return _unitList;
+        }
+
 
         public static List<GradesConfig> GradesConfigList()
         {

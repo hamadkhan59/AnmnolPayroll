@@ -14,11 +14,18 @@ namespace SMS_DAL
     
     public partial class Item
     {
-        public int ItemId { get; set; }
-        public int Headid { get; set; }
+        public Item()
+        {
+            this.ItemPurchaseDetails = new HashSet<ItemPurchaseDetail>();
+        }
+    
+        public int Id { get; set; }
         public string ItemName { get; set; }
-        public Nullable<int> ItemQuantity { get; set; }
+        public Nullable<int> UnitId { get; set; }
         public string ItemDescription { get; set; }
-        public string IsDeleted { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+    
+        public virtual ItemUnit ItemUnit { get; set; }
+        public virtual ICollection<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
     }
 }

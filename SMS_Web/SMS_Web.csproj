@@ -342,6 +342,8 @@
     <Compile Include="Controllers\StaffHandling\StaffAttendanceAdjustmentController.cs" />
     <Compile Include="Controllers\StaffHandling\StaffHolidayController.cs" />
     <Compile Include="Controllers\StaffHandling\StaffMiscWithdrawController.cs" />
+    <Compile Include="Controllers\StoreManagement\ItemPurchaseController.cs" />
+    <Compile Include="Controllers\StoreManagement\ItemController.cs" />
     <Compile Include="Controllers\StoreManagement\VendorController.cs" />
     <Compile Include="Controllers\SystemConfiguration\FeeConfigurationController.cs" />
     <Compile Include="Controllers\FeeCollection\IssueChalanController.cs" />
@@ -5826,6 +5828,8 @@
     <Content Include="Views\PettyCashAccount\Index.cshtml" />
     <Content Include="Views\PettyCashReport\ViewReport.cshtml" />
     <Content Include="Views\Vendor\Index.cshtml" />
+    <Content Include="Views\Item\Index.cshtml" />
+    <Content Include="Views\ItemPurchase\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

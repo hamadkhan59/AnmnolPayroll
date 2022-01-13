@@ -302,10 +302,16 @@
     <Compile Include="ItemPurchase.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ItemPurchaseDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ItemSale.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemStock.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemUnit.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemVendor.cs">
@@ -630,6 +636,7 @@
     <Compile Include="ViewModel\ChapterTopicViewModel.cs" />
     <Compile Include="ViewModel\ClassSectionModel.cs" />
     <Compile Include="ViewModel\DDModel.cs" />
+    <Compile Include="ViewModel\ItemModel.cs" />
     <Compile Include="ViewModel\SmsModel.cs" />
     <Compile Include="ViewModel\DailyTestViewModel.cs" />
     <Compile Include="ViewModel\ActivityMarksViewModel.cs" />
