@@ -123,6 +123,16 @@ namespace SMS_DAL.Reports
                         from StaffAttendanceReport sar inner join StaffAttendanceDetail sad
                         on sar.AttendanceId = sad.AttendanceId
                         order  by sar.StaffId, sad.Id";
+
+            if (fromDate.Date == toDate.Date)
+            {
+                sql = @"Select sar.StaffId as Year, sar.Name, sar.TotalHours  as JoininDate, 
+                        sar.WorkingHours  as Address, sad.TimeIn as Designation, sad.TimeOut as Education,
+                        isnull(ExtraHours,0) as Total
+                        from StaffAttendanceReport sar left outer join StaffAttendanceDetail sad
+                        on sar.AttendanceId = sad.AttendanceId
+                        order  by sar.StaffId, sad.Id";
+            }
             return ExecuteDataSet(sql);
         }
 
