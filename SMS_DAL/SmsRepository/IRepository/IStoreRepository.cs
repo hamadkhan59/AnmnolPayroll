@@ -33,6 +33,7 @@ namespace SMS_DAL.SmsRepository.IRepository
         void UpdateItemPurchase(ItemPurchase itemPurchase);
         List<ItemPurchase> GetAllItemPurchase();
         void DeleteItemPurchase(ItemPurchase itemPurchase);
+        List<ItemPurchaseModel> SearchItemPurchase(DateTime fromDate, DateTime toDate, int orderId);
         int AddItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail);
         ItemPurchaseDetail GetItemPurchaseDetailById(int id);
         void UpdateItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail);

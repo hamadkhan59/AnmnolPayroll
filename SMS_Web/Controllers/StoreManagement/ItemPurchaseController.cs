@@ -45,7 +45,17 @@ namespace SMS_Web.Controllers.StoreManagement
             //}
             try
             {
-                ViewData["OrderId"] = storeRepo.GetPurchaseOrderId();
+                if (id > 0)
+                {
+                    var itemPurchase = storeRepo.GetItemPurchaseById(id);
+                    ViewData["OrderId"] = itemPurchase.OrderId;
+                    ViewData["OrderDate"] = itemPurchase.PurchaseDate;
+                    ViewData["itemPurchase"] = storeRepo.GetAllItemPurchaseDetailModelByItemPurchaseId(itemPurchase.Id);
+                }
+                else
+                {
+                    ViewData["OrderId"] = storeRepo.GetPurchaseOrderId();
+                }
                 ViewBag.ItemNames = SessionHelper.ItemNamesList();
                 ViewBag.UnitId = new SelectList(SessionHelper.UnitList(), "Id", "Name");
                 ViewData["Error"] = errorCode;
@@ -139,7 +149,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
                 foreach (var model in itemPurchaseList)
                 {
-                    var itemName = model.ItemName;
+                    var itemName = model.ItemName.Trim();
                     var item = SessionHelper.ItemList().Where(x => x.ItemName == itemName).FirstOrDefault();
                     ItemPurchaseDetail detail = new ItemPurchaseDetail();
                     detail.ItemPurchaseId = purchase.Id;
@@ -164,6 +174,59 @@ namespace SMS_Web.Controllers.StoreManagement
                 LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
                 LogWriter.WriteExceptionLog(exc);
             }
+        }
+
+        public ActionResult Search()
+        {
+            if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            //if (UserPermissionController.CheckUserPermission(Session.SessionID,ConstHelper.SA_CLASSES) == false)
+            //{
+            //    return RedirectToAction("Index", "NoPermission");
+            //}
+            try
+            {
+                List<ItemPurchaseModel> purchaseList = new List<ItemPurchaseModel>();
+                if (Session[ConstHelper.STM_ITEM_PURCHASE_LIST] != null)
+                {
+                    purchaseList = (List<ItemPurchaseModel>)Session[ConstHelper.STM_ITEM_PURCHASE_LIST];
+                    ViewData["itemPurchase"] = purchaseList;
+                }
+                ViewData["Error"] = errorCode;
+                errorCode = 0;
+            }
+            catch (Exception exc)
+            {
+                LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                LogWriter.WriteExceptionLog(exc);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SearchItemPurchase(DateTime FromDate, DateTime ToDate, int OrderId = 0)
+        {
+            if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            try
+            {
+                var purchaseList = storeRepo.SearchItemPurchase(FromDate, ToDate, OrderId);
+                Session[ConstHelper.STM_ITEM_PURCHASE_LIST] = purchaseList;
+            }
+            catch (Exception exc)
+            {
+                errorCode = 420;
+                LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                LogWriter.WriteExceptionLog(exc);
+            }
+            return RedirectToAction("Search");
         }
     }
 }

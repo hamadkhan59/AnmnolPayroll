@@ -26,4 +26,13 @@ namespace SMS_DAL.ViewModel
         public string ItemName { get; set; }
         public int OrderId { get; set; }
     }
+
+    public partial class ItemPurchaseModel
+    {
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public Nullable<int> Amount { get; set; }
+        public Nullable<System.DateTime> PurchaseDate { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+    }
 }

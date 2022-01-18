@@ -252,10 +252,21 @@
                                             {
                                                 <li><a href="~/Item/Index/0">Items</a></li>
                                             }
-                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Users|") == true)
-                                            {
-                                                <li><a href="~/ItemPurchase/Index/0">Purchase</a></li>
-                                            }
+                                            <li>
+                                                <a>Purchase <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Users|") == true)
+                                                    {
+                                                        <li><a href="~/ItemPurchase/Index/0">New Purchase</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Designation|") == true)
+                                                    {
+                                                        <li><a href="~/ItemPurchase/Search">Search</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                            
                                         </ul>
                                     }
                                 </li>

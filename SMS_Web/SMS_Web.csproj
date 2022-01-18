@@ -5830,6 +5830,7 @@
     <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Views\Item\Index.cshtml" />
     <Content Include="Views\ItemPurchase\Index.cshtml" />
+    <Content Include="Views\ItemPurchase\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

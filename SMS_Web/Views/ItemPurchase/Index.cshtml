@@ -141,7 +141,33 @@
                                 </tr>
 
                             </thead>
-                            <tbody style="background-color:white;color:#2A3F54" id="classBody"></tbody>
+                            <tbody style="background-color:white;color:#2A3F54" id="classBody">
+                                @if (ViewData["itemPurchase"] != null)
+                                {
+                                    int i = 0;
+                                    foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ItemPurchaseDetailModel>)ViewData["itemPurchase"])
+                                    {
+                                        <tr id="@("tableRowHis" + i)">
+                                          
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ItemName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Rate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Total)
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-squar btn-danger btn-xs navbar-right" title="Delete Item" onclick="DeleteItemFromTable(0,@(i++))"> X </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
                         </table>
                     </div>
                     <div class="ln_solid"></div>
@@ -271,7 +297,7 @@
 
                 window.onload = function (e) {
                     populateErrors();
-                    $('#purchaseDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
+                    $('#purchaseDate').val('@(ViewData["OrderDate"] == null ? DateTime.Now.ToString("yyyy-MM-dd") : ((DateTime)ViewData["OrderDate"]).ToString("yyyy-MM-dd"))');
                     GetItemNames();
                     autocomplete(document.getElementById("ItemNameId"), itemNames);
                     $("#qty").change(function(){
@@ -296,7 +322,7 @@
                             return false;
                         }
                     });
-
+                    GetGrandTotal();
                 }
 
                 function calculateTotal()

@@ -3,6 +3,7 @@ using SMS_DAL.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -229,6 +230,25 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             }
         }
 
+        public List<ItemPurchaseModel> SearchItemPurchase(DateTime fromDate, DateTime toDate, int orderId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+
+            var query = from purchase in dbContext.ItemPurchases
+                        where ((EntityFunctions.TruncateTime(purchase.CreatedOn) >= fromDate.Date
+                           && EntityFunctions.TruncateTime(purchase.CreatedOn) <= toDate.Date) 
+                           || purchase.OrderId == orderId)
+                        select new ItemPurchaseModel
+                        {
+                            Id = purchase.Id,
+                            Amount = purchase.Amount,
+                            OrderId = purchase.OrderId,
+                            CreatedOn = purchase.CreatedOn,
+                            PurchaseDate = purchase.PurchaseDate
+                        };
+            return query.ToList();
+        }
+
         public int AddItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail)
         {
             int result = -1;
@@ -280,7 +300,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             var query = from purchaseDetail in dbContext.ItemPurchaseDetails
                         join item in dbContext.Items on purchaseDetail.ItemId equals item.Id
                         join purchase in dbContext.ItemPurchases on purchaseDetail.ItemPurchaseId equals purchase.Id
-                        where purchaseDetail.Id == itemPurchaseId
+                        where purchaseDetail.ItemPurchaseId == itemPurchaseId
                         select new ItemPurchaseDetailModel
                         {
                             Id = purchaseDetail.Id,
