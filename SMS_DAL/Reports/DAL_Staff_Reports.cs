@@ -127,7 +127,7 @@ namespace SMS_DAL.Reports
             if (fromDate.Date == toDate.Date)
             {
                 sql = @"Select sar.StaffId as Year, sar.Name, sar.TotalHours  as JoininDate, 
-                        sar.WorkingHours  as Address, sad.TimeIn as Designation, sad.TimeOut as Education,
+                        sar.WorkingHours  as Address, isnull(sad.TimeIn, 'Absent') as Designation, sad.TimeOut as Education,
                         isnull(ExtraHours,0) as Total
                         from StaffAttendanceReport sar left outer join StaffAttendanceDetail sad
                         on sar.AttendanceId = sad.AttendanceId
