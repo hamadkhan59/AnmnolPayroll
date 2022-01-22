@@ -310,7 +310,8 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             OrderId = purchase.OrderId,
                             Quantity = purchaseDetail.Quantity,
                             Rate = purchaseDetail.Rate,
-                            Total = purchaseDetail.Total
+                            Total = purchaseDetail.Total,
+                            IssuanceQuantity = purchaseDetail.IssuanceQuantity
                         };
 
             return query.ToList();
@@ -323,6 +324,156 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             if (count > 0)
             {
                 orderId = dbContext.ItemPurchases.Max(x => x.OrderId);
+                orderId++;
+            }
+
+            return orderId;
+        }
+
+        public int AddItemIssuance(ItemIssuance itemIssuance)
+        {
+            int result = -1;
+            if (itemIssuance != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.ItemIssuances.Add(itemIssuance);
+                dbContext.SaveChanges();
+                result = itemIssuance.Id;
+            }
+
+            return result;
+        }
+
+        public ItemIssuance GetItemIssuanceByOrderId(int orderId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemIssuances.Where(x => x.OrderId == orderId).FirstOrDefault();
+        }
+
+        public ItemIssuance GetItemIssuanceById(int Id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemIssuances.Where(x => x.Id == Id).FirstOrDefault();
+        }
+
+        public void UpdateItemIssuance(ItemIssuance itemIssuance)
+        {
+            if (itemIssuance != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Entry(itemIssuance).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<ItemIssuance> GetAllItemIssuance()
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemIssuances.OrderByDescending(x => x.Id).ToList();
+        }
+
+        public void DeleteItemIssuance(ItemIssuance itemIssuance)
+        {
+            if (itemIssuance != null)
+            {
+                dbContext.ItemIssuances.Remove(itemIssuance);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<ItemIssuanceModel> SearchItemIssuanc(DateTime fromDate, DateTime toDate, int orderId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+
+            var query = from purchase in dbContext.ItemIssuances
+                        where ((EntityFunctions.TruncateTime(purchase.CreatedOn) >= fromDate.Date
+                           && EntityFunctions.TruncateTime(purchase.CreatedOn) <= toDate.Date)
+                           || purchase.OrderId == orderId)
+                        select new ItemIssuanceModel
+                        {
+                            Id = purchase.Id,
+                            Amount = purchase.Amount,
+                            OrderId = purchase.OrderId,
+                            CreatedOn = purchase.CreatedOn,
+                            IssuanceDate = purchase.IssuanceDate
+                        };
+            return query.ToList();
+        }
+
+        public int AddItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail)
+        {
+            int result = -1;
+            if (itemIssuanceDetail != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.ItemIssuanceDetails.Add(itemIssuanceDetail);
+                dbContext.SaveChanges();
+                result = itemIssuanceDetail.Id;
+            }
+
+            return result;
+        }
+
+        public ItemIssuanceDetail GetItemIssuanceDetailById(int id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemIssuanceDetails.Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        public void UpdateItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail)
+        {
+            if (itemIssuanceDetail != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Entry(itemIssuanceDetail).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail)
+        {
+            if (itemIssuanceDetail != null)
+            {
+                dbContext.ItemIssuanceDetails.Remove(itemIssuanceDetail);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<ItemIssuanceDetail> GetAllItemIssuanceDetailByItemIssuanceId(int IiemIssuanceId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemIssuanceDetails.Where(x => x.ItemIssuanceId == IiemIssuanceId).ToList();
+        }
+
+        public List<ItemIssuanceDetailModel> GetAllItemIssuanceDetailModelByItemIssuanceId(int itemIssuanceId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            var query = from issuanceDetail in dbContext.ItemIssuanceDetails
+                        join item in dbContext.Items on issuanceDetail.ItemId equals item.Id
+                        join issuance in dbContext.ItemIssuances on issuanceDetail.ItemIssuanceId equals issuance.Id
+                        where issuanceDetail.ItemIssuanceId == itemIssuanceId
+                        select new ItemIssuanceDetailModel
+                        {
+                            Id = issuanceDetail.Id,
+                            ItemId = issuanceDetail.ItemId,
+                            ItemName = item.ItemName,
+                            ItemIssuanceId = issuanceDetail.ItemIssuanceId,
+                            OrderId = issuance.OrderId,
+                            Quantity = issuanceDetail.Quantity,
+                            Rate = issuanceDetail.Rate,
+                            Total = issuanceDetail.Total
+                        };
+
+            return query.ToList();
+        }
+
+        public int GetIssuanceOrderId()
+        {
+            int orderId = 1;
+            var count = dbContext.ItemIssuances.Count();
+            if (count > 0)
+            {
+                orderId = dbContext.ItemIssuances.Max(x => x.OrderId);
                 orderId++;
             }
 

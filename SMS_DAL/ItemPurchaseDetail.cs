@@ -21,8 +21,9 @@ namespace SMS_DAL
         public Nullable<decimal> Rate { get; set; }
         public Nullable<decimal> Total { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+        public Nullable<int> IssuanceQuantity { get; set; }
     
-        public virtual Item Item { get; set; }
         public virtual ItemPurchase ItemPurchase { get; set; }
+        public virtual Item Item { get; set; }
     }
 }

@@ -41,5 +41,19 @@ namespace SMS_DAL.SmsRepository.IRepository
         List<ItemPurchaseDetail> GetAllItemPurchaseDetailByItemPurchaseId(int itemPurchaseId);
         List<ItemPurchaseDetailModel> GetAllItemPurchaseDetailModelByItemPurchaseId(int itemPurchaseId);
         int GetPurchaseOrderId();
+        int AddItemIssuance(ItemIssuance itemIssuance);
+        ItemIssuance GetItemIssuanceByOrderId(int orderId);
+        ItemIssuance GetItemIssuanceById(int Id);
+        void UpdateItemIssuance(ItemIssuance itemIssuance);
+        List<ItemIssuance> GetAllItemIssuance();
+        void DeleteItemIssuance(ItemIssuance itemIssuance);
+        List<ItemIssuanceModel> SearchItemIssuanc(DateTime fromDate, DateTime toDate, int orderId);
+        int AddItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail);
+        ItemIssuanceDetail GetItemIssuanceDetailById(int id);
+        void UpdateItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail);
+        void DeleteItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail);
+        List<ItemIssuanceDetail> GetAllItemIssuanceDetailByItemIssuanceId(int IiemIssuanceId);
+        List<ItemIssuanceDetailModel> GetAllItemIssuanceDetailModelByItemIssuanceId(int itemIssuanceId);
+        int GetIssuanceOrderId();
     }
 }

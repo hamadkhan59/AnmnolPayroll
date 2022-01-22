@@ -7,13 +7,17 @@
       <Diagram DiagramId="114ef7574b92470292c1d10213613cfd" Name="Diagram1" ZoomLevel="27">
         <EntityTypeShape EntityType="SC_WEBModel.JournalEntry" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SC_WEBModel.Vendor" Width="1.5" PointX="3.375" PointY="0.75" />
-        <EntityTypeShape EntityType="SC_WEBModel.Item" Width="1.5" PointX="5.625" PointY="4.875" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemUnit" Width="1.5" PointX="3.375" PointY="5.25" />
-        <AssociationConnector Association="SC_WEBModel.FK_Items_ItemUnit" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchaseDetail" Width="1.5" PointX="7.875" PointY="4.625" />
-        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_Items" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchase" Width="1.5" PointX="5.375" PointY="1" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemIssuance" Width="1.5" PointX="5.625" PointY="3.25" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemIssuanceDetail" Width="1.5" PointX="7.875" PointY="7" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchase" Width="1.5" PointX="8.625" PointY="3.25" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchaseDetail" Width="1.5" PointX="10.875" PointY="7" />
+        <EntityTypeShape EntityType="SC_WEBModel.Item" Width="1.5" PointX="5.625" PointY="7.25" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemUnit" Width="1.5" PointX="3.375" PointY="7.625" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemIssuanceDetail_ItemIssuance" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemIssuanceDetail_Items" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_Items" />
+        <AssociationConnector Association="SC_WEBModel.FK_Items_ItemUnit" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
