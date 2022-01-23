@@ -206,7 +206,7 @@
                                 && SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS.ToString().Contains("|Petty Cash|") == true)
                                 {
                                     <li>
-                                        <a style="font-size:13px;height:38px;"><i class="fa fa-bar-chart-o" style="font-size:13px;"></i> Petty Cash <span class="fa fa-chevron-down"></span></a>
+                                        <a style="font-size:13px;height:38px;"><i class="fa fa-chain-broken" style="font-size:13px;"></i> Petty Cash <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
 
                                             @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Petty Cash Accounts|") == true)
@@ -241,7 +241,7 @@
                                     @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS != null
                                     && SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_MODULE_PERMISSIONS.ToString().Contains("|Security Assurance|") == true)
                                     {
-                                        <a style="font-size:13px;height:38px;"><i class="fa fa-user-secret" style="font-size:13px;"></i> Store Managment <span class="fa fa-chevron-down"></span></a>
+                                        <a style="font-size:13px;height:38px;"><i class="fa fa-scissors" style="font-size:13px;"></i> Store Managment <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
 
                                             @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|User Group|") == true)
@@ -266,7 +266,37 @@
                                                     }
                                                 </ul>
                                             </li>
-                                            
+
+                                            <li>
+                                                <a>Issuance <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Users|") == true)
+                                                    {
+                                                        <li><a href="~/ItemIssuance/Index/0">New Issuance</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Designation|") == true)
+                                                    {
+                                                        <li><a href="~/ItemIssuance/Search">Search</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+
+                                            <li>
+                                                <a>Return <span class="fa fa-chevron-down"></span></a>
+                                                <ul class="nav child_menu">
+
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Users|") == true)
+                                                    {
+                                                        <li><a href="~/ItemReturn/Index/0">New Return</a></li>
+                                                    }
+                                                    @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Designation|") == true)
+                                                    {
+                                                        <li><a href="~/ItemReturn/Search">Search</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+
                                         </ul>
                                     }
                                 </li>

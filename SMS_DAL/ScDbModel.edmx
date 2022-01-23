@@ -662,6 +662,17 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.FinanceAccountLevel' does not ha
           <Property Name="IsDeleted" Type="nchar" MaxLength="10" />
           <Property Name="BranchId" Type="int" />
         </EntityType>
+        <EntityType Name="IssuanceStockQuantity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemIssuanceDetailId" Type="int" />
+          <Property Name="ItemReturnDetailId" Type="int" />
+          <Property Name="ItemPurchaseDetailId" Type="int" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
         <EntityType Name="IssueChalanDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -758,7 +769,31 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.FinanceAccountLevel' does not ha
           <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
           <Property Name="CreatedOn" Type="datetime" />
-          <Property Name="IssuanceQuantity" Type="int" />
+          <Property Name="IssuanceQuantity" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="ItemReturn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="int" />
+          <Property Name="ReturnDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="UpdatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ItemReturnDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemReturnId" Type="int" />
+          <Property Name="ItemId" Type="int" />
+          <Property Name="UnitId" Type="int" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Rate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="Items">
           <Key>
@@ -2657,6 +2692,30 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ItemReturnDetail_ItemReturn">
+          <End Role="ItemReturn" Type="Self.ItemReturn" Multiplicity="0..1" />
+          <End Role="ItemReturnDetail" Type="Self.ItemReturnDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemReturn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemReturnDetail">
+              <PropertyRef Name="ItemReturnId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemReturnDetail_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1" />
+          <End Role="ItemReturnDetail" Type="Self.ItemReturnDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemReturnDetail">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Items_ItemUnit">
           <End Role="ItemUnit" Type="Self.ItemUnit" Multiplicity="0..1" />
           <End Role="Items" Type="Self.Items" Multiplicity="*" />
@@ -3924,6 +3983,7 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
           <EntitySet Name="GradesConfig" EntityType="Self.GradesConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupPermission" EntityType="Self.GroupPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Heads" EntityType="Self.Heads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IssuanceStockQuantity" EntityType="Self.IssuanceStockQuantity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssueChalanDetail" EntityType="Self.IssueChalanDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssueChallanConfig" EntityType="Self.IssueChallanConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IssuedChallan" EntityType="Self.IssuedChallan" Schema="dbo" store:Type="Tables" />
@@ -3931,6 +3991,8 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
           <EntitySet Name="ItemIssuanceDetail" EntityType="Self.ItemIssuanceDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemPurchase" EntityType="Self.ItemPurchase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemPurchaseDetail" EntityType="Self.ItemPurchaseDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemReturn" EntityType="Self.ItemReturn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemReturnDetail" EntityType="Self.ItemReturnDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemUnit" EntityType="Self.ItemUnit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntry" EntityType="Self.JournalEntry" Schema="dbo" store:Type="Tables" />
@@ -4355,6 +4417,14 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <AssociationSet Name="FK_ItemPurchaseDetail_Items" Association="Self.FK_ItemPurchaseDetail_Items">
             <End Role="Items" EntitySet="Items" />
             <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemReturnDetail_ItemReturn" Association="Self.FK_ItemReturnDetail_ItemReturn">
+            <End Role="ItemReturn" EntitySet="ItemReturn" />
+            <End Role="ItemReturnDetail" EntitySet="ItemReturnDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemReturnDetail_Items" Association="Self.FK_ItemReturnDetail_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="ItemReturnDetail" EntitySet="ItemReturnDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_Items_ItemUnit" Association="Self.FK_Items_ItemUnit">
             <End Role="ItemUnit" EntitySet="ItemUnit" />
@@ -5695,7 +5765,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <EntitySet Name="ItemIssuances" EntityType="SC_WEBModel.ItemIssuance" />
           <EntitySet Name="ItemIssuanceDetails" EntityType="SC_WEBModel.ItemIssuanceDetail" />
           <EntitySet Name="ItemPurchases" EntityType="SC_WEBModel.ItemPurchase" />
-          <EntitySet Name="ItemPurchaseDetails" EntityType="SC_WEBModel.ItemPurchaseDetail" />
           <EntitySet Name="Items" EntityType="SC_WEBModel.Item" />
           <EntitySet Name="ItemUnits" EntityType="SC_WEBModel.ItemUnit" />
           <AssociationSet Name="FK_ItemIssuanceDetail_ItemIssuance" Association="SC_WEBModel.FK_ItemIssuanceDetail_ItemIssuance">
@@ -5706,6 +5775,11 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             <End Role="Item" EntitySet="Items" />
             <End Role="ItemIssuanceDetail" EntitySet="ItemIssuanceDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_Items_ItemUnit" Association="SC_WEBModel.FK_Items_ItemUnit">
+            <End Role="ItemUnit" EntitySet="ItemUnits" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <EntitySet Name="ItemPurchaseDetails" EntityType="SC_WEBModel.ItemPurchaseDetail" />
           <AssociationSet Name="FK_ItemPurchaseDetail_ItemPurchase" Association="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase">
             <End Role="ItemPurchase" EntitySet="ItemPurchases" />
             <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetails" />
@@ -5714,10 +5788,17 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             <End Role="Item" EntitySet="Items" />
             <End Role="ItemPurchaseDetail" EntitySet="ItemPurchaseDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_Items_ItemUnit" Association="SC_WEBModel.FK_Items_ItemUnit">
-            <End Role="ItemUnit" EntitySet="ItemUnits" />
-            <End Role="Item" EntitySet="Items" />
+          <EntitySet Name="ItemReturns" EntityType="SC_WEBModel.ItemReturn" />
+          <EntitySet Name="ItemReturnDetails" EntityType="SC_WEBModel.ItemReturnDetail" />
+          <AssociationSet Name="FK_ItemReturnDetail_ItemReturn" Association="SC_WEBModel.FK_ItemReturnDetail_ItemReturn">
+            <End Role="ItemReturn" EntitySet="ItemReturns" />
+            <End Role="ItemReturnDetail" EntitySet="ItemReturnDetails" />
           </AssociationSet>
+          <AssociationSet Name="FK_ItemReturnDetail_Items" Association="SC_WEBModel.FK_ItemReturnDetail_Items">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="ItemReturnDetail" EntitySet="ItemReturnDetails" />
+          </AssociationSet>
+          <EntitySet Name="IssuanceStockQuantities" EntityType="SC_WEBModel.IssuanceStockQuantity" />
           </EntityContainer>
         <ComplexType Name="sp_Get_Student_Result_Result">
           <Property Type="Int32" Name="TermId" Nullable="true" />
@@ -9724,21 +9805,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="ItemPurchaseDetails" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" FromRole="ItemPurchase" ToRole="ItemPurchaseDetail" />
         </EntityType>
-        <EntityType Name="ItemPurchaseDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemPurchaseId" Type="Int32" />
-          <Property Name="ItemId" Type="Int32" />
-          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="IssuanceQuantity" Type="Int32" />
-          <NavigationProperty Name="ItemPurchase" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" FromRole="ItemPurchaseDetail" ToRole="ItemPurchase" />
-          <NavigationProperty Name="Item" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_Items" FromRole="ItemPurchaseDetail" ToRole="Item" />
-        </EntityType>
         <EntityType Name="Item">
           <Key>
             <PropertyRef Name="Id" />
@@ -9749,8 +9815,9 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <Property Name="ItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="ItemIssuanceDetails" Relationship="SC_WEBModel.FK_ItemIssuanceDetail_Items" FromRole="Item" ToRole="ItemIssuanceDetail" />
-          <NavigationProperty Name="ItemPurchaseDetails" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_Items" FromRole="Item" ToRole="ItemPurchaseDetail" />
           <NavigationProperty Name="ItemUnit" Relationship="SC_WEBModel.FK_Items_ItemUnit" FromRole="Item" ToRole="ItemUnit" />
+          <NavigationProperty Name="ItemPurchaseDetails" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_Items" FromRole="Item" ToRole="ItemPurchaseDetail" />
+          <NavigationProperty Name="ItemReturnDetails" Relationship="SC_WEBModel.FK_ItemReturnDetail_Items" FromRole="Item" ToRole="ItemReturnDetail" />
         </EntityType>
         <EntityType Name="ItemUnit">
           <Key>
@@ -9784,6 +9851,33 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Items_ItemUnit">
+          <End Type="SC_WEBModel.ItemUnit" Role="ItemUnit" Multiplicity="0..1" />
+          <End Type="SC_WEBModel.Item" Role="Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ItemUnit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="UnitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ItemPurchaseDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemPurchaseId" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="IssuanceQuantity" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="ItemPurchase" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" FromRole="ItemPurchaseDetail" ToRole="ItemPurchase" />
+          <NavigationProperty Name="Item" Relationship="SC_WEBModel.FK_ItemPurchaseDetail_Items" FromRole="ItemPurchaseDetail" ToRole="Item" />
+        </EntityType>
         <Association Name="FK_ItemPurchaseDetail_ItemPurchase">
           <End Type="SC_WEBModel.ItemPurchase" Role="ItemPurchase" Multiplicity="0..1" />
           <End Type="SC_WEBModel.ItemPurchaseDetail" Role="ItemPurchaseDetail" Multiplicity="*" />
@@ -9808,18 +9902,68 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Items_ItemUnit">
-          <End Type="SC_WEBModel.ItemUnit" Role="ItemUnit" Multiplicity="0..1" />
-          <End Type="SC_WEBModel.Item" Role="Item" Multiplicity="*" />
+        <EntityType Name="ItemReturn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Int32" />
+          <Property Name="ReturnDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ItemReturnDetails" Relationship="SC_WEBModel.FK_ItemReturnDetail_ItemReturn" FromRole="ItemReturn" ToRole="ItemReturnDetail" />
+        </EntityType>
+        <EntityType Name="ItemReturnDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemReturnId" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="UnitId" Type="Int32" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ItemReturn" Relationship="SC_WEBModel.FK_ItemReturnDetail_ItemReturn" FromRole="ItemReturnDetail" ToRole="ItemReturn" />
+          <NavigationProperty Name="Item" Relationship="SC_WEBModel.FK_ItemReturnDetail_Items" FromRole="ItemReturnDetail" ToRole="Item" />
+        </EntityType>
+        <Association Name="FK_ItemReturnDetail_ItemReturn">
+          <End Type="SC_WEBModel.ItemReturn" Role="ItemReturn" Multiplicity="0..1" />
+          <End Type="SC_WEBModel.ItemReturnDetail" Role="ItemReturnDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ItemUnit">
+            <Principal Role="ItemReturn">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Item">
-              <PropertyRef Name="UnitId" />
+            <Dependent Role="ItemReturnDetail">
+              <PropertyRef Name="ItemReturnId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ItemReturnDetail_Items">
+          <End Type="SC_WEBModel.Item" Role="Item" Multiplicity="0..1" />
+          <End Type="SC_WEBModel.ItemReturnDetail" Role="ItemReturnDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ItemReturnDetail">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="IssuanceStockQuantity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemIssuanceDetailId" Type="Int32" />
+          <Property Name="ItemReturnDetailId" Type="Int32" />
+          <Property Name="ItemPurchaseDetailId" Type="Int32" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11825,20 +11969,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ItemPurchaseDetails">
-            <EntityTypeMapping TypeName="SC_WEBModel.ItemPurchaseDetail">
-              <MappingFragment StoreEntitySet="ItemPurchaseDetail">
-                <ScalarProperty Name="IssuanceQuantity" ColumnName="IssuanceQuantity" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="ItemPurchaseId" ColumnName="ItemPurchaseId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Items">
             <EntityTypeMapping TypeName="SC_WEBModel.Item">
               <MappingFragment StoreEntitySet="Items">
@@ -11854,6 +11984,58 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             <EntityTypeMapping TypeName="SC_WEBModel.ItemUnit">
               <MappingFragment StoreEntitySet="ItemUnit">
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemPurchaseDetails">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemPurchaseDetail">
+              <MappingFragment StoreEntitySet="ItemPurchaseDetail">
+                <ScalarProperty Name="IssuanceQuantity" ColumnName="IssuanceQuantity" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemPurchaseId" ColumnName="ItemPurchaseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemReturns">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemReturn">
+              <MappingFragment StoreEntitySet="ItemReturn">
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemReturnDetails">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemReturnDetail">
+              <MappingFragment StoreEntitySet="ItemReturnDetail">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitId" ColumnName="UnitId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemReturnId" ColumnName="ItemReturnId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IssuanceStockQuantities">
+            <EntityTypeMapping TypeName="SC_WEBModel.IssuanceStockQuantity">
+              <MappingFragment StoreEntitySet="IssuanceStockQuantity">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ItemPurchaseDetailId" ColumnName="ItemPurchaseDetailId" />
+                <ScalarProperty Name="ItemReturnDetailId" ColumnName="ItemReturnDetailId" />
+                <ScalarProperty Name="ItemIssuanceDetailId" ColumnName="ItemIssuanceDetailId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

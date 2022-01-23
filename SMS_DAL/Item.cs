@@ -18,6 +18,7 @@ namespace SMS_DAL
         {
             this.ItemIssuanceDetails = new HashSet<ItemIssuanceDetail>();
             this.ItemPurchaseDetails = new HashSet<ItemPurchaseDetail>();
+            this.ItemReturnDetails = new HashSet<ItemReturnDetail>();
         }
     
         public int Id { get; set; }
@@ -27,7 +28,8 @@ namespace SMS_DAL
         public Nullable<System.DateTime> CreatedOn { get; set; }
     
         public virtual ICollection<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
-        public virtual ICollection<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
         public virtual ItemUnit ItemUnit { get; set; }
+        public virtual ICollection<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
+        public virtual ICollection<ItemReturnDetail> ItemReturnDetails { get; set; }
     }
 }

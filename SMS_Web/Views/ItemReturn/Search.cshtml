@@ -153,13 +153,12 @@
             <div class="x_content">
 
 
-                @using (Html.BeginForm("SearchItemPurchase", "ItemPurchase", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("SearchItemReturn", "ItemReturn", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
 
                     <fieldset>
-
                         <div class="form-group row">
                             <label class="control-label col-md-2 col-sm-2 col-xs-12" align="left" for="first-name" style="font-size: 11px">
                                 From Date
@@ -240,9 +239,6 @@
                                     <th>
                                         Purchase #
                                     </th>
-                                    <th style="max-width:80px">
-                                        Amount
-                                    </th>
                                     <th>
                                         System Date
                                     </th>
@@ -253,10 +249,10 @@
 
                             </thead>
                             <tbody style="background-color:white;color:#2A3F54" id="classBody">
-                                @if (ViewData["itemPurchase"] != null)
+                                @if (ViewData["itemRetrn"] != null)
                                 {
                                     int i = 1;
-                                    foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ItemPurchaseModel>)ViewData["itemPurchase"])
+                                    foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ItemReturnModel>)ViewData["itemRetrn"])
                                     {
                                         <tr>
                                           
@@ -264,13 +260,10 @@
                                                 @(i++)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.PurchaseDate.Value.ToString().Split(' ')[0])
+                                                @Html.DisplayFor(modelItem => item.ReturnDate.Value.ToString().Split(' ')[0])
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.OrderId)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Amount)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.CreatedOn.Value.ToString().Split(' ')[0])
@@ -299,7 +292,7 @@
       {
           if ((int)@ViewData["Error"] == 420)
           {
-              <text> showNotification('Unable to Search Item Purchase.', 'Error', 'Error') </text>
+              <text> showNotification('Unable to Search Item Return.', 'Error', 'Error') </text>
           }
       }
     }
@@ -309,14 +302,15 @@
     window.onload = function (e) {
         $("#classTable").DataTable();
         populateErrors();
-        ShowSearchPanel(@((ViewData["itemPurchase"] == null) ? 0 : 1));
+        ShowSearchPanel(@((ViewData["itemRetrn"] == null) ? 0 : 1));
         $('#fromDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
         $('#toDate').val('@(DateTime.Now.ToString("yyyy-MM-dd"))');
         GetItemNames();
         autocomplete(document.getElementById("ItemNameId"), itemNames);
     }
 
-    function AddItemId() {
+    function AddItemId()
+    {
         var itemId = $('#ItemNameId').val();
         itemId = itemId.split('|')[0].trim();
         $('#ItemId').val(itemId);

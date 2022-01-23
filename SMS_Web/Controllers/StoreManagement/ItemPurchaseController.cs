@@ -111,7 +111,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
                 foreach (var model in itemPurchaseList)
                 {
-                    var itemName = model.ItemName;
+                    var itemName = model.ItemName.Trim();
                     var item = SessionHelper.ItemList().Where(x => x.ItemName == itemName).FirstOrDefault();
                     ItemPurchaseDetail detail = new ItemPurchaseDetail();
                     detail.ItemPurchaseId = purchase.Id;
@@ -193,10 +193,12 @@ namespace SMS_Web.Controllers.StoreManagement
                 if (Session[ConstHelper.STM_ITEM_PURCHASE_LIST] != null)
                 {
                     purchaseList = (List<ItemPurchaseModel>)Session[ConstHelper.STM_ITEM_PURCHASE_LIST];
+                    Session[ConstHelper.STM_ITEM_PURCHASE_LIST] = null;
                     ViewData["itemPurchase"] = purchaseList;
                 }
                 ViewData["Error"] = errorCode;
                 errorCode = 0;
+                ViewBag.ItemNames = SessionHelper.ItemNamesList();
             }
             catch (Exception exc)
             {
@@ -208,7 +210,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SearchItemPurchase(DateTime FromDate, DateTime ToDate, int OrderId = 0)
+        public ActionResult SearchItemPurchase(DateTime FromDate, DateTime ToDate, int OrderId = 0, int ItemId = 0)
         {
             if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
             {
@@ -217,7 +219,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
             try
             {
-                var purchaseList = storeRepo.SearchItemPurchase(FromDate, ToDate, OrderId);
+                var purchaseList = storeRepo.SearchItemPurchase(FromDate, ToDate, OrderId, ItemId);
                 Session[ConstHelper.STM_ITEM_PURCHASE_LIST] = purchaseList;
             }
             catch (Exception exc)

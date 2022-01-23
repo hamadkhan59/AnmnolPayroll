@@ -6,7 +6,7 @@
 }
 
 
-@using (Html.BeginForm(Html.BeginForm("SaveItemPurchase", "ItemPurchase", FormMethod.Post, new { @id = "itemPurchaseForm", enctype = "multipart/form-data" })))
+@using (Html.BeginForm(Html.BeginForm("SaveItemReturn", "ItemReturn", FormMethod.Post, new { @id = "itemReturnForm", enctype = "multipart/form-data" })))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -16,7 +16,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title sc_panel_header">
-                        <label class="nav navbar-left control-label sc_panel_label">Item Purchase</label>
+                        <label class="nav navbar-left control-label sc_panel_label">Item Return</label>
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
                                 <label class="control-label col-md-4 col-sm-4 col-xs-12" align="right" for="first-name" style="font-size: 11px;margin-top:5px;">
@@ -34,7 +34,7 @@
                                 </label>
                                 <div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:2px;">
                                     <div>
-                                        <input type="date" name="PurchaseDate" class="form-control input-sm" id="purchaseDate" />
+                                        <input type="date" name="ReturnDate" class="form-control input-sm" id="purchaseDate" />
                                     </div>
                                 </div>
                             </li>
@@ -49,33 +49,36 @@
                         @*<form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">*@
 
 
-
                         <div class="form-group row">
                             <label class="control-label col-md-6 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
                                 Item
                             </label>
-                            <label class="control-label col-md-2 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                            <label class="control-label col-md-3 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
                                 Qty <span class="required" style="color:red;">*</span>
                             </label>
-                            <label class="control-label col-md-2 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
-                                Rate <span class="required" style="color:red;">*</span>
-                            </label>
-                            <label class="control-label col-md-2 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
-                                Total <span class="required" style="color:red;">*</span>
+                            <label class="control-label col-md-3 col-sm-1 col-xs-12" align="left" for="first-name" style="font-size: 11px;">
+                                Unit <span class="required" style="color:red;">*</span>
                             </label>
                         </div>
                         <div class="form-group row" style="margin-top:-10px;">
+                           
                             <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div>
                                     <input type="text" autocomplete="off" id="ItemNameId" name="ItemNameId" class="form-control input-sm" />
+                                </div>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-12">
+
+           
+
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
                                     <input id="qty" type="number" class="form-control input-sm" />
+                                </div>
                             </div>
-                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                    <input id="rate" type="number" class="form-control input-sm" />
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                    <input id="total" type="number" class="form-control input-sm" value="0" readonly />
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <div>
+                                    @Html.DropDownList("UnitId", (IEnumerable<SelectListItem>)ViewBag.UnitId, new { @class = "form-control input-sm" })
+                                </div>
                             </div>
                         </div>
 
@@ -95,7 +98,7 @@
 
         <div class="x_panel">
             <div class="x_title sc_panel_header">
-                <label class="nav navbar-left control-label sc_panel_label">Item Purchase List </label>
+                <label class="nav navbar-left control-label sc_panel_label">Item Return List </label>
                 <div class="clearfix"></div>
             </div>
 
@@ -113,10 +116,7 @@
                                         Qty
                                     </th>
                                     <th>
-                                        Rate
-                                    </th>
-                                    <th>
-                                        Total
+                                        Unit
                                     </th>
                                     <th width="80px">
                                         Action
@@ -126,10 +126,10 @@
 
                             </thead>
                             <tbody style="background-color:white;color:#2A3F54" id="classBody">
-                                @if (ViewData["itemPurchase"] != null)
+                                @if (ViewData["itemReturn"] != null)
                                 {
                                     int i = 0;
-                                    foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ItemPurchaseDetailModel>)ViewData["itemPurchase"])
+                                    foreach (var item in (IEnumerable<SMS_DAL.ViewModel.ItemReturnDetailModel>)ViewData["itemReturn"])
                                     {
                                         <tr id="@("tableRowHis" + i)">
                                           
@@ -139,11 +139,8 @@
                                             <td align="right">
                                                 @Html.DisplayFor(modelItem => item.Quantity)
                                             </td>
-                                            <td align="right">
-                                                @Html.DisplayFor(modelItem => item.Rate)
-                                            </td>
-                                            <td align="right">
-                                                @Html.DisplayFor(modelItem => item.Total)
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UnitName)
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-sm btn-squar btn-danger btn-xs navbar-right" title="Delete Item" onclick="DeleteItemFromTable(0,@(i++))"> X </button>
@@ -155,16 +152,6 @@
                         </table>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="nav navbar-right">
-                            <input id="grandTotal" type="number" class="form-control input-sm" value="0" style="background-color:white;font-size:15px;font-weight:600;width:150px;text-align:right"  readonly />
-                        </div>
-
-                        <div class="nav navbar-right" style="margin-top:2px;margin-right:10px;">
-                            <label class="control-label" align="right" for="first-name" style="font-size: 11px;">
-                                Grand Total:
-                            </label>
-                        </div>
-
                         <div class="nav navbar-right" style="margin-right:10px;">
                             <input id="grandQty" type="number" class="form-control input-sm" value="0" style="background-color:white;font-size:15px;font-weight:600;width:150px;text-align:right" readonly />
                         </div>
@@ -174,7 +161,6 @@
                                 Total Qty:
                             </label>
                         </div>
-
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="ln_solid"></div>
@@ -264,7 +250,7 @@
        {
            if ((int)@ViewData["Error"] == 2)
            {
-               <text> showNotification('Item(s) Purchase is saved succesfully.', 'Success', 'Success') </text>
+               <text> showNotification('Item(s) Return is saved succesfully.', 'Success', 'Success') </text>
            }
        else if ((int)@ViewData["Error"] == 11)
            {
@@ -272,7 +258,7 @@
            }
        else if ((int)@ViewData["Error"] == 420)
            {
-               <text> showNotification('Unable to Save Item(s) Purchase.', 'Error', 'Error') </text>
+               <text> showNotification('Unable to Save Item(s) Issuance.', 'Error', 'Error') </text>
            }
        else if ((int)@ViewData["Error"] == 3)
            {
@@ -295,38 +281,17 @@
                     $('#purchaseDate').val('@(ViewData["OrderDate"] == null ? DateTime.Now.ToString("yyyy-MM-dd") : ((DateTime)ViewData["OrderDate"]).ToString("yyyy-MM-dd"))');
                     GetItemNames();
                     autocomplete(document.getElementById("ItemNameId"), itemNames);
-                    $("#qty").change(function(){
-                        calculateTotal();
+                    $("#ItemNameId").blur(function(){
+                        EnableUnitDD();
                     });
-                    $("#rate").change(function(){
-                        calculateTotal();
-                    });
-
-                    $('#qty').on('keyup keypress', function(e) {
-                        var keyCode = e.keyCode || e.which;
-                        if (keyCode === 13) {
-                            e.preventDefault();
-                            return false;
-                        }
-                    });
-
-                    $('#rate').on('keyup keypress', function(e) {
-                        var keyCode = e.keyCode || e.which;
-                        if (keyCode === 13) {
-                            e.preventDefault();
-                            return false;
-                        }
-                    });
-                    GetGrandTotal();
                 }
 
                 function calculateTotal()
                 {
                     var rate = $("#rate").val();
                     var qty = $("#qty").val();
-                    var total  = rate * qty;
-                    var total  = total.toFixed(2);
-                    $("#total").val(total);
+
+                    $("#total").val(rate * qty);
                 }
 
                 function getItemName()
@@ -337,14 +302,36 @@
                     return itemName;
                 }
 
+                function EnableUnitDD()
+                {
+                    var unitName = getUnitName();
+                    $("select#UnitId option").each(function() { this.selected = (this.text == unitName); });
+                    if(unitName == 'Boxes' || unitName == 'Pieces' || unitName == 'Liter' || unitName == 'Kilos')
+                    {
+                        $('#UnitId').attr('disabled', 'disabled');
+                    }
+                    else
+                    {
+                        $('#UnitId').removeAttr('disabled');
+                        $("select#UnitId option").each(function() { this.disabled = (this.text == 'Kilos' ||
+                            this.text == 'Pieces' || this.text == 'Boxes' || this.text == 'Liter'); });
+                    }
+                }
+                
+                function getUnitName()
+                {
+                    var itemName = $('#ItemNameId').val();
+                    itemName = itemName.split('|')[2].trim();
+
+                    return itemName;
+                }
+
                 function AddItemPurchaseDetail()
                 {
                     var itemName = getItemName();
                     var qty = $('#qty').val();
-                    var rate = $('#rate').val();
-                    var total = $('#total').val();
+                    var unit = $("#UnitId option:selected").text();
                     qty = Number(qty).toFixed(2);
-                    rate = Number(rate).toFixed(2);
 
                     if(itemName == null || itemName.length == 0)
                     {
@@ -353,10 +340,6 @@
                     else if(qty == null || qty.length == 0 || qty == 0)
                     {
                         showNotification('Please enter quantity.', 'Error', 'Error')
-                    }
-                    else if(rate == null || rate.length == 0 || rate == 0)
-                    {
-                        showNotification('Please enter rate.', 'Error', 'Error')
                     }
                     else if(IsItemAlreadyAdded(itemName) == true)
                     {
@@ -367,10 +350,8 @@
                         var rowCount = document.getElementById("classTable").rows.length - 1;
                         $('#ItemNameId').val("");
                         $('#qty').val("");
-                        $('#rate').val("");
-                        $('#total').val("0");
                         var button = '<button type="button" class="btn btn-sm btn-squar btn-danger btn-xs navbar-right" title = "Delete Item" onclick="DeleteItemFromTable(0,'+rowCount+')"> X </button>';
-                        var rowData = '<tr id="tableRowHis'+rowCount+'" style="height:35px;"><td>' +itemName+ '</td><td align="right">' +qty+ '</td><td align="right">' +rate+ '</td><td align="right">' +total+ '</td><td>' +button+ '</td></tr>';
+                        var rowData = '<tr id="tableRowHis'+rowCount+'" style="height:35px;"><td>' +itemName+ '</td><td align="right">' +qty+ '</td><td>' +unit+ '</td><td>' +button+ '</td></tr>';
                         $('#classTable tbody').append(rowData);
                         GetGrandTotal();
                     }
@@ -381,7 +362,6 @@
                 {
                     $('#ItemNameId').focus();
                 }
-
                 function DeleteItemFromTable(itemId, index)
                 {
                     var row = document.getElementById('tableRowHis'+index);
@@ -416,10 +396,10 @@
 
                     var rowCount = document.getElementById("classTable").rows.length;
                     var objCount = 0;
-                    var listName = "itemPurchaseList";
+                    var listName = "itemReturnList";
                     if(rowCount == 1)
                     {
-                        showNotification('No Items are added in the issuance', 'Error', 'Error');
+                        showNotification('No Items are added in the return', 'Error', 'Error');
                         return false;
                     }
                     else
@@ -429,13 +409,10 @@
                             debugger
                             var itemName = rowData[0].innerHTML;
                             var qty = Number(rowData[1].innerHTML);
-                            var rate = Number(rowData[2].innerHTML);
-                            var total = Number(rowData[3].innerHTML);
-
-                            $("#itemPurchaseForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].ItemName' value='" + itemName + "'>");
-                            $("#itemPurchaseForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].Quantity' value='" + qty + "'>");
-                            $("#itemPurchaseForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].Rate' value='" + rate + "'>");
-                            $("#itemPurchaseForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].Total' value='" + total + "'>");
+                            var unit = rowData[2].innerHTML;
+                            $("#itemReturnForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].ItemName' value='" + itemName + "'>");
+                            $("#itemReturnForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].Quantity' value='" + qty + "'>");
+                            $("#itemReturnForm").prepend("<input type='hidden' name='" + listName + "[" + objCount + "].UnitName' value='" + unit + "'>");
                             objCount++;
                         }
 
@@ -446,24 +423,18 @@
                 function GetGrandTotal()
                 {
                     var grandTotal = 0;
-                    var grandQty = 0;
                     var rowCount = document.getElementById("classTable").rows.length;
                     if(rowCount > 1)
                     {
                         for( var i = 1; i < rowCount; i++)
                         {
                             var rowData = document.getElementById("classTable").rows[i].cells;
-                            var total = rowData[3].innerHTML;
-                            var qty = rowData[1].innerHTML;
+                            var total = rowData[1].innerHTML;
                             grandTotal += Number(total);
-                            grandQty += Number(qty);
                         }
 
                     }
-                    grandTotal = grandTotal.toFixed(2);
-                    grandQty = grandQty.toFixed(2);
-                    $('#grandTotal').val(grandTotal);
-                    $('#grandQty').val(grandQty);
+                    $('#grandQty').val(grandTotal);
                 }
 
                 function GetItemNames() {

@@ -537,6 +537,8 @@ namespace SMS_Web.Helpers
         public const string ET_CRV = "CRV";
 
         public const string STM_ITEM_PURCHASE_LIST = "ITEM_PURCHASE_LIST";
+        public const string STM_ITEM_ISSUANCE_LIST = "ITEM_ISSUANCE_LIST";
+        public const string STM_ITEM_RETURN_LIST = "ITEM_RETURN_LIST";
 
     }
 }

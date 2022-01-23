@@ -287,6 +287,9 @@
     <Compile Include="Head.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="IssuanceStockQuantity.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="IssueChalanDetail.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
@@ -299,10 +302,22 @@
     <Compile Include="Item.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ItemIssuance.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemIssuanceDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ItemPurchase.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemPurchaseDetail.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemReturn.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ItemReturnDetail.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ItemSale.cs">

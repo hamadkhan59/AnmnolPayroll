@@ -230,14 +230,16 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             }
         }
 
-        public List<ItemPurchaseModel> SearchItemPurchase(DateTime fromDate, DateTime toDate, int orderId)
+        public List<ItemPurchaseModel> SearchItemPurchase(DateTime fromDate, DateTime toDate, int orderId, int itemId)
         {
             dbContext.Configuration.LazyLoadingEnabled = false;
 
             var query = from purchase in dbContext.ItemPurchases
+                        join purchaseDetail in dbContext.ItemPurchaseDetails on purchase.Id equals purchaseDetail.ItemPurchaseId
                         where ((EntityFunctions.TruncateTime(purchase.CreatedOn) >= fromDate.Date
                            && EntityFunctions.TruncateTime(purchase.CreatedOn) <= toDate.Date) 
                            || purchase.OrderId == orderId)
+                           &&(itemId == 0 || purchaseDetail.ItemId == itemId)
                         select new ItemPurchaseModel
                         {
                             Id = purchase.Id,
@@ -381,21 +383,23 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             }
         }
 
-        public List<ItemIssuanceModel> SearchItemIssuanc(DateTime fromDate, DateTime toDate, int orderId)
+        public List<ItemIssuanceModel> SearchItemIssuanc(DateTime fromDate, DateTime toDate, int orderId, int itemId)
         {
             dbContext.Configuration.LazyLoadingEnabled = false;
 
-            var query = from purchase in dbContext.ItemIssuances
-                        where ((EntityFunctions.TruncateTime(purchase.CreatedOn) >= fromDate.Date
-                           && EntityFunctions.TruncateTime(purchase.CreatedOn) <= toDate.Date)
-                           || purchase.OrderId == orderId)
+            var query = from issuance in dbContext.ItemIssuances
+                        join issuanceDetail in dbContext.ItemIssuanceDetails on issuance.Id equals issuanceDetail.ItemIssuanceId
+                        where ((EntityFunctions.TruncateTime(issuance.CreatedOn) >= fromDate.Date
+                           && EntityFunctions.TruncateTime(issuance.CreatedOn) <= toDate.Date)
+                           || issuance.OrderId == orderId)
+                           &&(itemId == 0 || itemId == issuanceDetail.ItemId)
                         select new ItemIssuanceModel
                         {
-                            Id = purchase.Id,
-                            Amount = purchase.Amount,
-                            OrderId = purchase.OrderId,
-                            CreatedOn = purchase.CreatedOn,
-                            IssuanceDate = purchase.IssuanceDate
+                            Id = issuance.Id,
+                            Amount = issuance.Amount,
+                            OrderId = issuance.OrderId,
+                            CreatedOn = issuance.CreatedOn,
+                            IssuanceDate = issuance.IssuanceDate
                         };
             return query.ToList();
         }
@@ -450,6 +454,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             dbContext.Configuration.LazyLoadingEnabled = false;
             var query = from issuanceDetail in dbContext.ItemIssuanceDetails
                         join item in dbContext.Items on issuanceDetail.ItemId equals item.Id
+                        join unit in dbContext.ItemUnits on issuanceDetail.UnitId equals unit.Id
                         join issuance in dbContext.ItemIssuances on issuanceDetail.ItemIssuanceId equals issuance.Id
                         where issuanceDetail.ItemIssuanceId == itemIssuanceId
                         select new ItemIssuanceDetailModel
@@ -461,7 +466,8 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             OrderId = issuance.OrderId,
                             Quantity = issuanceDetail.Quantity,
                             Rate = issuanceDetail.Rate,
-                            Total = issuanceDetail.Total
+                            Total = issuanceDetail.Total,
+                            UnitName = unit.Name
                         };
 
             return query.ToList();
@@ -474,6 +480,248 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             if (count > 0)
             {
                 orderId = dbContext.ItemIssuances.Max(x => x.OrderId);
+                orderId++;
+            }
+
+            return orderId;
+        }
+
+        public int AddIssuanceStockQuantity(IssuanceStockQuantity issuanceStockQuantity)
+        {
+            int result = -1;
+            if (issuanceStockQuantity != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.IssuanceStockQuantities.Add(issuanceStockQuantity);
+                dbContext.SaveChanges();
+                result = issuanceStockQuantity.Id;
+            }
+
+            return result;
+        }
+        public void UpdateIssuanceStockQuantity(IssuanceStockQuantity issuanceStockQuantity)
+        {
+            if (issuanceStockQuantity != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Entry(issuanceStockQuantity).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteIssuanceStockQuantity(IssuanceStockQuantity issuanceStockQuantity)
+        {
+            if (issuanceStockQuantity != null)
+            {
+                dbContext.IssuanceStockQuantities.Remove(issuanceStockQuantity);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<IssuanceStockQuantity> GetIssuanceQuanatityList(int itemIssuanceDetailId)
+        {
+            return dbContext.IssuanceStockQuantities.Where(x => x.ItemIssuanceDetailId == itemIssuanceDetailId).ToList();
+        }
+
+        public List<IssuanceStockQuantity> GetIssuanceReturnQuanatityList(int itemIssuanceDetailId)
+        {
+            return dbContext.IssuanceStockQuantities.Where(x => x.ItemReturnDetailId == itemIssuanceDetailId).ToList();
+        }
+
+
+        public List<ItemPurchaseDetailModel> GetItemPurchaseWithQuantity(int itemId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            var query = from purchaseDetail in dbContext.ItemPurchaseDetails
+                        join purchase in dbContext.ItemPurchases on purchaseDetail.ItemPurchaseId equals purchase.Id
+                        join item in dbContext.Items on purchaseDetail.ItemId equals item.Id
+                        where purchaseDetail.ItemId == itemId
+                        && purchaseDetail.Quantity - (purchaseDetail.IssuanceQuantity ?? 0) > 0
+                        select new ItemPurchaseDetailModel
+                        {
+                            Id = purchaseDetail.Id,
+                            ItemId = purchaseDetail.ItemId,
+                            ItemName = item.ItemName,
+                            OrderId = purchase.OrderId,
+                            Quantity = purchaseDetail.Quantity,
+                            Rate = purchaseDetail.Rate,
+                            Total = purchaseDetail.Total
+                        };
+
+            return query.OrderBy(x => x.Id).ToList();
+        }
+
+        public List<ItemPurchaseDetailModel> GetItemPurchaseWithZeroQuantity(int itemId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            var query = from purchaseDetail in dbContext.ItemPurchaseDetails
+                        join purchase in dbContext.ItemPurchases on purchaseDetail.ItemPurchaseId equals purchase.Id
+                        join item in dbContext.Items on purchaseDetail.ItemId equals item.Id
+                        where purchaseDetail.ItemId == itemId
+                        && purchaseDetail.Quantity - (purchaseDetail.IssuanceQuantity ?? 0) == 0
+                        select new ItemPurchaseDetailModel
+                        {
+                            Id = purchaseDetail.Id,
+                            ItemId = purchaseDetail.ItemId,
+                            ItemName = item.ItemName,
+                            OrderId = purchase.OrderId,
+                            Quantity = purchaseDetail.Quantity,
+                            Rate = purchaseDetail.Rate,
+                            Total = purchaseDetail.Total
+                        };
+
+            return query.OrderByDescending(x => x.Id).ToList();
+        }
+
+
+        public int AddItemReturn(ItemReturn itemReturn)
+        {
+            int result = -1;
+            if (itemReturn != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.ItemReturns.Add(itemReturn);
+                dbContext.SaveChanges();
+                result = itemReturn.Id;
+            }
+
+            return result;
+        }
+
+        public ItemReturn GetItemReturnByOrderId(int orderId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemReturns.Where(x => x.OrderId == orderId).FirstOrDefault();
+        }
+
+        public ItemReturn GetItemReturnById(int Id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemReturns.Where(x => x.Id == Id).FirstOrDefault();
+        }
+
+        public void UpdateItemReturn(ItemReturn itemReturn)
+        {
+            if (itemReturn != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Entry(itemReturn).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<ItemReturn> GetAllItemItemReturn()
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemReturns.OrderByDescending(x => x.Id).ToList();
+        }
+
+        public void DeleteItemReturn(ItemReturn itemReturn)
+        {
+            if (itemReturn != null)
+            {
+                dbContext.ItemReturns.Remove(itemReturn);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<ItemReturnModel> SearchItemReturn(DateTime fromDate, DateTime toDate, int orderId, int itemId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+
+            var query = from ireturn in dbContext.ItemReturns
+                        join returnDetail in dbContext.ItemReturnDetails on ireturn.Id equals returnDetail.ItemReturnId
+                        where ((EntityFunctions.TruncateTime(ireturn.CreatedOn) >= fromDate.Date
+                           && EntityFunctions.TruncateTime(ireturn.CreatedOn) <= toDate.Date)
+                           || ireturn.OrderId == orderId)
+                           && (itemId == 0 || itemId == returnDetail.ItemId)
+                        select new ItemReturnModel
+                        {
+                            Id = ireturn.Id,
+                            Amount = ireturn.Amount,
+                            OrderId = ireturn.OrderId,
+                            CreatedOn = ireturn.CreatedOn,
+                            ReturnDate = ireturn.ReturnDate
+                        };
+            return query.ToList();
+        }
+
+        public int AddItemReturnDetail(ItemReturnDetail itemReturnDetail)
+        {
+            int result = -1;
+            if (itemReturnDetail != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.ItemReturnDetails.Add(itemReturnDetail);
+                dbContext.SaveChanges();
+                result = itemReturnDetail.Id;
+            }
+
+            return result;
+        }
+
+        public ItemReturnDetail GetItemReturnDetailById(int id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemReturnDetails.Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        public void UpdateItemReturnDetail(ItemReturnDetail itemReturnDetail)
+        {
+            if (itemReturnDetail != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Entry(itemReturnDetail).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteItemReturnDetail(ItemReturnDetail itemReturnDetail)
+        {
+            if (itemReturnDetail != null)
+            {
+                dbContext.ItemReturnDetails.Remove(itemReturnDetail);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<ItemReturnDetail> GetAllItemReturnDetailByItemReturnId(int itemReturnId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemReturnDetails.Where(x => x.ItemReturnId == itemReturnId).ToList();
+        }
+
+        public List<ItemReturnDetailModel> GetAllItemReturnDetailModelByItemReturnId(int itemReturnId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            var query = from retuernDetail in dbContext.ItemReturnDetails
+                        join item in dbContext.Items on retuernDetail.ItemId equals item.Id
+                        join unit in dbContext.ItemUnits on retuernDetail.UnitId equals unit.Id
+                        join ireturn in dbContext.ItemReturns on retuernDetail.ItemReturnId equals ireturn.Id
+                        where retuernDetail.ItemReturnId == itemReturnId
+                        select new ItemReturnDetailModel
+                        {
+                            Id = retuernDetail.Id,
+                            ItemId = retuernDetail.ItemId,
+                            ItemName = item.ItemName,
+                            ItemReturnId = retuernDetail.ItemReturnId,
+                            OrderId = ireturn.OrderId,
+                            Quantity = retuernDetail.Quantity,
+                            Rate = retuernDetail.Rate,
+                            Total = retuernDetail.Total,
+                            UnitName = unit.Name
+                        };
+
+            return query.ToList();
+        }
+
+        public int GetReturnOrderId()
+        {
+            int orderId = 1;
+            var count = dbContext.ItemReturns.Count();
+            if (count > 0)
+            {
+                orderId = dbContext.ItemReturns.Max(x => x.OrderId);
                 orderId++;
             }
 

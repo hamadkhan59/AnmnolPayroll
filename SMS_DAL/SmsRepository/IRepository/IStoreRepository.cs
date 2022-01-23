@@ -33,7 +33,7 @@ namespace SMS_DAL.SmsRepository.IRepository
         void UpdateItemPurchase(ItemPurchase itemPurchase);
         List<ItemPurchase> GetAllItemPurchase();
         void DeleteItemPurchase(ItemPurchase itemPurchase);
-        List<ItemPurchaseModel> SearchItemPurchase(DateTime fromDate, DateTime toDate, int orderId);
+        List<ItemPurchaseModel> SearchItemPurchase(DateTime fromDate, DateTime toDate, int orderId, int itemId);
         int AddItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail);
         ItemPurchaseDetail GetItemPurchaseDetailById(int id);
         void UpdateItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail);
@@ -47,7 +47,7 @@ namespace SMS_DAL.SmsRepository.IRepository
         void UpdateItemIssuance(ItemIssuance itemIssuance);
         List<ItemIssuance> GetAllItemIssuance();
         void DeleteItemIssuance(ItemIssuance itemIssuance);
-        List<ItemIssuanceModel> SearchItemIssuanc(DateTime fromDate, DateTime toDate, int orderId);
+        List<ItemIssuanceModel> SearchItemIssuanc(DateTime fromDate, DateTime toDate, int orderId, int itemId);
         int AddItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail);
         ItemIssuanceDetail GetItemIssuanceDetailById(int id);
         void UpdateItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail);
@@ -55,5 +55,26 @@ namespace SMS_DAL.SmsRepository.IRepository
         List<ItemIssuanceDetail> GetAllItemIssuanceDetailByItemIssuanceId(int IiemIssuanceId);
         List<ItemIssuanceDetailModel> GetAllItemIssuanceDetailModelByItemIssuanceId(int itemIssuanceId);
         int GetIssuanceOrderId();
+        int AddIssuanceStockQuantity(IssuanceStockQuantity issuanceStockQuantity);
+        void UpdateIssuanceStockQuantity(IssuanceStockQuantity issuanceStockQuantity);
+        void DeleteIssuanceStockQuantity(IssuanceStockQuantity issuanceStockQuantity);
+        List<IssuanceStockQuantity> GetIssuanceQuanatityList(int itemIssuanceDetailId);
+        List<IssuanceStockQuantity> GetIssuanceReturnQuanatityList(int itemIssuanceDetailId);
+        List<ItemPurchaseDetailModel> GetItemPurchaseWithQuantity(int itemId);
+        List<ItemPurchaseDetailModel> GetItemPurchaseWithZeroQuantity(int itemId);
+        int AddItemReturn(ItemReturn itemReturn);
+        ItemReturn GetItemReturnByOrderId(int orderId);
+        ItemReturn GetItemReturnById(int Id);
+        void UpdateItemReturn(ItemReturn itemReturn);
+        List<ItemReturn> GetAllItemItemReturn();
+        void DeleteItemReturn(ItemReturn itemReturn);
+        List<ItemReturnModel> SearchItemReturn(DateTime fromDate, DateTime toDate, int orderId, int itemId);
+        int AddItemReturnDetail(ItemReturnDetail itemReturnDetail);
+        ItemReturnDetail GetItemReturnDetailById(int id);
+        void UpdateItemReturnDetail(ItemReturnDetail itemReturnDetail);
+        void DeleteItemReturnDetail(ItemReturnDetail itemReturnDetail);
+        List<ItemReturnDetail> GetAllItemReturnDetailByItemReturnId(int itemReturnId);
+        List<ItemReturnDetailModel> GetAllItemReturnDetailModelByItemReturnId(int itemReturnId);
+        int GetReturnOrderId();
     }
 }

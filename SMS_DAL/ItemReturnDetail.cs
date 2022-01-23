@@ -12,18 +12,18 @@ namespace SMS_DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemPurchaseDetail
+    public partial class ItemReturnDetail
     {
         public int Id { get; set; }
-        public Nullable<int> ItemPurchaseId { get; set; }
+        public Nullable<int> ItemReturnId { get; set; }
         public Nullable<int> ItemId { get; set; }
+        public Nullable<int> UnitId { get; set; }
         public Nullable<decimal> Quantity { get; set; }
         public Nullable<decimal> Rate { get; set; }
         public Nullable<decimal> Total { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<decimal> IssuanceQuantity { get; set; }
     
-        public virtual ItemPurchase ItemPurchase { get; set; }
+        public virtual ItemReturn ItemReturn { get; set; }
         public virtual Item Item { get; set; }
     }
 }

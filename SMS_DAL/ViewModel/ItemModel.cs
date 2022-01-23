@@ -46,6 +46,15 @@ namespace SMS_DAL.ViewModel
         public Nullable<System.DateTime> CreatedOn { get; set; }
     }
 
+    public partial class ItemReturnModel
+    {
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public Nullable<int> Amount { get; set; }
+        public Nullable<System.DateTime> ReturnDate { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+    }
+
     public partial class ItemIssuanceDetailModel
     {
         public int Id { get; set; }
@@ -55,6 +64,20 @@ namespace SMS_DAL.ViewModel
         public Nullable<decimal> Rate { get; set; }
         public Nullable<decimal> Total { get; set; }
         public string ItemName { get; set; }
+        public string UnitName { get; set; }
+        public int OrderId { get; set; }
+    }
+
+    public partial class ItemReturnDetailModel
+    {
+        public int Id { get; set; }
+        public Nullable<int> ItemReturnId { get; set; }
+        public Nullable<int> ItemId { get; set; }
+        public Nullable<decimal> Quantity { get; set; }
+        public Nullable<decimal> Rate { get; set; }
+        public Nullable<decimal> Total { get; set; }
+        public string ItemName { get; set; }
+        public string UnitName { get; set; }
         public int OrderId { get; set; }
     }
 }
