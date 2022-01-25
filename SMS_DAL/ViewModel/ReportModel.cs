@@ -51,6 +51,8 @@ namespace SMS_DAL.ViewModel
         public int detailedReport { get; set; }
         public int reportLevel { get; set; }
         public int cashWihdrawReport { get; set; }
+        public int orderId { get; set; }
+        public int itemId { get; set; }
 
 
     }

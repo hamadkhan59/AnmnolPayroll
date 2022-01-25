@@ -296,7 +296,10 @@
                                                     }
                                                 </ul>
                                             </li>
-
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Petty Cash Reports|") == true)
+                                            {
+                                                <li><a href="~/StoreReport/ViewReport">Reports</a></li>
+                                            }
                                         </ul>
                                     }
                                 </li>

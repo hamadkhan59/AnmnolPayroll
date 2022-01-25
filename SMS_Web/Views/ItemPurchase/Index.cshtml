@@ -24,6 +24,7 @@
                                 </label>
                                 <div class="col-md-8 col-sm-8 col-xs-12" style="margin-top:2px;">
                                     <div>
+                                        <input type="hidden" name="Print" id="Print" class="form-control input-sm" />
                                         <input id="orderId" type="number" value="@ViewData["OrderId"]" name="OrderId" class="form-control input-sm" style="background-color:white" readonly />
                                     </div>
                                 </div>
@@ -179,7 +180,12 @@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="ln_solid"></div>
                         <div class="nav navbar-right">
-                            <input type="submit" value="Save" name="Save" class="btn btn-squar" onclick="return AddItemDetailInForm()" />
+                            <input type="submit" value="Print & Save" name="PrintSave" class="btn btn-squar" onclick="return AddItemDetailInForm(2)" />
+                            @if (ViewData["OrderDate"] != null)
+                            {
+                                <input type="submit" value="Print" name="Print" class="btn btn-squar" onclick="return AddItemDetailInForm(1)" />
+                            }
+                            <input type="submit" value="Save" name="Save" class="btn btn-squar" onclick="return AddItemDetailInForm(0)" />
                         </div>
                     </div>
 
@@ -412,7 +418,8 @@
                     return boolFlag;
                 }
 
-                function AddItemDetailInForm() {
+                function AddItemDetailInForm(print) {
+                    $('#Print').val(print);
 
                     var rowCount = document.getElementById("classTable").rows.length;
                     var objCount = 0;

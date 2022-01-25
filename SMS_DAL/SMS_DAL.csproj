@@ -401,6 +401,7 @@
     <Compile Include="Reports\DAL_Exam_Reports.cs" />
     <Compile Include="Reports\DAL_Fee_Reports.cs" />
     <Compile Include="Reports\DAL_Finance_Reports.cs" />
+    <Compile Include="Reports\DAL_Store_Reports.cs" />
     <Compile Include="Reports\DAL_Staff_Reports.cs" />
     <Compile Include="Reports\DAL_Student_Reports.cs" />
     <Compile Include="REPORT_FILTERS.cs">

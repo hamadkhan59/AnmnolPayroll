@@ -14,6 +14,8 @@ using SMS_Web.Helpers;
 using Logger;
 using System.Reflection;
 using SMS_DAL.ViewModel;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace SMS_Web.Controllers.StoreManagement
 {
@@ -22,6 +24,8 @@ namespace SMS_Web.Controllers.StoreManagement
         //private cs db = new cs();
 
         private IStoreRepository storeRepo;
+        SMS_DAL.Reports.DAL_Store_Reports storeDs = new SMS_DAL.Reports.DAL_Store_Reports();
+        private ISecurityRepository secRepo = new SecurityRepositoryImp(new SC_WEBEntities2());
         private static int errorCode = 0;
         //
         // GET: /Class/
@@ -71,7 +75,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId)
+        public ActionResult SaveItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId, int Print)
         {
             if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
             {
@@ -81,13 +85,24 @@ namespace SMS_Web.Controllers.StoreManagement
             try
             {
                 var itemPurchase = storeRepo.GetItemPurchaseByOrderId(OrderId);
-                if (itemPurchase == null)
+                if (Print == 1)
                 {
-                    AddNewItemPurchase(itemPurchaseList, PurchaseDate, OrderId);
+                    return PrintItemPurchase(OrderId);
                 }
                 else
                 {
-                    UpdateItemPurchase(itemPurchaseList, PurchaseDate, itemPurchase);
+                    if (itemPurchase == null)
+                    {
+                        AddNewItemPurchase(itemPurchaseList, PurchaseDate, OrderId);
+                    }
+                    else
+                    {
+                        UpdateItemPurchase(itemPurchaseList, PurchaseDate, itemPurchase);
+                    }
+                    if (Print == 2)
+                    {
+                        return PrintItemPurchase(OrderId);
+                    }
                 }
             }
             catch (Exception exc)
@@ -229,6 +244,68 @@ namespace SMS_Web.Controllers.StoreManagement
                 LogWriter.WriteExceptionLog(exc);
             }
             return RedirectToAction("Search");
+        }
+
+        public ActionResult CreatePdf(int id = 0)
+        {
+            var itemPurchase = storeRepo.GetItemPurchaseById(id);
+            return PrintItemPurchase(itemPurchase.OrderId);
+        }
+        public FileStreamResult PrintItemPurchase(int orderId)
+        {
+            DataSet ds = storeDs.GetItemPurchase(orderId);
+
+            return showReportAsPdf(ds);
+        }
+
+        public FileStreamResult showReportAsPdf(DataSet ds)
+        {
+            ReportDocument rd = createReport(ds);
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            string fileName = "ItemReportOrder.pdf";
+            var contentLength = stream.Length;
+            Response.AppendHeader("Content-Length", contentLength.ToString());
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
+
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf");
+
+        }
+
+        public ReportDocument createReport(DataSet ds)
+        {
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            ReportDocument rd = new ReportDocument();
+            int branchId = UserPermissionController.GetLoginBranchId(Session.SessionID);
+            SchoolConfig config = secRepo.GetSchoolConfigByBranchId(branchId);
+
+            rd.Load(Path.Combine(Server.MapPath("~/Reports/Store"), "ItemPurchaseOrder.rpt"));
+
+            rd.Database.Tables["StoreDataTable"].SetDataSource(ds.Tables[0]);
+            rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
+
+            rd.SetParameterValue("CampusName", config.CampusName);
+            rd.SetParameterValue("SchoolName", config.SchoolName);
+            return rd;
+        }
+
+        private DataTable AddImage()
+        {
+            DataTable tbl = new DataTable();
+            tbl.Rows.Add();
+
+            int branchId = UserPermissionController.GetLoginBranchId(Session.SessionID);
+            SchoolConfig config = secRepo.GetSchoolConfigByBranchId(branchId);
+            DataColumn colByteArray = new DataColumn("ReportImage");
+            colByteArray.DataType = System.Type.GetType("System.Byte[]");
+            tbl.Columns.Add(colByteArray);
+            tbl.Rows[0]["ReportImage"] = config.SchoolLogo;
+
+            return tbl;
         }
     }
 }

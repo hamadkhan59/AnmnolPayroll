@@ -323,6 +323,7 @@
     <Compile Include="Controllers\FinanceOperations\PettyCashAccountController.cs" />
     <Compile Include="Controllers\FinanceOperations\PettyCashController.cs" />
     <Compile Include="Controllers\Reports\PettyCashReportController.cs" />
+    <Compile Include="Controllers\Reports\StoreReportController.cs" />
     <Compile Include="Controllers\SessionManagement\ChapterTopicController.cs" />
     <Compile Include="Controllers\SessionManagement\TermChaptersController.cs" />
     <Compile Include="Controllers\SmsMessage\SmsMessageController.cs" />
@@ -1037,6 +1038,71 @@
       <DependentUpon>StaffSalarySheet.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Reports\Store\Dataset\StoreDataset.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreDataset.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Store\ItemIssuanceOrder.cs">
+      <DependentUpon>ItemIssuanceOrder.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemPurchaseOrder.cs">
+      <DependentUpon>ItemPurchaseOrder.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemReturnOrder.cs">
+      <DependentUpon>ItemReturnOrder.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemStockReport.cs">
+      <DependentUpon>ItemStockReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemReturnReportByName.cs">
+      <DependentUpon>ItemReturnReportByName.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemReturnReport.cs">
+      <DependentUpon>ItemReturnReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemIssuanceReportByName.cs">
+      <DependentUpon>ItemIssuanceReportByName.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemIssuanceReport.cs">
+      <DependentUpon>ItemIssuanceReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemPurchaseReportByName.cs">
+      <DependentUpon>ItemPurchaseReportByName.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reports\Store\ItemPurchaseReport.cs">
+      <DependentUpon>ItemPurchaseReport.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Reports\Students\AttendanceMonthlyReport.cs">
       <DependentUpon>AttendanceMonthlyReport.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1376,6 +1442,17 @@
     </None>
     <Content Include="Reports\Staffs\StaffDataSet.xss">
       <DependentUpon>StaffDataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reports\Store\Dataset\StoreDataset.xsc">
+      <DependentUpon>StoreDataset.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\Store\Dataset\StoreDataset.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>StoreDataset.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\Store\Dataset\StoreDataset.xss">
+      <DependentUpon>StoreDataset.xsd</DependentUpon>
     </Content>
     <None Include="Reports\Students\Dataset\StudentDataset.xsd">
       <Generator>MSDataSetGenerator</Generator>
@@ -5837,6 +5914,8 @@
     <Content Include="Views\ItemIssuance\Search.cshtml" />
     <Content Include="Views\ItemReturn\Index.cshtml" />
     <Content Include="Views\ItemReturn\Search.cshtml" />
+    <Content Include="Views\StoreReport\Report.cshtml" />
+    <Content Include="Views\StoreReport\ViewReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -6210,6 +6289,46 @@
     <EmbeddedResource Include="Reports\Staffs\StaffSalarySheet.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>StaffSalarySheet1.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemIssuanceOrder.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemIssuanceOrder.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemPurchaseOrder.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemPurchaseOrder.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemReturnOrder.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemReturnOrder.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemStockReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemStockReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemReturnReportByName.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemReturnReportByName.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemReturnReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemReturnReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemIssuanceReportByName.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemIssuanceReportByName.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemIssuanceReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemIssuanceReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemPurchaseReportByName.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemPurchaseReportByName.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Store\ItemPurchaseReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ItemPurchaseReport.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Students\AttendanceMonthlyReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

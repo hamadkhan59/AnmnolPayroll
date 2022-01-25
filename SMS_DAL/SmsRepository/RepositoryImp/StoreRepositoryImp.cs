@@ -248,7 +248,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             CreatedOn = purchase.CreatedOn,
                             PurchaseDate = purchase.PurchaseDate
                         };
-            return query.ToList();
+            return query.Distinct().ToList();
         }
 
         public int AddItemPurchaseDetail(ItemPurchaseDetail itemPurchaseDetail)
@@ -401,7 +401,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             CreatedOn = issuance.CreatedOn,
                             IssuanceDate = issuance.IssuanceDate
                         };
-            return query.ToList();
+            return query.Distinct().ToList();
         }
 
         public int AddItemIssuanceDetail(ItemIssuanceDetail itemIssuanceDetail)
@@ -643,7 +643,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             CreatedOn = ireturn.CreatedOn,
                             ReturnDate = ireturn.ReturnDate
                         };
-            return query.ToList();
+            return query.Distinct().ToList();
         }
 
         public int AddItemReturnDetail(ItemReturnDetail itemReturnDetail)
