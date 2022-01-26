@@ -16,8 +16,8 @@ namespace SMS_DAL
     {
         public Item()
         {
-            this.ItemIssuanceDetails = new HashSet<ItemIssuanceDetail>();
             this.ItemPurchaseDetails = new HashSet<ItemPurchaseDetail>();
+            this.ItemIssuanceDetails = new HashSet<ItemIssuanceDetail>();
             this.ItemReturnDetails = new HashSet<ItemReturnDetail>();
         }
     
@@ -27,9 +27,9 @@ namespace SMS_DAL
         public string ItemDescription { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
     
-        public virtual ICollection<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
         public virtual ItemUnit ItemUnit { get; set; }
         public virtual ICollection<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
+        public virtual ICollection<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
         public virtual ICollection<ItemReturnDetail> ItemReturnDetails { get; set; }
     }
 }

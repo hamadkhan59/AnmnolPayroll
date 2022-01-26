@@ -179,14 +179,14 @@ namespace SMS_DAL
         public DbSet<JournalEntry> JournalEntries { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<ItemIssuance> ItemIssuances { get; set; }
-        public DbSet<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
         public DbSet<ItemPurchase> ItemPurchases { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemUnit> ItemUnits { get; set; }
         public DbSet<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
         public DbSet<ItemReturn> ItemReturns { get; set; }
-        public DbSet<ItemReturnDetail> ItemReturnDetails { get; set; }
         public DbSet<IssuanceStockQuantity> IssuanceStockQuantities { get; set; }
+        public DbSet<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
+        public DbSet<ItemReturnDetail> ItemReturnDetails { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

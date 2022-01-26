@@ -97,6 +97,16 @@ namespace SMS_Web.Controllers.Reports
                     ds = storeDs.GetCurrentStockData();
                     return showReport(ds, model, exportType);
                 }
+                else if (model.reportId == 66)
+                {
+                    ds = storeDs.GetItemData();
+                    return showReport(ds, model, exportType);
+                }
+                else if (model.reportId == 67)
+                {
+                    ds = storeDs.GetVendorData();
+                    return showReport(ds, model, exportType);
+                }
                 else
                 {
                     ds = storeDs.GetItemPurchaseData(model.orderId, model.itemId, model.fromDate, model.toDate);
@@ -277,6 +287,30 @@ namespace SMS_Web.Controllers.Reports
             else if (model.reportId == 62)
             {
                 rd.Load(Path.Combine(Server.MapPath("~/Reports/Store"), "ItemStockReport.rpt"));
+
+                AddParametersToReport(rd, model.fromDate, model.toDate);
+                rd.Database.Tables["StoreDataTable"].SetDataSource(ds.Tables[0]);
+                rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
+
+                rd.SetParameterValue("CampusName", config.CampusName);
+                rd.SetParameterValue("SchoolName", config.SchoolName);
+                return rd;
+            }
+            else if (model.reportId == 66)
+            {
+                rd.Load(Path.Combine(Server.MapPath("~/Reports/Store"), "ItemsReport.rpt"));
+
+                AddParametersToReport(rd, model.fromDate, model.toDate);
+                rd.Database.Tables["StoreDataTable"].SetDataSource(ds.Tables[0]);
+                rd.Database.Tables["DataTable1"].SetDataSource(AddImage());
+
+                rd.SetParameterValue("CampusName", config.CampusName);
+                rd.SetParameterValue("SchoolName", config.SchoolName);
+                return rd;
+            }
+            else if (model.reportId == 67)
+            {
+                rd.Load(Path.Combine(Server.MapPath("~/Reports/Store"), "VendorsReport.rpt"));
 
                 AddParametersToReport(rd, model.fromDate, model.toDate);
                 rd.Database.Tables["StoreDataTable"].SetDataSource(ds.Tables[0]);

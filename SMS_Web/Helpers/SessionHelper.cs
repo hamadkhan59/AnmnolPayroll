@@ -1737,5 +1737,46 @@ namespace SMS_Web.Helpers
             }
             return dataSet;
         }
+
+        public static double ConvertToInchesQty(int unitId, double quantity)
+        {
+            double resultQty = 0;
+
+            if (unitId == ConstHelper.METER_UNIT)
+            {
+                resultQty = quantity * ConstHelper.METER_TO_INCHES;
+            }
+            else if (unitId == ConstHelper.FOOT_UNIT)
+            {
+                resultQty = quantity * ConstHelper.FOOT_TO_INCHES;
+            }
+            else
+            {
+                resultQty = quantity;
+            }
+            return Math.Round(resultQty, 2);
+        }
+
+        public static double ConvertFromInchesQty(int unitId, double quantity)
+        {
+            double resultQty = 0;
+
+            if (unitId == ConstHelper.METER_UNIT)
+            {
+                resultQty = quantity * ConstHelper.INCHES_TO_METER;
+            }
+            else if (unitId == ConstHelper.FOOT_UNIT)
+            {
+                resultQty = quantity * ConstHelper.INCHES_TO_FOOT;
+            }
+            else
+            {
+                resultQty = quantity;
+            }
+
+            return Math.Round(resultQty, 2);
+        }
+
+
     }
 }

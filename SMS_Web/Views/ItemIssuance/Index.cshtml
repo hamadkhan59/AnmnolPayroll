@@ -291,6 +291,11 @@
                     $("#ItemNameId").blur(function(){
                         EnableUnitDD();
                     });
+                    
+                    $("#qty").focus(function(){
+                        EnableUnitDD();
+                    });
+
                 }
 
                 function calculateTotal()
@@ -335,6 +340,7 @@
 
                 function AddItemPurchaseDetail()
                 {
+                    EnableUnitDD();
                     var itemName = getItemName();
                     var qty = $('#qty').val();
                     var unit = $("#UnitId option:selected").text();

@@ -57,14 +57,16 @@ namespace SMS_DAL.Reports
 
         public DataSet GetCurrentStockData()
         {
-            var sql = @"select item.ItemName, 
+            var sql = @"select item.Id, item.ItemName, unit.Name as Unit,
                         sum(ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) as Quantity,
                         sum(cast (ROUND((ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) * ipd.Rate,2) as numeric(36,2))) as Total
                         from ItemPurchaseDetail ipd
                         inner join ItemPurchase ips on ips.Id = ipd.ItemPurchaseId
                         inner join Items item on item.Id = ipd.ItemId
+						inner join ItemUnit unit on item.UnitId = unit.Id
                         where (ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) > 0
-                        Group By item.ItemName";
+                        Group By item.Id, item.ItemName, unit.Name
+						order by item.Id";
             return ExecuteDataSet(sql);
         }
 
@@ -105,6 +107,24 @@ namespace SMS_DAL.Reports
             sql = string.Format(sql, orderId);
             return ExecuteDataSet(sql);
         }
+
+        public DataSet GetVendorData()
+        {
+            var sql = @"select Name as VendorName, PhoneNo, Email, CompanyName
+                        from Vendor";
+            return ExecuteDataSet(sql);
+        }
+
+        public DataSet GetItemData()
+        {
+            var sql = @"select item.ItemName as ItemName, unit.Name as Unit,
+                        item.ItemDescription as Description
+                        from Items item 
+                        inner join ItemUnit unit on item.UnitId = unit.Id";
+            return ExecuteDataSet(sql);
+        }
+
+
 
         private string getDate(DateTime date)
         {

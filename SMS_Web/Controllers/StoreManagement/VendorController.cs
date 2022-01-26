@@ -38,10 +38,10 @@ namespace SMS_Web.Controllers.StoreManagement
                 return RedirectToAction("Index", "Login");
             }
 
-            //if (UserPermissionController.CheckUserPermission(Session.SessionID,ConstHelper.SA_CLASSES) == false)
-            //{
-            //    return RedirectToAction("Index", "NoPermission");
-            //}
+            if (UserPermissionController.CheckUserPermission(Session.SessionID, ConstHelper.STM_VEDNORS) == false)
+            {
+                return RedirectToAction("Index", "NoPermission");
+            }
             Vendor vendor = new Vendor();
             try
             {

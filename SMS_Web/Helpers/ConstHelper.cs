@@ -539,6 +539,21 @@ namespace SMS_Web.Helpers
         public const string STM_ITEM_PURCHASE_LIST = "ITEM_PURCHASE_LIST";
         public const string STM_ITEM_ISSUANCE_LIST = "ITEM_ISSUANCE_LIST";
         public const string STM_ITEM_RETURN_LIST = "ITEM_RETURN_LIST";
+        public const string STM_ITEMS = "Items";
+        public const string STM_VEDNORS = "Vendor";
+        public const string STM_ITEM_PURCHASE = "ItemPurchase";
+        public const string STM_ITEM_ISSUANCE = "ItemIssuance";
+        public const string STM_ITEM_RETURN = "ItemReturn";
+        public const string STM_REPORTS = "StoreReports";
+
+        public const int METER_UNIT = 1;
+        public const int FOOT_UNIT = 2;
+
+        public const double METER_TO_INCHES = 39.3701;
+        public const double FOOT_TO_INCHES = 12;
+
+        public const double INCHES_TO_METER = 0.0254;
+        public const double INCHES_TO_FOOT = 0.0833333;
 
     }
 }

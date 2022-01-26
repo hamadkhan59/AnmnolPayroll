@@ -43,10 +43,10 @@ namespace SMS_Web.Controllers.StoreManagement
                 return RedirectToAction("Index", "Login");
             }
 
-            //if (UserPermissionController.CheckUserPermission(Session.SessionID,ConstHelper.SA_CLASSES) == false)
-            //{
-            //    return RedirectToAction("Index", "NoPermission");
-            //}
+            if (UserPermissionController.CheckUserPermission(Session.SessionID, ConstHelper.STM_ITEM_RETURN) == false)
+            {
+                return RedirectToAction("Index", "NoPermission");
+            }
             try
             {
                 if (id > 0)
@@ -138,9 +138,14 @@ namespace SMS_Web.Controllers.StoreManagement
                     detail.ItemId = item.Id;
                     detail.CreatedOn = DateTime.Now;
                     detail.UnitId = unit.Id;
+                    detail.ActualUnitId = item.UnitId;
+
+                    double actualQty = SessionHelper.ConvertToInchesQty((int)detail.UnitId, (double)detail.Quantity);
+                    actualQty = SessionHelper.ConvertFromInchesQty((int)detail.ActualUnitId, actualQty);
+                    detail.ActualQuantity = (decimal)actualQty;
 
                     storeRepo.AddItemReturnDetail(detail);
-                    ItemQuantitySettlement((int)detail.ItemId, detail.Id, (decimal)detail.Quantity);
+                    ItemQuantitySettlement((int)detail.ItemId, detail.Id, (decimal)detail.ActualQuantity);
                 }
 
                 ireturn.Amount = (int)itemReturnList.Sum(x => x.Total ?? 0);
@@ -181,9 +186,14 @@ namespace SMS_Web.Controllers.StoreManagement
                     detail.ItemId = item.Id;
                     detail.CreatedOn = DateTime.Now;
                     detail.UnitId = unit.Id;
+                    detail.ActualUnitId = item.UnitId;
+
+                    double actualQty = SessionHelper.ConvertToInchesQty((int)detail.UnitId, (double)detail.Quantity);
+                    actualQty = SessionHelper.ConvertFromInchesQty((int)detail.ActualUnitId, actualQty);
+                    detail.ActualQuantity = (decimal)actualQty;
 
                     storeRepo.AddItemReturnDetail(detail);
-                    ItemQuantitySettlement((int)detail.ItemId, detail.Id, (decimal)detail.Quantity);
+                    ItemQuantitySettlement((int)detail.ItemId, detail.Id, (decimal)detail.ActualQuantity);
                 }
 
                 itemReturn.UpdatedOn = DateTime.Now;
@@ -207,10 +217,10 @@ namespace SMS_Web.Controllers.StoreManagement
                 return RedirectToAction("Index", "Login");
             }
 
-            //if (UserPermissionController.CheckUserPermission(Session.SessionID,ConstHelper.SA_CLASSES) == false)
-            //{
-            //    return RedirectToAction("Index", "NoPermission");
-            //}
+            if (UserPermissionController.CheckUserPermission(Session.SessionID, ConstHelper.STM_ITEM_RETURN) == false)
+            {
+                return RedirectToAction("Index", "NoPermission");
+            }
             try
             {
                 List<ItemReturnModel> returnList = new List<ItemReturnModel>();
