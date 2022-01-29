@@ -13,6 +13,11 @@ using SMS_Web.Controllers.SecurityAssurance;
 using SMS_Web.Helpers;
 using Logger;
 using System.Reflection;
+using System.Net.Http;
+using System.Net;
+using System.Web.Services;
+using System.Web.Script.Services;
+using Newtonsoft.Json;
 
 namespace SMS_Web.Controllers.StoreManagement
 {
@@ -53,6 +58,7 @@ namespace SMS_Web.Controllers.StoreManagement
                 ViewData["Operation"] = id;
                 ViewData["item"] = SessionHelper.ItemList();
                 ViewBag.UnitId = new SelectList(SessionHelper.UnitList(), "Id", "Name", item.UnitId ?? 0);
+                ViewBag.VendorNames = SessionHelper.VendorNameList();
                 ViewData["Error"] = errorCode;
                 errorCode = 0;
 
@@ -65,7 +71,37 @@ namespace SMS_Web.Controllers.StoreManagement
             return View(item);
         }
 
-       
+        public ActionResult ItemVendor(int id = 0)
+        {
+            if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            if (UserPermissionController.CheckUserPermission(Session.SessionID, ConstHelper.STM_ITEMS) == false)
+            {
+                return RedirectToAction("Index", "NoPermission");
+            }
+            Item item = new Item();
+            try
+            {
+                item = storeRepo.GetItemById(id);
+                ViewBag.VendorNames = SessionHelper.VendorNameList();
+                ViewBag.UnitId = new SelectList(SessionHelper.UnitList(), "Id", "Name", item.UnitId ?? 0);
+                ViewData["itemVendor"] = storeRepo.GetItemVendorsByItemId(id);
+                ViewData["Error"] = errorCode;
+                errorCode = 0;
+
+            }
+            catch (Exception exc)
+            {
+                LogWriter.WriteProcErrorLog(this.GetType().Name, MethodBase.GetCurrentMethod().Name);
+                LogWriter.WriteExceptionLog(exc);
+            }
+            return View(item);
+        }
+
+
         [HttpPost]
         [ActionName("Index")]
         [OnAction(ButtonName = "Create")]
@@ -181,6 +217,43 @@ namespace SMS_Web.Controllers.StoreManagement
             return RedirectToAction("Index", new { id = 0 });
         }
 
+        [HttpGet]
+        [WebMethod()]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string SaveItemIvendor(int itemId, int vendorId)
+        {
+            int result = 10;
+            try
+            {
+                ItemVendor vendor = new ItemVendor();
+                vendor.ItemId = itemId;
+                vendor.VendorId = vendorId;
 
+                storeRepo.AddItemVendor(vendor);
+            }
+            catch (Exception exc)
+            {
+                result = 420;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
+
+        [HttpGet]
+        [WebMethod()]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public string DeleteItemIvendor(int id)
+        {
+            int result = 10;
+            try
+            {
+                ItemVendor vendor = storeRepo.GetItemVendorById(id);
+                storeRepo.DeleteItemVendor(vendor);
+            }
+            catch (Exception exc)
+            {
+                result = 420;
+            }
+            return JsonConvert.SerializeObject(result);
+        }
     }
 }

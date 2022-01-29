@@ -130,9 +130,9 @@
                                         @Html.DisplayFor(modelItem => item.ItemDescription)
                                     </td>
                                     <td>
-                                        @Html.ActionLink("  ", "Index", new { id = item.Id }, new { style = "color: green; font-size: 20px; margin-left: 10px", title = "Edit", @class = "glyphicon glyphicon-edit" }) 
-                                        @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-                                        @Html.ActionLink("  ", "Delete", new { id = item.Id }, new { onclick = "return ConfirmDelete('Are you sure you wish to delete this Item?', " + item.Id + ", 'Item');", style = "color: darkred;font-size: 15px;", title = "Delete", @class = "glyphicon glyphicon-trash" })
+                                        @Html.ActionLink("  ", "Index", new { id = item.Id }, new { style = "color: green; font-size: 20px; margin-left: 10px", title = "Edit", @class = "glyphicon glyphicon-edit" })
+                                        @Html.ActionLink("  ", "ItemVendor", new { id = item.Id }, new { style = "color: black; font-size: 20px; margin-left: 10px", title = "Item Vendors", @class = "glyphicon glyphicon-asterisk" }) 
+                                        @Html.ActionLink("  ", "Delete", new { id = item.Id }, new { onclick = "return ConfirmDelete('Are you sure you wish to delete this Item?', " + item.Id + ", 'Item');", style = "color: darkred;font-size: 15px;margin-left: 10px", title = "Delete", @class = "glyphicon glyphicon-trash" })
                                     </td>
                                 </tr>
                             }

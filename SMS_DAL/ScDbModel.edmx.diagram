@@ -23,6 +23,7 @@
         <AssociationConnector Association="SC_WEBModel.FK_ItemIssuanceDetail_Items" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemReturnDetail_ItemReturn" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemReturnDetail_Items" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemVendor" Width="1.5" PointX="3.375" PointY="10.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

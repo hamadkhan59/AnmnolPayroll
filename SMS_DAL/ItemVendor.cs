@@ -17,6 +17,6 @@ namespace SMS_DAL
         public int Id { get; set; }
         public int ItemId { get; set; }
         public int VendorId { get; set; }
-        public string IsDeleted { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
     }
 }

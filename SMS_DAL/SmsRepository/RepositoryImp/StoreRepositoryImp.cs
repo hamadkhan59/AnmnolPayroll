@@ -728,6 +728,58 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             return orderId;
         }
 
+
+        public int AddItemVendor(ItemVendor itemVendor)
+        {
+            int result = -1;
+            if (itemVendor != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.ItemVendors.Add(itemVendor);
+                dbContext.SaveChanges();
+                result = itemVendor.Id;
+            }
+
+            return result;
+        }
+
+        public ItemVendor GetItemVendorById(int id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.ItemVendors.Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        public List<ItemVendorModel> GetItemVendorsByItemId(int id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            var query = from itemVend in dbContext.ItemVendors
+                        join item in dbContext.Items on itemVend.ItemId equals item.Id
+                        join vendor in dbContext.Vendors on itemVend.VendorId equals vendor.Id
+                        where itemVend.ItemId == id
+                        select new ItemVendorModel
+                        {
+                            Id = itemVend.Id,
+                            CompanyName = vendor.CompanyName,
+                            Email = vendor.Email,
+                            ItemId = itemVend.ItemId,
+                            ItemName = item.ItemName,
+                            PhoneNo = vendor.PhoneNo,
+                            VendorId = itemVend.VendorId,
+                            VendorName = vendor.Name
+                        };
+            return query.ToList();
+        }
+        
+        public void DeleteItemVendor(ItemVendor itemVendor)
+        {
+            if (itemVendor != null)
+            {
+                dbContext.ItemVendors.Remove(itemVendor);
+                dbContext.SaveChanges();
+            }
+        }
+
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

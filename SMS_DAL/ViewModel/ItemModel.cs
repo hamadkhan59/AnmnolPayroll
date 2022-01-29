@@ -80,4 +80,18 @@ namespace SMS_DAL.ViewModel
         public string UnitName { get; set; }
         public int OrderId { get; set; }
     }
+
+
+    public partial class ItemVendorModel
+    {
+        public int Id { get; set; }
+        public Nullable<int> ItemId { get; set; }
+        public Nullable<int> VendorId { get; set; }
+        public string ItemName { get; set; }
+        public string VendorName { get; set; }
+        public string PhoneNo { get; set; }
+        public string Email { get; set; }
+        public string CompanyName { get; set; }
+    }
+    
 }

@@ -290,6 +290,19 @@ namespace SMS_Web.Helpers
             return names;
         }
 
+        public static List<string> VendorNameList()
+        {
+            VendorList();
+            List<string> names = new List<string>();
+
+            foreach (var item in _vendorList)
+            {
+                names.Add(item.Id + " | " + item.Name + " | " + item.PhoneNo + " | " + item.Email + " | " + item.CompanyName);
+            }
+
+            return names;
+        }
+
         public static List<ItemUnit> UnitList()
         {
             if (_unitList == null || _unitList.Count == 0)

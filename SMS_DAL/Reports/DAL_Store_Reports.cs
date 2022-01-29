@@ -124,7 +124,15 @@ namespace SMS_DAL.Reports
             return ExecuteDataSet(sql);
         }
 
-
+        public DataSet GetVendorData(int itemId)
+        {
+            var sql = @"select distinct itv.ItemId,  Name as VendorName, PhoneNo, Email, CompanyName
+                        from ItemVendor itv 
+                        inner join Vendor vend on itv.VendorId = vend.Id
+                        where itv.ItemId = {0}";
+            sql = string.Format(sql, itemId);
+            return ExecuteDataSet(sql);
+        }
 
         private string getDate(DateTime date)
         {

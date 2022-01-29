@@ -76,5 +76,9 @@ namespace SMS_DAL.SmsRepository.IRepository
         List<ItemReturnDetail> GetAllItemReturnDetailByItemReturnId(int itemReturnId);
         List<ItemReturnDetailModel> GetAllItemReturnDetailModelByItemReturnId(int itemReturnId);
         int GetReturnOrderId();
+        int AddItemVendor(ItemVendor itemVendor);
+        ItemVendor GetItemVendorById(int id);
+        List<ItemVendorModel> GetItemVendorsByItemId(int id);
+        void DeleteItemVendor(ItemVendor itemVendor);
     }
 }

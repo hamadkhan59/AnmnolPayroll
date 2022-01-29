@@ -5928,6 +5928,7 @@
     <Content Include="Views\ItemReturn\Search.cshtml" />
     <Content Include="Views\StoreReport\Report.cshtml" />
     <Content Include="Views\StoreReport\ViewReport.cshtml" />
+    <Content Include="Views\Item\ItemVendor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -173,7 +173,6 @@ namespace SMS_DAL
         public DbSet<FinanceAccountLevel> FinanceAccountLevels { get; set; }
         public DbSet<ItemSale> ItemSales { get; set; }
         public DbSet<ItemStock> ItemStocks { get; set; }
-        public DbSet<ItemVendor> ItemVendors { get; set; }
         public DbSet<JournalEntrySummary> JournalEntrySummaries { get; set; }
         public DbSet<PreviousGrade> PreviousGrades { get; set; }
         public DbSet<JournalEntry> JournalEntries { get; set; }
@@ -187,6 +186,7 @@ namespace SMS_DAL
         public DbSet<IssuanceStockQuantity> IssuanceStockQuantities { get; set; }
         public DbSet<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
         public DbSet<ItemReturnDetail> ItemReturnDetails { get; set; }
+        public DbSet<ItemVendor> ItemVendors { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

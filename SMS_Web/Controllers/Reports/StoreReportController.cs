@@ -107,6 +107,11 @@ namespace SMS_Web.Controllers.Reports
                     ds = storeDs.GetVendorData();
                     return showReport(ds, model, exportType);
                 }
+                else if (model.reportId == 68)
+                {
+                    ds = storeDs.GetVendorData(model.itemId);
+                    return showReport(ds, model, exportType);
+                }
                 else
                 {
                     ds = storeDs.GetItemPurchaseData(model.orderId, model.itemId, model.fromDate, model.toDate);
@@ -308,7 +313,7 @@ namespace SMS_Web.Controllers.Reports
                 rd.SetParameterValue("SchoolName", config.SchoolName);
                 return rd;
             }
-            else if (model.reportId == 67)
+            else if (model.reportId == 67 || model.reportId == 68)
             {
                 rd.Load(Path.Combine(Server.MapPath("~/Reports/Store"), "VendorsReport.rpt"));
 

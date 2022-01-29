@@ -843,18 +843,14 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.ItemStock' does not have a prima
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ANMOL_PAYROLL.dbo.ItemVendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ItemVendor">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="ItemId" />
-            <PropertyRef Name="VendorId" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemId" Type="int" Nullable="false" />
           <Property Name="VendorId" Type="int" Nullable="false" />
-          <Property Name="IsDeleted" Type="nchar" MaxLength="10" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="JournalEntry">
           <Key>
@@ -3999,6 +3995,7 @@ warning 6002: The table/view 'ANMOL_PAYROLL.dbo.PreviousGrade' does not have a p
           <EntitySet Name="ItemReturnDetail" EntityType="Self.ItemReturnDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemUnit" EntityType="Self.ItemUnit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemVendor" EntityType="Self.ItemVendor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntry" EntityType="Self.JournalEntry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntryCreditDetail" EntityType="Self.JournalEntryCreditDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JournalEntryDebitDetail" EntityType="Self.JournalEntryDebitDetail" Schema="dbo" store:Type="Tables" />
@@ -4118,14 +4115,6 @@ FROM [dbo].[ItemSale] AS [ItemSale]</DefiningQuery>
 [ItemStock].[ItemId] AS [ItemId], 
 [ItemStock].[Quantity] AS [Quantity]
 FROM [dbo].[ItemStock] AS [ItemStock]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ItemVendor" EntityType="Self.ItemVendor" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[ItemVendor].[Id] AS [Id], 
-[ItemVendor].[ItemId] AS [ItemId], 
-[ItemVendor].[VendorId] AS [VendorId], 
-[ItemVendor].[IsDeleted] AS [IsDeleted]
-FROM [dbo].[ItemVendor] AS [ItemVendor]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="JournalEntrySummary" EntityType="Self.JournalEntrySummary" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -5145,7 +5134,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <EntitySet Name="FinanceAccountLevels" EntityType="SC_WEBModel.FinanceAccountLevel" />
           <EntitySet Name="ItemSales" EntityType="SC_WEBModel.ItemSale" />
           <EntitySet Name="ItemStocks" EntityType="SC_WEBModel.ItemStock" />
-          <EntitySet Name="ItemVendors" EntityType="SC_WEBModel.ItemVendor" />
           <EntitySet Name="JournalEntrySummaries" EntityType="SC_WEBModel.JournalEntrySummary" />
           <EntitySet Name="PreviousGrades" EntityType="SC_WEBModel.PreviousGrade" />
           <AssociationSet Name="FK_Activities_Branch" Association="SC_WEBModel.FK_Activities_Branch">
@@ -5803,6 +5791,7 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             <End Role="Item" EntitySet="Items" />
             <End Role="ItemReturnDetail" EntitySet="ItemReturnDetails" />
           </AssociationSet>
+          <EntitySet Name="ItemVendors" EntityType="SC_WEBModel.ItemVendor" />
           </EntityContainer>
         <ComplexType Name="sp_Get_Student_Result_Result">
           <Property Type="Int32" Name="TermId" Nullable="true" />
@@ -7828,17 +7817,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" />
-        </EntityType>
-        <EntityType Name="ItemVendor">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="ItemId" />
-            <PropertyRef Name="VendorId" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemId" Type="Int32" Nullable="false" />
-          <Property Name="VendorId" Type="Int32" Nullable="false" />
-          <Property Name="IsDeleted" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="JournalEntrySummary">
           <Key>
@@ -9972,6 +9950,15 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ItemVendor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="VendorId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11860,16 +11847,6 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ItemVendors">
-            <EntityTypeMapping TypeName="SC_WEBModel.ItemVendor">
-              <MappingFragment StoreEntitySet="ItemVendor">
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="JournalEntrySummaries">
             <EntityTypeMapping TypeName="SC_WEBModel.JournalEntrySummary">
               <MappingFragment StoreEntitySet="JournalEntrySummary">
@@ -12048,6 +12025,16 @@ FROM [dbo].[PreviousGrade] AS [PreviousGrade]</DefiningQuery>
                 <ScalarProperty Name="UnitId" ColumnName="UnitId" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="ItemReturnId" ColumnName="ItemReturnId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemVendors">
+            <EntityTypeMapping TypeName="SC_WEBModel.ItemVendor">
+              <MappingFragment StoreEntitySet="ItemVendor">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
