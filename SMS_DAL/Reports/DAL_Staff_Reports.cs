@@ -228,7 +228,7 @@ namespace SMS_DAL.Reports
             var spQuery = @"select st.StaffId, st.Name
                             from StaffAttandance sta 
                             inner join Staff st on sta.StaffId = st.StaffId
-                            where Status = 2 and Date >= '{0}' and Date <= '{1}'";
+                            where Status = 2 and st.IsLeft = 0 and Date >= '{0}' and Date <= '{1}'";
             spQuery = string.Format(spQuery, getDate(fromDate), getDate(toDate));
             return ExecuteDataSet(spQuery);
         }
@@ -241,7 +241,7 @@ namespace SMS_DAL.Reports
                             where AttendanceId = sta.Id order by Id) as TimeIn
                             from StaffAttandance sta 
                             inner join Staff st on sta.StaffId = st.StaffId
-                            where Status = 1 and Date >= '{0}' and Date <= '{1}'
+                            where Status = 1 and st.IsLeft = 0 and Date >= '{0}' and Date <= '{1}'
                             and (select top(1) TimeIn from StaffAttendanceDetail 
                             where AttendanceId = sta.Id order by Id) > '{2}'";
             spQuery = string.Format(spQuery, getDate(fromDate), getDate(toDate), logfileLocation);
