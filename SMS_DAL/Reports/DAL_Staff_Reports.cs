@@ -38,7 +38,8 @@ namespace SMS_DAL.Reports
             var sql = @"select RIGHT('00000'++CAST(st.StaffId AS VARCHAR(5)),5) as Year, st.Name, FatherName, dsgn.Name as Designation,
                                 st.Education, st.Year, st.Marks_Or_Cgpa as Result,
                                 st.Total_Marks_Or_Cgpa as total, st.Salary, st.PhoneNumber as ContactNo,
-								CONVERT(VARCHAR(10),  st.JoinDate, 103) as JoininDate, st.currentAddress as Address
+								CONVERT(VARCHAR(10),  st.JoinDate, 103) as JoininDate, st.currentAddress as Address,
+								st.CNIC as ForMonth
                                 from Staff st, Designation dsgn
                                 where st.DesignationId = dsgn.Id and st.BranchId = {0} order by st.StaffId";
             sql = string.Format(sql, branchId);
