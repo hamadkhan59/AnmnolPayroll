@@ -38,7 +38,8 @@ namespace SMS_DAL.Reports
             var sql = @"select RIGHT('00000'++CAST(st.StaffId AS VARCHAR(5)),5) as Year, st.Name, FatherName, dsgn.Name as Designation,
                                 st.Education, st.Year, st.Marks_Or_Cgpa as Result,
                                 st.Total_Marks_Or_Cgpa as total, st.Salary, st.PhoneNumber as ContactNo,
-								CONVERT(VARCHAR(10),  st.JoinDate, 103) as JoininDate, st.currentAddress as Address
+								CONVERT(VARCHAR(10),  st.JoinDate, 103) as JoininDate, st.currentAddress as Address,
+								st.CNIC as ForMonth
                                 from Staff st, Designation dsgn
                                 where st.DesignationId = dsgn.Id and st.BranchId = {0} order by st.StaffId";
             sql = string.Format(sql, branchId);
@@ -123,6 +124,16 @@ namespace SMS_DAL.Reports
                         from StaffAttendanceReport sar inner join StaffAttendanceDetail sad
                         on sar.AttendanceId = sad.AttendanceId
                         order  by sar.StaffId, sad.Id";
+
+            if (fromDate.Date == toDate.Date)
+            {
+                sql = @"Select sar.StaffId as Year, sar.Name, sar.TotalHours  as JoininDate, 
+                        sar.WorkingHours  as Address, isnull(sad.TimeIn, 'Absent') as Designation, sad.TimeOut as Education,
+                        isnull(ExtraHours,0) as Total
+                        from StaffAttendanceReport sar left outer join StaffAttendanceDetail sad
+                        on sar.AttendanceId = sad.AttendanceId
+                        order  by sar.StaffId, sad.Id";
+            }
             return ExecuteDataSet(sql);
         }
 
