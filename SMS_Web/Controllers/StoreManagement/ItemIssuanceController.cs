@@ -55,11 +55,15 @@ namespace SMS_Web.Controllers.StoreManagement
                     ViewData["OrderId"] = itemIssuance.OrderId;
                     ViewData["OrderDate"] = itemIssuance.IssuanceDate;
                     ViewData["itemIssuance"] = storeRepo.GetAllItemIssuanceDetailModelByItemIssuanceId(itemIssuance.Id);
+                    var issuer = storeRepo.GetIssuerById((int)itemIssuance.IssuerId);
+                    ViewData["issuerName"] = issuer.Id + " | " + issuer.Name;
                 }
                 else
                 {
+                    ViewData["issuerName"] = "";
                     ViewData["OrderId"] = storeRepo.GetIssuanceOrderId();
                 }
+                ViewBag.IssuerNames = SessionHelper.IssuerNameList();
                 ViewBag.ItemNames = SessionHelper.ItemNamesList();
                 ViewBag.UnitId = new SelectList(SessionHelper.UnitList(), "Id", "Name");
                 ViewData["Error"] = errorCode;
@@ -75,7 +79,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveItemIssuance(List<ItemIssuanceDetailModel> itemIssuanceList, DateTime IssuanceDate, int OrderId, int Print)
+        public ActionResult SaveItemIssuance(List<ItemIssuanceDetailModel> itemIssuanceList, DateTime IssuanceDate, int OrderId, int Print, int IssuerId)
         {
             if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
             {
@@ -93,11 +97,11 @@ namespace SMS_Web.Controllers.StoreManagement
                 {
                     if (itemIssuance == null)
                     {
-                        AddNewItemIssuance(itemIssuanceList, IssuanceDate, OrderId);
+                        AddNewItemIssuance(itemIssuanceList, IssuanceDate, OrderId, IssuerId);
                     }
                     else
                     {
-                        UpdateItemIssuance(itemIssuanceList, IssuanceDate, itemIssuance);
+                        UpdateItemIssuance(itemIssuanceList, IssuanceDate, itemIssuance, IssuerId);
                     }
                     if (Print == 2)
                     {
@@ -114,7 +118,7 @@ namespace SMS_Web.Controllers.StoreManagement
             return RedirectToAction("Index", new { id = 0 });
         }
 
-        public void AddNewItemIssuance(List<ItemIssuanceDetailModel> itemIssuanceList, DateTime IssuanceDate, int OrderId)
+        public void AddNewItemIssuance(List<ItemIssuanceDetailModel> itemIssuanceList, DateTime IssuanceDate, int OrderId, int IssuerId)
         {
             try
             {
@@ -122,6 +126,7 @@ namespace SMS_Web.Controllers.StoreManagement
                 issuance.OrderId = OrderId;
                 issuance.IssuanceDate = IssuanceDate;
                 issuance.CreatedOn = DateTime.Now;
+                issuance.IssuerId = IssuerId;
                 storeRepo.AddItemIssuance(issuance);
 
                 foreach (var model in itemIssuanceList)
@@ -160,7 +165,7 @@ namespace SMS_Web.Controllers.StoreManagement
             }
         }
 
-        public void UpdateItemIssuance(List<ItemIssuanceDetailModel> itemIssuanceList, DateTime IssuanceDate, ItemIssuance issuance)
+        public void UpdateItemIssuance(List<ItemIssuanceDetailModel> itemIssuanceList, DateTime IssuanceDate, ItemIssuance issuance, int IssuerId)
         {
             try
             {
@@ -199,6 +204,7 @@ namespace SMS_Web.Controllers.StoreManagement
                 issuance.UpdatedOn = DateTime.Now;
                 issuance.IssuanceDate = IssuanceDate;
                 issuance.Amount = (int)itemIssuanceList.Sum(x => x.Total ?? 0);
+                issuance.IssuerId = IssuerId;
                 storeRepo.UpdateItemIssuance(issuance);
                 errorCode = 2;
             }

@@ -7,23 +7,26 @@
       <Diagram DiagramId="114ef7574b92470292c1d10213613cfd" Name="Diagram1" ZoomLevel="27">
         <EntityTypeShape EntityType="SC_WEBModel.JournalEntry" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SC_WEBModel.Vendor" Width="1.5" PointX="3.375" PointY="0.75" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemIssuance" Width="1.5" PointX="5.625" PointY="3.25" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchase" Width="1.5" PointX="8.625" PointY="3.25" />
-        <EntityTypeShape EntityType="SC_WEBModel.Item" Width="1.5" PointX="5.625" PointY="7.25" />
         <EntityTypeShape EntityType="SC_WEBModel.ItemUnit" Width="1.5" PointX="3.375" PointY="7.625" />
-        <AssociationConnector Association="SC_WEBModel.FK_Items_ItemUnit" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchaseDetail" PointX="10.875" PointY="5.125" Width="1.5" />
-        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" />
-        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_Items" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemReturn" Width="1.5" PointX="8.625" PointY="11.5" />
         <EntityTypeShape EntityType="SC_WEBModel.IssuanceStockQuantity" Width="1.5" PointX="0.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemIssuanceDetail" Width="1.5" PointX="7.875" PointY="7" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemReturnDetail" Width="1.5" PointX="10.875" PointY="8.875" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemVendor" Width="1.5" PointX="3.375" PointY="10.75" />
+        <EntityTypeShape EntityType="SC_WEBModel.Issuer" Width="1.5" PointX="3.375" PointY="14" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemIssuance" Width="1.5" PointX="5.625" PointY="14" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemIssuanceDetail" Width="1.5" PointX="7.875" PointY="6.75" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchase" Width="1.5" PointX="5.625" PointY="3" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemPurchaseDetail" Width="1.5" PointX="7.875" PointY="3" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemReturn" Width="1.5" PointX="8.625" PointY="11.25" />
+        <EntityTypeShape EntityType="SC_WEBModel.ItemReturnDetail" Width="1.5" PointX="10.875" PointY="6.75" />
+        <EntityTypeShape EntityType="SC_WEBModel.Item" Width="1.5" PointX="5.625" PointY="7" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemIssuance_Issuer" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemIssuanceDetail_ItemIssuance" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemIssuanceDetail_Items" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchase_Vendor" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_ItemPurchase" />
+        <AssociationConnector Association="SC_WEBModel.FK_ItemPurchaseDetail_Items" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemReturnDetail_ItemReturn" />
         <AssociationConnector Association="SC_WEBModel.FK_ItemReturnDetail_Items" />
-        <EntityTypeShape EntityType="SC_WEBModel.ItemVendor" Width="1.5" PointX="3.375" PointY="10.75" />
+        <AssociationConnector Association="SC_WEBModel.FK_Items_ItemUnit" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

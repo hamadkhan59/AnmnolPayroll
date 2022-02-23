@@ -299,6 +299,9 @@
     <Compile Include="IssuedChallan.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Issuer.cs">
+      <DependentUpon>ScDbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Item.cs">
       <DependentUpon>ScDbModel.tt</DependentUpon>
     </Compile>

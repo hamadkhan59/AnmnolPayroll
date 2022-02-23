@@ -80,5 +80,13 @@ namespace SMS_DAL.SmsRepository.IRepository
         ItemVendor GetItemVendorById(int id);
         List<ItemVendorModel> GetItemVendorsByItemId(int id);
         void DeleteItemVendor(ItemVendor itemVendor);
+        int AddIssuer(Issuer issuer);
+        Issuer GetIssuerByName(string issuerName);
+        Issuer GetIssuerByNameAndId(string issuerName, int id);
+        void UpdateIssuer(Issuer issuer);
+        Issuer GetIssuerById(int issuerId);
+        void DeleteIssuer(Issuer issuer);
+        List<Issuer> GetAllIssuers();
+        List<Issuer> GetAllIssuerData();
     }
 }

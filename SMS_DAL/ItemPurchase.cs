@@ -21,11 +21,13 @@ namespace SMS_DAL
     
         public int Id { get; set; }
         public int OrderId { get; set; }
+        public Nullable<int> VendorId { get; set; }
         public Nullable<int> Amount { get; set; }
         public Nullable<System.DateTime> PurchaseDate { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public Nullable<System.DateTime> UpdatedOn { get; set; }
     
+        public virtual Vendor Vendor { get; set; }
         public virtual ICollection<ItemPurchaseDetail> ItemPurchaseDetails { get; set; }
     }
 }

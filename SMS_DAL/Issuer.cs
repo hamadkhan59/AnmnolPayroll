@@ -12,22 +12,22 @@ namespace SMS_DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemIssuance
+    public partial class Issuer
     {
-        public ItemIssuance()
+        public Issuer()
         {
-            this.ItemIssuanceDetails = new HashSet<ItemIssuanceDetail>();
+            this.ItemIssuances = new HashSet<ItemIssuance>();
         }
     
         public int Id { get; set; }
-        public int OrderId { get; set; }
-        public Nullable<int> IssuerId { get; set; }
-        public Nullable<int> Amount { get; set; }
-        public Nullable<System.DateTime> IssuanceDate { get; set; }
+        public string Name { get; set; }
+        public string PhoneNo { get; set; }
+        public string CNIC { get; set; }
+        public string Email { get; set; }
+        public string CompanyName { get; set; }
+        public string Address { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
-        public Nullable<System.DateTime> UpdatedOn { get; set; }
     
-        public virtual Issuer Issuer { get; set; }
-        public virtual ICollection<ItemIssuanceDetail> ItemIssuanceDetails { get; set; }
+        public virtual ICollection<ItemIssuance> ItemIssuances { get; set; }
     }
 }

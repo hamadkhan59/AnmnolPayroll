@@ -303,6 +303,8 @@ namespace SMS_Web.Reports.Store.Dataset {
             
             private global::System.Data.DataColumn columnDescription;
             
+            private global::System.Data.DataColumn columnIssuedTo;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public StoreDataTableDataTable() {
@@ -434,6 +436,14 @@ namespace SMS_Web.Reports.Store.Dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn IssuedToColumn {
+                get {
+                    return this.columnIssuedTo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -469,7 +479,7 @@ namespace SMS_Web.Reports.Store.Dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StoreDataTableRow AddStoreDataTableRow(string OrderId, string CreatedOn, string ItemName, string Quantity, string Rate, string Total, string Unit, string VendorName, string PhoneNo, string Email, string CompanyName, string Description) {
+            public StoreDataTableRow AddStoreDataTableRow(string OrderId, string CreatedOn, string ItemName, string Quantity, string Rate, string Total, string Unit, string VendorName, string PhoneNo, string Email, string CompanyName, string Description, string IssuedTo) {
                 StoreDataTableRow rowStoreDataTableRow = ((StoreDataTableRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         OrderId,
@@ -483,7 +493,8 @@ namespace SMS_Web.Reports.Store.Dataset {
                         PhoneNo,
                         Email,
                         CompanyName,
-                        Description};
+                        Description,
+                        IssuedTo};
                 rowStoreDataTableRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowStoreDataTableRow);
                 return rowStoreDataTableRow;
@@ -518,6 +529,7 @@ namespace SMS_Web.Reports.Store.Dataset {
                 this.columnEmail = base.Columns["Email"];
                 this.columnCompanyName = base.Columns["CompanyName"];
                 this.columnDescription = base.Columns["Description"];
+                this.columnIssuedTo = base.Columns["IssuedTo"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -547,6 +559,8 @@ namespace SMS_Web.Reports.Store.Dataset {
                 base.Columns.Add(this.columnCompanyName);
                 this.columnDescription = new global::System.Data.DataColumn("Description", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDescription);
+                this.columnIssuedTo = new global::System.Data.DataColumn("IssuedTo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIssuedTo);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -881,6 +895,22 @@ namespace SMS_Web.Reports.Store.Dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string IssuedTo {
+                get {
+                    try {
+                        return ((string)(this[this.tableStoreDataTable.IssuedToColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'IssuedTo\' in table \'StoreDataTable\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableStoreDataTable.IssuedToColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsOrderIdNull() {
                 return this.IsNull(this.tableStoreDataTable.OrderIdColumn);
             }
@@ -1021,6 +1051,18 @@ namespace SMS_Web.Reports.Store.Dataset {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetDescriptionNull() {
                 this[this.tableStoreDataTable.DescriptionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsIssuedToNull() {
+                return this.IsNull(this.tableStoreDataTable.IssuedToColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetIssuedToNull() {
+                this[this.tableStoreDataTable.IssuedToColumn] = global::System.Convert.DBNull;
             }
         }
         

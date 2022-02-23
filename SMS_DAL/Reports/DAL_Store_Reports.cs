@@ -14,10 +14,11 @@ namespace SMS_DAL.Reports
         public DataSet GetItemPurchaseData(int orderId, int itemId, DateTime fromDate, DateTime toDate)
         {
             var sql = @"select RIGHT('0000000'+CAST(ips.OrderId AS VARCHAR(7)),7) as OrderId, ips.CreatedOn, item.ItemName,
-                        ipd.Quantity, ipd.Rate, ipd.Total
+                        ipd.Quantity, ipd.Rate, ipd.Total, vend.Name as VendorName
                         from ItemPurchaseDetail ipd
                         inner join ItemPurchase ips on ips.Id = ipd.ItemPurchaseId
                         inner join Items item on item.Id = ipd.ItemId
+						inner join Vendor vend on ips.VendorId = vend.Id
                         where ips.CreatedOn >= '{0}' and ips.CreatedOn <= '{1}'
                         and (0 in ({2}) or ips.OrderId in ({2}))
                         and (0 in ({3}) or ipd.ItemId in ({3}))";
@@ -28,11 +29,13 @@ namespace SMS_DAL.Reports
         public DataSet GetItemIssuanceData(int orderId, int itemId, DateTime fromDate, DateTime toDate)
         {
             var sql = @"select RIGHT('0000000'+CAST(iss.OrderId AS VARCHAR(7)),7) as OrderId, iss.CreatedOn, item.ItemName,
-                        isd.Quantity, isnull(isd.Rate, 0) as Rate, isnull(isd.Total, 0) as Total, unit.Name as Unit
+                        isd.Quantity, isnull(isd.Rate, 0) as Rate, isnull(isd.Total, 0) as Total, 
+						unit.Name as Unit, issr.Name as IssuedTo
                         from ItemIssuanceDetail isd
                         inner join ItemIssuance iss on iss.Id = isd.ItemIssuanceId
                         inner join Items item on item.Id = isd.ItemId
 						inner join ItemUnit unit on isd.UnitId = unit.Id
+						inner join Issuer issr on issr.Id = iss.IssuerId
                         where iss.CreatedOn >= '{0}' and iss.CreatedOn <= '{1}'
                         and (0 in ({2}) or iss.OrderId in ({2}))
                         and (0 in ({3}) or isd.ItemId in ({3}))";
@@ -73,10 +76,11 @@ namespace SMS_DAL.Reports
         public DataSet GetItemPurchase(int orderId)
         {
             var sql = @"select RIGHT('0000000'+CAST(ips.OrderId AS VARCHAR(7)),7) as OrderId, ips.CreatedOn, item.ItemName,
-                        ipd.Quantity, ipd.Rate, ipd.Total
+                        ipd.Quantity, ipd.Rate, ipd.Total, vend.Name as VendorName
                         from ItemPurchaseDetail ipd
                         inner join ItemPurchase ips on ips.Id = ipd.ItemPurchaseId
                         inner join Items item on item.Id = ipd.ItemId
+						inner join Vendor vend on ips.VendorId = vend.Id
                         where ips.OrderId =  {0}";
             sql = string.Format(sql, orderId);
             return ExecuteDataSet(sql);
@@ -85,11 +89,13 @@ namespace SMS_DAL.Reports
         public DataSet GetItemIssuance(int orderId)
         {
             var sql = @"select RIGHT('0000000'+CAST(iss.OrderId AS VARCHAR(7)),7) as OrderId, iss.CreatedOn, item.ItemName,
-                        isd.Quantity, isnull(isd.Rate, 0) as Rate, isnull(isd.Total, 0) as Total, unit.Name as Unit
+                        isd.Quantity, isnull(isd.Rate, 0) as Rate, isnull(isd.Total, 0) as Total, 
+						unit.Name as Unit, issr.Name as IssuedTo
                         from ItemIssuanceDetail isd
                         inner join ItemIssuance iss on iss.Id = isd.ItemIssuanceId
                         inner join Items item on item.Id = isd.ItemId
 						inner join ItemUnit unit on isd.UnitId = unit.Id
+						inner join Issuer issr on issr.Id = iss.IssuerId
                         where iss.OrderId =  {0}";
             sql = string.Format(sql, orderId);
             return ExecuteDataSet(sql);

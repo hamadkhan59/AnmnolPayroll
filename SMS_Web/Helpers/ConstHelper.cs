@@ -541,6 +541,7 @@ namespace SMS_Web.Helpers
         public const string STM_ITEM_RETURN_LIST = "ITEM_RETURN_LIST";
         public const string STM_ITEMS = "Items";
         public const string STM_VEDNORS = "Vendor";
+        public const string STM_ISSUERS = "Issuer";
         public const string STM_ITEM_PURCHASE = "ItemPurchase";
         public const string STM_ITEM_ISSUANCE = "ItemIssuance";
         public const string STM_ITEM_RETURN = "ItemReturn";

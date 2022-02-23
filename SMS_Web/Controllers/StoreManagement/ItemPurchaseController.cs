@@ -55,11 +55,15 @@ namespace SMS_Web.Controllers.StoreManagement
                     ViewData["OrderId"] = itemPurchase.OrderId;
                     ViewData["OrderDate"] = itemPurchase.PurchaseDate;
                     ViewData["itemPurchase"] = storeRepo.GetAllItemPurchaseDetailModelByItemPurchaseId(itemPurchase.Id);
+                    var vendor = storeRepo.GetVendorById((int)itemPurchase.VendorId);
+                    ViewData["vendorName"] = vendor.Id + " | " + vendor.Name;
                 }
                 else
                 {
+                    ViewData["vendorName"] = "";
                     ViewData["OrderId"] = storeRepo.GetPurchaseOrderId();
                 }
+                ViewBag.VendorNames = SessionHelper.VendorNameList();
                 ViewBag.ItemNames = SessionHelper.ItemNamesList();
                 ViewBag.UnitId = new SelectList(SessionHelper.UnitList(), "Id", "Name");
                 ViewData["Error"] = errorCode;
@@ -75,7 +79,7 @@ namespace SMS_Web.Controllers.StoreManagement
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId, int Print)
+        public ActionResult SaveItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId, int Print, int VendorId)
         {
             if (UserPermissionController.CheckUserLoginStatus(Session.SessionID) == false)
             {
@@ -93,11 +97,11 @@ namespace SMS_Web.Controllers.StoreManagement
                 {
                     if (itemPurchase == null)
                     {
-                        AddNewItemPurchase(itemPurchaseList, PurchaseDate, OrderId);
+                        AddNewItemPurchase(itemPurchaseList, PurchaseDate, OrderId, VendorId);
                     }
                     else
                     {
-                        UpdateItemPurchase(itemPurchaseList, PurchaseDate, itemPurchase);
+                        UpdateItemPurchase(itemPurchaseList, PurchaseDate, itemPurchase, VendorId);
                     }
                     if (Print == 2)
                     {
@@ -114,7 +118,7 @@ namespace SMS_Web.Controllers.StoreManagement
             return RedirectToAction("Index", new { id = 0 });
         }
 
-        public void AddNewItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId)
+        public void AddNewItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, int OrderId, int VendorId)
         {
             try
             {
@@ -122,6 +126,7 @@ namespace SMS_Web.Controllers.StoreManagement
                 purchase.OrderId = OrderId;
                 purchase.PurchaseDate = PurchaseDate;
                 purchase.CreatedOn = DateTime.Now;
+                purchase.VendorId = VendorId;
                 storeRepo.AddItemPurchase(purchase);
 
                 foreach (var model in itemPurchaseList)
@@ -151,7 +156,7 @@ namespace SMS_Web.Controllers.StoreManagement
             }
         }
 
-        public void UpdateItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, ItemPurchase purchase)
+        public void UpdateItemPurchase(List<ItemPurchaseDetailModel> itemPurchaseList, DateTime PurchaseDate, ItemPurchase purchase, int VendorId)
         {
             try
             {
@@ -180,6 +185,7 @@ namespace SMS_Web.Controllers.StoreManagement
                 purchase.UpdatedOn = DateTime.Now;
                 purchase.PurchaseDate = PurchaseDate;
                 purchase.Amount = (int)itemPurchaseList.Sum(x => x.Total);
+                purchase.VendorId = VendorId;
                 storeRepo.UpdateItemPurchase(purchase);
                 errorCode = 2;
             }

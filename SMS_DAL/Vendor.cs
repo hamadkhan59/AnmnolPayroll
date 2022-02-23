@@ -14,6 +14,11 @@ namespace SMS_DAL
     
     public partial class Vendor
     {
+        public Vendor()
+        {
+            this.ItemPurchases = new HashSet<ItemPurchase>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNo { get; set; }
@@ -22,5 +27,7 @@ namespace SMS_DAL
         public string CompanyName { get; set; }
         public string Address { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+    
+        public virtual ICollection<ItemPurchase> ItemPurchases { get; set; }
     }
 }

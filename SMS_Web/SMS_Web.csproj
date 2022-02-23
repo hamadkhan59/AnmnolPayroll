@@ -347,6 +347,7 @@
     <Compile Include="Controllers\StoreManagement\ItemReturnController.cs" />
     <Compile Include="Controllers\StoreManagement\ItemIssuanceController.cs" />
     <Compile Include="Controllers\StoreManagement\ItemPurchaseController.cs" />
+    <Compile Include="Controllers\StoreManagement\IssuerController.cs" />
     <Compile Include="Controllers\StoreManagement\VendorController.cs" />
     <Compile Include="Controllers\SystemConfiguration\FeeConfigurationController.cs" />
     <Compile Include="Controllers\FeeCollection\IssueChalanController.cs" />
@@ -1052,8 +1053,8 @@
     <Compile Include="Reports\Store\ItemPurchaseOrder.cs">
       <DependentUpon>ItemPurchaseOrder.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Store\ItemReturnOrder.cs">
       <DependentUpon>ItemReturnOrder.rpt</DependentUpon>
@@ -1106,14 +1107,14 @@
     <Compile Include="Reports\Store\ItemPurchaseReportByName.cs">
       <DependentUpon>ItemPurchaseReportByName.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Store\ItemPurchaseReport.cs">
       <DependentUpon>ItemPurchaseReport.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Students\AttendanceMonthlyReport.cs">
       <DependentUpon>AttendanceMonthlyReport.rpt</DependentUpon>
@@ -5929,6 +5930,7 @@
     <Content Include="Views\StoreReport\Report.cshtml" />
     <Content Include="Views\StoreReport\ViewReport.cshtml" />
     <Content Include="Views\Item\ItemVendor.cshtml" />
+    <Content Include="Views\Issuer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

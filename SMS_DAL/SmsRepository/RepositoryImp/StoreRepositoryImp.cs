@@ -236,6 +236,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
 
             var query = from purchase in dbContext.ItemPurchases
                         join purchaseDetail in dbContext.ItemPurchaseDetails on purchase.Id equals purchaseDetail.ItemPurchaseId
+                        join vendor in dbContext.Vendors on purchase.VendorId equals vendor.Id
                         where ((EntityFunctions.TruncateTime(purchase.CreatedOn) >= fromDate.Date
                            && EntityFunctions.TruncateTime(purchase.CreatedOn) <= toDate.Date) 
                            || purchase.OrderId == orderId)
@@ -246,7 +247,9 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             Amount = purchase.Amount,
                             OrderId = purchase.OrderId,
                             CreatedOn = purchase.CreatedOn,
-                            PurchaseDate = purchase.PurchaseDate
+                            PurchaseDate = purchase.PurchaseDate,
+                            VendorId = vendor.Id,
+                            VendorName = vendor.Name
                         };
             return query.Distinct().ToList();
         }
@@ -302,6 +305,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             var query = from purchaseDetail in dbContext.ItemPurchaseDetails
                         join item in dbContext.Items on purchaseDetail.ItemId equals item.Id
                         join purchase in dbContext.ItemPurchases on purchaseDetail.ItemPurchaseId equals purchase.Id
+                        join vendor in dbContext.Vendors on purchase.VendorId equals vendor.Id
                         where purchaseDetail.ItemPurchaseId == itemPurchaseId
                         select new ItemPurchaseDetailModel
                         {
@@ -313,7 +317,9 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             Quantity = purchaseDetail.Quantity,
                             Rate = purchaseDetail.Rate,
                             Total = purchaseDetail.Total,
-                            IssuanceQuantity = purchaseDetail.IssuanceQuantity
+                            IssuanceQuantity = purchaseDetail.IssuanceQuantity,
+                            VendorId = vendor.Id,
+                            VendorName = vendor.Name
                         };
 
             return query.ToList();
@@ -389,6 +395,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
 
             var query = from issuance in dbContext.ItemIssuances
                         join issuanceDetail in dbContext.ItemIssuanceDetails on issuance.Id equals issuanceDetail.ItemIssuanceId
+                        join issuer in dbContext.Issuers on issuance.IssuerId equals issuer.Id
                         where ((EntityFunctions.TruncateTime(issuance.CreatedOn) >= fromDate.Date
                            && EntityFunctions.TruncateTime(issuance.CreatedOn) <= toDate.Date)
                            || issuance.OrderId == orderId)
@@ -399,7 +406,9 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             Amount = issuance.Amount,
                             OrderId = issuance.OrderId,
                             CreatedOn = issuance.CreatedOn,
-                            IssuanceDate = issuance.IssuanceDate
+                            IssuanceDate = issuance.IssuanceDate,
+                            IssuerId = issuer.Id,
+                            IssuerName = issuer.Name
                         };
             return query.Distinct().ToList();
         }
@@ -456,6 +465,7 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                         join item in dbContext.Items on issuanceDetail.ItemId equals item.Id
                         join unit in dbContext.ItemUnits on issuanceDetail.UnitId equals unit.Id
                         join issuance in dbContext.ItemIssuances on issuanceDetail.ItemIssuanceId equals issuance.Id
+                        join issuer in dbContext.Issuers on issuance.IssuerId equals issuer.Id
                         where issuanceDetail.ItemIssuanceId == itemIssuanceId
                         select new ItemIssuanceDetailModel
                         {
@@ -467,7 +477,9 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
                             Quantity = issuanceDetail.Quantity,
                             Rate = issuanceDetail.Rate,
                             Total = issuanceDetail.Total,
-                            UnitName = unit.Name
+                            UnitName = unit.Name,
+                            IssuerId = issuer.Id,
+                            IssuerName = issuer.Name
                         };
 
             return query.ToList();
@@ -779,6 +791,68 @@ namespace SMS_DAL.SmsRepository.RepositoryImp
             }
         }
 
+        public int AddIssuer(Issuer issuer)
+        {
+            int result = -1;
+            if (issuer != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Issuers.Add(issuer);
+                dbContext.SaveChanges();
+                result = issuer.Id;
+            }
+
+            return result;
+        }
+
+        public Issuer GetIssuerByName(string issuerName)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.Issuers.Where(x => x.Name == issuerName).FirstOrDefault();
+        }
+
+        public Issuer GetIssuerByNameAndId(string issuerName, int id)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.Issuers.Where(x => x.Name == issuerName && x.Id != id).FirstOrDefault();
+        }
+
+        public void UpdateIssuer(Issuer issuer)
+        {
+            if (issuer != null)
+            {
+                dbContext.Configuration.LazyLoadingEnabled = false;
+                dbContext.Entry(issuer).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public Issuer GetIssuerById(int issuerId)
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.Issuers.Where(x => x.Id == issuerId).FirstOrDefault();
+        }
+
+        public void DeleteIssuer(Issuer issuer)
+        {
+            if (issuer != null)
+            {
+                dbContext.Issuers.Remove(issuer);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public List<Issuer> GetAllIssuers()
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.Issuers.ToList();
+        }
+
+        public List<Issuer> GetAllIssuerData()
+        {
+            dbContext.Configuration.LazyLoadingEnabled = false;
+            return dbContext.Issuers.Select(c => new Issuer { Id = c.Id, Name = c.Name }).ToList();
+        }
 
         private bool disposed = false;
 

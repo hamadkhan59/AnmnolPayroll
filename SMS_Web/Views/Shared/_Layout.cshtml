@@ -248,6 +248,10 @@
                                             {
                                                 <li><a href="~/Vendor/Index/0">Vendors</a></li>
                                             }
+                                            @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Issuer|") == true)
+                                            {
+                                                <li><a href="~/Issuer/Index/0">Issuer</a></li>
+                                            }
                                             @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Items|") == true)
                                             {
                                                 <li><a href="~/Item/Index/0">Items</a></li>

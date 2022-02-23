@@ -112,6 +112,7 @@ namespace SMS_Web.Helpers
         public static bool InvalidateTransportDriverCache = false;
         public static bool InvalidateStaffHolidayCache = false;
         public static bool InvalidateVendorCache = false;
+        public static bool InvalidateIssuerCache = false;
         public static bool InvalidateItemCache = false;
 
         private static List<Class> _classList;
@@ -175,6 +176,7 @@ namespace SMS_Web.Helpers
         private static List<SystemConfig> _systemConfig;
         private static List<StaffHoliday> _staffHolidayList;
         private static List<Vendor> _vendorList;
+        private static List<Issuer> _issuerList;
         private static List<ItemUnit> _unitList;
         private static List<ItemModel> _itemList;
 
@@ -265,6 +267,18 @@ namespace SMS_Web.Helpers
             return _vendorList;
         }
 
+        public static List<Issuer> IssuerList()
+        {
+            if (_issuerList == null || _issuerList.Count == 0 || InvalidateVendorCache == false)
+            {
+                storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
+                _issuerList = storeRepo.GetAllIssuers();
+                InvalidateIssuerCache = true;
+            }
+
+            return _issuerList;
+        }
+
         public static List<ItemModel> ItemList()
         {
             if (_itemList == null || _itemList.Count == 0 || InvalidateItemCache == false)
@@ -296,6 +310,19 @@ namespace SMS_Web.Helpers
             List<string> names = new List<string>();
 
             foreach (var item in _vendorList)
+            {
+                names.Add(item.Id + " | " + item.Name + " | " + item.PhoneNo + " | " + item.Email + " | " + item.CompanyName);
+            }
+
+            return names;
+        }
+
+        public static List<string> IssuerNameList()
+        {
+            IssuerList();
+            List<string> names = new List<string>();
+
+            foreach (var item in _issuerList)
             {
                 names.Add(item.Id + " | " + item.Name + " | " + item.PhoneNo + " | " + item.Email + " | " + item.CompanyName);
             }

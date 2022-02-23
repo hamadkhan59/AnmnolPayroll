@@ -25,6 +25,7 @@
                                 <div class="col-md-8 col-sm-8 col-xs-12" style="margin-top:2px;">
                                     <div>
                                         <input type="hidden" name="Print" id="Print" class="form-control input-sm" />
+                                        <input type="hidden" name="IssuerId" id="IssuerId" class="form-control input-sm" />
                                         <input id="orderId" type="number" value="@ViewData["OrderId"]" name="OrderId" class="form-control input-sm" style="background-color:white" readonly />
                                     </div>
                                 </div>
@@ -78,7 +79,7 @@
                             </div>
                             <div class="col-md-3 col-sm-3 col-xs-12">
                                 <div>
-                                    @Html.DropDownList("UnitId", (IEnumerable<SelectListItem>)ViewBag.UnitId, new { @class = "form-control input-sm" })
+                                    @Html.DropDownList("UnitId", (IEnumerable<SelectListItem>)ViewBag.UnitId, new { @class = "form-control input-sm", @onChange = "myNewFunction(this);" })
                                 </div>
                             </div>
                         </div>
@@ -104,6 +105,16 @@
             </div>
 
             <div class="x_content">
+                <div class="form-group row">
+                    <label class="control-label col-md-7 col-sm-7 col-xs-12" align="right" for="first-name" style="font-size: 11px;">
+                        Issued To
+                    </label>
+                    <div class="col-md-5 col-sm-5 col-xs-12">
+                        <div>
+                            <input type="text" autocomplete="off" id="IssuerNameId" name="IssuerNameId" class="form-control input-sm" value="@ViewData["issuerName"]" />
+                        </div>
+                    </div>
+                </div>
 
                 <div>
                     <div class="table-responsive">
@@ -282,20 +293,34 @@
        }
                 }
                 var itemNames = [];
-
+                var selectedUnitName = '';
+                var issuerNames = [];
                 window.onload = function (e) {
                     populateErrors();
                     $('#purchaseDate').val('@(ViewData["OrderDate"] == null ? DateTime.Now.ToString("yyyy-MM-dd") : ((DateTime)ViewData["OrderDate"]).ToString("yyyy-MM-dd"))');
                     GetItemNames();
                     autocomplete(document.getElementById("ItemNameId"), itemNames);
+                    GetIssuerNames();
+                    autocomplete(document.getElementById("IssuerNameId"), issuerNames);
                     $("#ItemNameId").blur(function(){
                         EnableUnitDD();
                     });
-                    
+
                     $("#qty").focus(function(){
                         EnableUnitDD();
                     });
 
+                }
+
+                function GetIssuerNames() {
+                    var i = 0;
+                    @foreach (var item in ViewBag.IssuerNames)
+                    {
+                        <text>
+                        var name = '@item';
+                        issuerNames[i++] = name;
+                        </text>
+                    }
                 }
 
                 function calculateTotal()
@@ -314,6 +339,10 @@
                     return itemName;
                 }
 
+                function myNewFunction(sel) {
+                    selectedUnitName = sel.options[sel.selectedIndex].text;
+                }
+
                 function EnableUnitDD()
                 {
                     var unitName = getUnitName();
@@ -329,7 +358,7 @@
                             this.text == 'Pieces' || this.text == 'Boxes' || this.text == 'Liter'); });
                     }
                 }
-                
+
                 function getUnitName()
                 {
                     var itemName = $('#ItemNameId').val();
@@ -343,9 +372,13 @@
                     EnableUnitDD();
                     var itemName = getItemName();
                     var qty = $('#qty').val();
-                    var unit = $("#UnitId option:selected").text();
-                    qty = Number(qty).toFixed(2);
+                    var unit = selectedUnitName;
+                    if(unit.length == 0)
+                    {
+                        unit = $("#UnitId option:selected").text();
+                    }
 
+                    qty = Number(qty).toFixed(2);
                     if(itemName == null || itemName.length == 0)
                     {
                         showNotification('Please enter item name.', 'Error', 'Error')
@@ -369,6 +402,7 @@
                         GetGrandTotal();
                     }
                     SetItemFocus();
+                    selectedUnitName = '';
                 }
 
                 function SetItemFocus()
@@ -381,6 +415,16 @@
                     row.parentNode.removeChild(row);
                     GetGrandTotal();
                     SetItemFocus();
+                }
+
+                function GetIssuerId() {
+                    var issuerName = $('#IssuerNameId').val();
+                    var id = 0;
+                    if (issuerName != null && issuerName.length > 0) {
+                        id = issuerName.split('|')[0].trim();
+                    }
+
+                    return id;
                 }
 
                 function IsItemAlreadyAdded(itemName)
@@ -410,14 +454,22 @@
 
                     var rowCount = document.getElementById("classTable").rows.length;
                     var objCount = 0;
+                    var issuerId = GetIssuerId();
                     var listName = "itemIssuanceList";
                     if(rowCount == 1)
                     {
                         showNotification('No Items are added in the issuance', 'Error', 'Error');
                         return false;
                     }
+                    else if(issuerId == 0)
+                    {
+                        showNotification('Please enter a Issued to save the purchase', 'Error', 'Error');
+                        return false;
+                    }
                     else
                     {
+                        $('#IssuerId').val(issuerId);
+
                         for (var i = 1; i < rowCount; i++){
                             var rowData = document.getElementById("classTable").rows[i].cells;
                             debugger
