@@ -38,7 +38,7 @@ namespace SMS_Web.Controllers.Reports
                 return RedirectToAction("Index", "Login");
             }
 
-            if (UserPermissionController.CheckUserPermission(Session.SessionID, ConstHelper.SH_STAFF_REPORTS) == false)
+            if (UserPermissionController.CheckUserPermission(Session.SessionID, ConstHelper.STM_REPORTS) == false)
             {
                 return RedirectToAction("Index", "NoPermission");
             }
