@@ -115,14 +115,14 @@ namespace SMS_Web.Controllers.Reports
                 {
                     model.toDate = model.toDate.AddDays(-1);
                     //ds = staffDs.GetStaffattandanceData(model.categoryId, model.designationId, model.staffId, model.fromDate, model.toDate, branchId);
-                    ds = staffDs.GetStaffattandanceReport(model.fromDate, model.toDate);
+                    ds = staffDs.GetStaffattandanceReport(model.fromDate, model.toDate, model.categoryId);
                     return showReport(ds, model, exportType);
                 }
                 else if (model.reportId == 48)
                 {
                     model.toDate = model.toDate.AddDays(-1);
                     //ds = staffDs.GetStaffattandanceData(model.categoryId, model.designationId, model.staffId, model.fromDate, model.toDate, branchId);
-                    ds = staffDs.GetStaffattandanceReportForStaff(model.fromDate, model.toDate);
+                    ds = staffDs.GetStaffattandanceReportForStaff(model.fromDate, model.toDate, model.categoryId);
                     return showReport(ds, model, exportType);
                 }
                 else if (model.reportId == 49)

@@ -276,12 +276,11 @@
                                 <li class="nav-boxed">
                                     <a href="#2a" data-toggle="tab">Address Info</a>
                                 </li>
-                                @if(SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Salary View OR Edit|") == true)
-                                { 
+                                
                                     <li class="nav-boxed">
                                         <a href="#3a" data-toggle="tab">Salary Info</a>
                                     </li>
-                                }
+
                                 <li class="nav-boxed">
                                     <a href="#4a" data-toggle="tab">Education Info</a>
                                 </li>
@@ -383,8 +382,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if (SMS_Web.Controllers.SecurityAssurance.UserPermissionController.GetSessionModel(Session.SessionID).USER_SUB_MODULE_PERMISSIONS.ToString().Contains("|Salary View OR Edit|") == true)
-                                {
+                                
                                     <div class="tab-pane boxed" id="3a">
                                     <div class="form-group row padded-ends" style="margin-top:20px">
 
@@ -455,7 +453,6 @@
                                     </div>
 
                                 </div>
-                                }
                                 <div class="tab-pane boxed" id="4a">
 
                                     <div class="row form-group padded-ends" style="margin-top:20px;">
