@@ -60,7 +60,7 @@ namespace SMS_DAL.Reports
 
         public DataSet GetCurrentStockData()
         {
-            var sql = @"select item.Id, item.ItemName, unit.Name as Unit,
+            var sql = @"select item.Id, item.ItemName, unit.Name as Unit, unit.Id as UnitId,
                         sum(ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) as Quantity,
                         sum(cast (ROUND((ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) * ipd.Rate,2) as numeric(36,2))) as Total
                         from ItemPurchaseDetail ipd
@@ -68,8 +68,33 @@ namespace SMS_DAL.Reports
                         inner join Items item on item.Id = ipd.ItemId
 						inner join ItemUnit unit on item.UnitId = unit.Id
                         where (ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) > 0
-                        Group By item.Id, item.ItemName, unit.Name
+                        Group By item.Id, item.ItemName, unit.Name, unit.Id
 						order by item.Id";
+            return ExecuteDataSet(sql);
+        }
+
+        public DataSet GetItemList()
+        {
+            var sql = @"select item.Id, item.ItemName, unit.Name as Unit, unit.Id as UnitId, 0 as Quantity, 0 as Total
+                        from Items item inner join ItemUnit unit on item.UnitId = unit.Id
+                        where item.Id not in(
+                        select item.Id from ItemPurchaseDetail ipd
+                                                inner join ItemPurchase ips on ips.Id = ipd.ItemPurchaseId
+                                                inner join Items item on item.Id = ipd.ItemId
+						                        inner join ItemUnit unit on item.UnitId = unit.Id
+                                                where (ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) > 0
+                                                Group By item.Id, item.ItemName, unit.Name, unit.Id)
+                        union
+                        select item.Id, item.ItemName, unit.Name as Unit, unit.Id as UnitId,
+                                                sum(ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) as Quantity,
+                                                sum(cast (ROUND((ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) * ipd.Rate,2) as numeric(36,2))) as Total
+                                                from ItemPurchaseDetail ipd
+                                                inner join ItemPurchase ips on ips.Id = ipd.ItemPurchaseId
+                                                inner join Items item on item.Id = ipd.ItemId
+						                        inner join ItemUnit unit on item.UnitId = unit.Id
+                                                where (ipd.Quantity - isnull(ipd.IssuanceQuantity,0)) > 0
+                                                Group By item.Id, item.ItemName, unit.Name, unit.Id
+						                        order by item.Id";
             return ExecuteDataSet(sql);
         }
 

@@ -13,6 +13,7 @@ namespace SMS_DAL.ViewModel
         public Nullable<int> UnitId { get; set; }
         public string UnitName { get; set; }
         public string ItemDescription { get; set; }
+        public double Qty { get; set; }
     }
 
     public partial class ItemPurchaseDetailModel

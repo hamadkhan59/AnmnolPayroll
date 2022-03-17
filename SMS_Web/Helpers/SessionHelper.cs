@@ -43,6 +43,7 @@ namespace SMS_Web.Helpers
         public static ISecurityRepository securityRepo = new SecurityRepositoryImp(new SC_WEBEntities2());
         public static ITransportRepository treansRepo = new TransportRepositoryImp(new SC_WEBEntities2());
         public static IStoreRepository storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
+        static SMS_DAL.Reports.DAL_Store_Reports storeDs = new SMS_DAL.Reports.DAL_Store_Reports();
 
 
         //public static bool IsCacheLoaded = false;
@@ -281,11 +282,25 @@ namespace SMS_Web.Helpers
 
         public static List<ItemModel> ItemList()
         {
-            if (_itemList == null || _itemList.Count == 0 || InvalidateItemCache == false)
+            var ds = storeDs.GetItemList();
+
+            if (_itemList == null)
+                _itemList = new List<ItemModel>();
+            else
+                _itemList.Clear();
+
+            if (ds.Tables != null && ds.Tables.Count > 0)
             {
-                storeRepo = new StoreRepositoryImp(new SC_WEBEntities2());
-                _itemList = storeRepo.GetAllItemsModel();
-                InvalidateItemCache = true;
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    ItemModel model = new ItemModel();
+                    model.Id = int.Parse(row["Id"].ToString());
+                    model.ItemName = row["ItemName"].ToString();
+                    model.UnitName = row["Unit"].ToString();
+                    model.UnitId = int.Parse(row["UnitId"].ToString());
+                    model.Qty = double.Parse(row["Quantity"].ToString());
+                    _itemList.Add(model);
+                }
             }
 
             return _itemList;
@@ -298,7 +313,7 @@ namespace SMS_Web.Helpers
 
             foreach (var item in _itemList)
             {
-                names.Add(item.Id.ToString().PadLeft(4, '0') +" | "+ item.ItemName + " | " + item.UnitName);
+                names.Add(item.Id.ToString().PadLeft(4, '0') +" | "+ item.ItemName + " | " + item.UnitName + " | " + item.Qty);
             }
 
             return names;
