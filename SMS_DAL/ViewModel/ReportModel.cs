@@ -14,6 +14,7 @@ namespace SMS_DAL.ViewModel
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
 
+        public string staffIdsRange { get; set; }
         public string year { get; set; }
         public int classId { get; set; }
         public int staffId { get; set; }

@@ -16,6 +16,7 @@ using SMS_Web.Helpers;
 using SMS_Web.Controllers.SecurityAssurance;
 using Logger;
 using System.Reflection;
+using SMS_Web.Helpers.ExcelHelpers;
 
 namespace SMS_Web.Controllers.Reports
 {
@@ -132,6 +133,34 @@ namespace SMS_Web.Controllers.Reports
                     ds = staffDs.GetStaffattandanceReportMonthly(model.fromDate, model.toDate, model.staffId);
                     return showReport(ds, model, exportType);
                 }
+                else if (model.reportId == 69)
+                {
+                    if (verifyInputs(model) == true)
+                    {
+                        string range = model.staffIdsRange;
+                        string start = range.Split('-')[0];
+                        string end = range.Split('-')[1];
+                        int startIdx = int.Parse(start);
+                        int endIdx = int.Parse(end);
+                        if (startIdx > 0)
+                            startIdx--;
+                        int staffRange = endIdx - startIdx;
+
+                        model.toDate = model.toDate.AddDays(-1);
+                        StaffReportExelHelper helper = new StaffReportExelHelper();
+                        var staffList = SessionHelper.StaffList(Session.SessionID);
+                        staffList = staffList.Skip(startIdx).Take(staffRange).ToList();
+                        foreach (var staff in staffList)
+                        {
+                            ds = staffDs.GetAllStaffattandanceReportMonthly(model.fromDate, model.toDate, staff.StaffId);
+                            helper.AddStaffDetail(ds);
+                        }
+                        Stream report = helper.GetAllStaffAttendanceReportExcel();
+                        return showReportAsExcel(report, model);
+                    }
+                    else
+                        return RedirectToAction("/ViewReport");
+                }
                 else if (model.reportId == 68)
                 {
                     ds = staffDs.GetStaffSmsHistoryData(model.categoryId, model.designationId, model.staffId, model.fromDate, model.toDate, branchId);
@@ -150,6 +179,35 @@ namespace SMS_Web.Controllers.Reports
                 LogWriter.WriteExceptionLog(ex);
                 return RedirectToAction("/ViewReport");
             }
+        }
+
+        private bool verifyInputs(ReportModel model)
+        {
+            bool flag = true;
+
+            string range = model.staffIdsRange;
+
+            if (range.Contains("-"))
+            {
+                string start = range.Split('-')[0];
+                string end = range.Split('-')[1];
+                int startIdx = int.Parse(start);
+                int endIdx = int.Parse(end);
+                if (startIdx >= endIdx)
+                {
+                    errorCode = 2420;
+                    flag = false;
+                }
+                else if(endIdx - startIdx > 30)
+                {
+                    errorCode = 1420;
+                    flag = false;
+                }
+            }
+            else
+                flag = false;
+
+            return flag;
         }
 
         private string GetDBForMonth(ReportModel model)
@@ -267,6 +325,16 @@ namespace SMS_Web.Controllers.Reports
             //return File(stream, "application/pdf");
             return File(stream, "application/msword");
 
+        }
+
+        public FileStreamResult showReportAsExcel(Stream stream, ReportModel model)
+        {
+            var contentLength = stream.Length;
+            Response.AppendHeader("Content-Length", contentLength.ToString());
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + model.reportName + ".xlsx");
+
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/msword");
         }
 
         public FileStreamResult showReportAsPdf(DataSet ds, ReportModel model)

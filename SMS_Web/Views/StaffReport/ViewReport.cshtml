@@ -24,6 +24,18 @@
             {
                 <text> showNotification('Unable to fetch report data, please try again later.', 'Error', 'Error') </text>
             }
+            else if ((int)@ViewData["Error"] == 1420)
+            {
+                <text> showNotification('Please staff range must be less than the 30.', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 2420)
+            {
+                <text> showNotification('End range must be less than the start range', 'Error', 'Error') </text>
+            }
+            else if ((int)@ViewData["Error"] == 3420)
+            {
+                <text> showNotification('Please enter the staff range', 'Error', 'Error') </text>
+            }
         }
 
         //hide all filters
@@ -45,25 +57,24 @@
         });
 
         //on changing report
-        $("#ddlStaffReports").change(function(){
+        $("#ddlStaffReports").change(function () {
             //hide all initially
             hideAll();
             var rID = $("#ddlStaffReports").val();
-            if(rID == -1)
+            if (rID == -1)
                 return;
 
             $.ajax({
                 type: "GET",
-                url: AppDetail() + '/api/Common/getReportFilters?reportId='+ rID,
+                url: AppDetail() + '/api/Common/getReportFilters?reportId=' + rID,
                 contentType: 'application/json',
                 success: function (result) {
-                    if(result.length ==0)
+                    if (result.length == 0)
                         return;
 
                     debugger;
-                    for(var i=0;i<result.length;i++)
-                    {
-                        var classname="filter" + result[i].FILTER_ID;
+                    for (var i = 0; i < result.length; i++) {
+                        var classname = "filter" + result[i].FILTER_ID;
                         document.getElementsByClassName(classname)[0].style.display = 'block';
                     }
                 },
@@ -99,6 +110,7 @@
             categoryId: $('#ddlCats').val(),
             designationId: $('#ddlDsg').val(),
             staffId: $('#txtStaffId').val(),
+            staffIdsRange: $('#txtStaffIdsRange').val(),
             year: $('#ddlYear').val(),
             //name: $('#nameSearch').val()
             //rollNo: $('#rollNoSearch').val(),
@@ -123,12 +135,10 @@
         });
     }
 
-    function hideAll()
-    {
-        $('.filter1, .filter2, .filter3, .filter4, .filter5, .filter6, .filter7, .filter8, .filter9, .filter1004, .filter1005, .filter1006, .filter12').hide();
+    function hideAll() {
+        $('.filter1, .filter2, .filter3, .filter4, .filter5, .filter6, .filter7, .filter8, .filter9, .filter1004, .filter1005, .filter1006, .filter2022, .filter12').hide();
     }
-    function populateYears()
-    {
+    function populateYears() {
 
         $.ajax({
             type: "GET",
@@ -144,8 +154,7 @@
 
 
     }
-    function populateMonths()
-    {
+    function populateMonths() {
         var options = "";
         options = options + '<option value="' + -1 + '"> All </option>';
         options = options + '<option value="' + 1 + '"> January </option>';
@@ -291,6 +300,17 @@
                             <div class="col-md-8 col-sm-8 col-xs-12">
                                 <div>
                                     <input type="number" class="form-control input-sm" id="txtStaffId" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 filter2022" style="margin : 10px 0px">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 11px;">
+                                Staff Ids
+                            </label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div>
+                                    <input type="text" class="form-control input-sm" id="txtStaffIdsRange" />
                                 </div>
                             </div>
                         </div>

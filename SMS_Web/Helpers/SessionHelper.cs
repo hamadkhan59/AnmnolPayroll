@@ -942,7 +942,7 @@ namespace SMS_Web.Helpers
             {
                 staffRepo = new StaffRepositoryImp(new SC_WEBEntities2());
                 _staffList = staffRepo.GetAllStaff();
-                _staffList = _staffList.Select(x => new Staff { StaffId = x.StaffId, Name = x.Name, PhoneNumber = x.PhoneNumber, BranchId = x.BranchId, DesignationId = x.DesignationId }).Where(x => x.IsLeft == null || x.IsLeft == false).ToList();
+                _staffList = _staffList.Select(x => new Staff { StaffId = x.StaffId, Name = x.Name, PhoneNumber = x.PhoneNumber, BranchId = x.BranchId, DesignationId = x.DesignationId, IsLeft = x.IsLeft }).Where(x => x.IsLeft == null || x.IsLeft == false).ToList();
                 InvalidateStaffCache = true;
             }
 

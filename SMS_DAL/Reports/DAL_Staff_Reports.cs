@@ -172,13 +172,17 @@ namespace SMS_DAL.Reports
             return ExecuteDataSet(sql);
         }
 
-        public DataSet GetStaffattandanceReportMonthly(DateTime fromDate, DateTime toDate, int staffId)
+        public void spStaffAttendancedetailReportMonthly(DateTime fromDate, DateTime toDate, int staffId)
         {
             var spQuery = @"EXEC [dbo].[sp_StaffAttendancedetailReportMonthly]
 		                            @FromDateMonthly = '{0}', @ToDateMonthly = '{1}', @StaffIdMonthly = {2} ";
             spQuery = string.Format(spQuery, getDate(fromDate), getDate(toDate), staffId);
             ExecuteNonQuery(spQuery);
+        }
 
+        public DataSet GetStaffattandanceReportMonthly(DateTime fromDate, DateTime toDate, int staffId)
+        {
+            spStaffAttendancedetailReportMonthly(fromDate, toDate, staffId);
             //var sql = @"select distinct sta.Id, sta.Date as Result, sar.Name, sar.TotalHours as JoininDate,
             //            sar.WorkingHours  as Address, sta.Time  as Designation, sta.OutTime  as Education
             //            from StaffAttendanceReport sar 
@@ -186,12 +190,41 @@ namespace SMS_DAL.Reports
             //            inner join StaffAttendanceDetail stad on sta.Id = stad.AttendanceId
             //            order by sta.Id";
 
+            //      var sql = @"select distinct sta.Id, sar.AttendanceId, sta.Date as Result, sar.Name, sar.TotalHours as JoininDate,
+            //                  sar.WorkingHours  as Address,
+            //(select top(1) TimeIn from StaffAttendanceDetail 
+            //where AttendanceId = sar.AttendanceId order by Id)  as Designation, 
+            //(select top(1) TimeOut from StaffAttendanceDetail 
+            //where AttendanceId = sar.AttendanceId order by Id desc)  as Education
+            //                  from StaffAttendanceReport sar 
+            //                  inner join StaffAttandance sta on sar.AttendanceId = sta.Id 
+            //                  order by sta.Date";
+
             var sql = @"select distinct sta.Id, sar.AttendanceId, sta.Date as Result, sar.Name, sar.TotalHours as JoininDate,
                         sar.WorkingHours  as Address,
-						(select top(1) TimeIn from StaffAttendanceDetail 
-						where AttendanceId = sar.AttendanceId order by Id)  as Designation, 
-						(select top(1) TimeOut from StaffAttendanceDetail 
-						where AttendanceId = sar.AttendanceId order by Id desc)  as Education
+						isnull((select top(1) TimeIn from StaffAttendanceDetail 
+						where AttendanceId = sar.AttendanceId order by Id), '-')  as Designation, 
+						isnull((select top(1) TimeOut from StaffAttendanceDetail 
+						where AttendanceId = sar.AttendanceId order by Id desc), '-')  as Education
+                        from StaffAttendanceReport sar 
+                        inner join StaffAttandance sta on sar.AttendanceId = sta.Id 
+						where WorkingHours > 0
+                        order by sta.Date";
+
+            return ExecuteDataSet(sql);
+        }
+
+        public DataSet GetAllStaffattandanceReportMonthly(DateTime fromDate, DateTime toDate, int staffId)
+        {
+            spStaffAttendancedetailReportMonthly(fromDate, toDate, staffId);
+
+            var sql = @"select distinct sta.Id, sar.AttendanceId, sta.Date as Result, Day(sta.Date) as DOM,
+                        sta.StaffId, sar.Name, sar.TotalHours as DutyHours,
+                        sar.WorkingHours  as Hours,
+						isnull((select top(1) TimeIn from StaffAttendanceDetail 
+						where AttendanceId = sar.AttendanceId order by Id), '-')  as TimeIn, 
+						isnull((select top(1) TimeOut from StaffAttendanceDetail 
+						where AttendanceId = sar.AttendanceId order by Id desc), '-')  as TimeOut
                         from StaffAttendanceReport sar 
                         inner join StaffAttandance sta on sar.AttendanceId = sta.Id 
                         order by sta.Date";
