@@ -100,12 +100,17 @@ namespace SMS_DAL.Reports
             return ExecuteDataSet(sql);
         }
 
-        public DataSet GetStaffattandanceReport(DateTime fromDate, DateTime toDate, int categoryId)
+        private void sp_StaffAttendancedetailReport(DateTime fromDate, DateTime toDate)
         {
             var spQuery = @"EXEC [dbo].[sp_StaffAttendancedetailReport]
 		                            @FromDate = '{0}', @ToDate = '{1}' ";
             spQuery = string.Format(spQuery, getDate(fromDate), getDate(toDate));
             ExecuteNonQuery(spQuery);
+        }
+
+        public DataSet GetStaffattandanceReport(DateTime fromDate, DateTime toDate, int categoryId)
+        {
+            sp_StaffAttendancedetailReport(fromDate, toDate);
 
             //var sql = @"select StaffId as Year, Name, FatherName, MobileNo as Designation,
             //            TotalHours as JoininDate, WorkingHours as Address, [EarningAmount] AS Salary,
@@ -114,7 +119,7 @@ namespace SMS_DAL.Reports
 
             var sql = @"select sar.StaffId as Year, sar.Name, sar.FatherName, MobileNo as Designation,
                         TotalHours as JoininDate, WorkingHours as Address, [EarningAmount] AS Salary,
-                        isnull(WorkingDays,0) as Total, isnull(ExtraHours,0) as Education
+                        isnull(WorkingDays,0) as Total, isnull(ExtraHours,0) as Education, MiscWithdraw as Result
                         from [StaffAttendanceReport] sar inner join Staff st
 						on sar.StaffId = st.StaffId inner join Designation dc
 						on st.DesignationId = dc.Id
@@ -126,10 +131,7 @@ namespace SMS_DAL.Reports
 
         public DataSet GetStaffattandanceReportForStaff(DateTime fromDate, DateTime toDate, int categoryId)
         {
-            var spQuery = @"EXEC [dbo].[sp_StaffAttendancedetailReport]
-		                            @FromDate = '{0}', @ToDate = '{1}' ";
-            spQuery = string.Format(spQuery, getDate(fromDate), getDate(toDate));
-            ExecuteNonQuery(spQuery);
+            sp_StaffAttendancedetailReport(fromDate, toDate);
 
             //var sql = @"Select sar.StaffId as Year, sar.Name, sar.TotalHours  as JoininDate, 
             //            sar.WorkingHours  as Address, sad.TimeIn as Designation, sad.TimeOut as Education,
@@ -163,7 +165,7 @@ namespace SMS_DAL.Reports
                         on sar.AttendanceId = sad.AttendanceId inner join Staff st
 						on sar.StaffId = st.StaffId inner join Designation dc
 						on st.DesignationId = dc.Id
-						where (0 in ({0}) or dc.CatagoryId in ({0}))
+						where (-1 in ({0}) or dc.CatagoryId in ({0}))
                         order  by sar.StaffId, sad.Id";
 
             }
